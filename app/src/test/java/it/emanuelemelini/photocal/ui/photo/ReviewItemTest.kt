@@ -1,12 +1,21 @@
 package it.emanuelemelini.photocal.ui.photo
 
+import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.data.estimate.PerGram
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
+import java.util.Locale
 
 class ReviewItemTest {
+
+    @Before
+    fun italianLocale() {
+        // Expected values below use the Italian decimal comma
+        AppLocale.current = Locale.ITALIAN
+    }
 
     private val ai = PerGram(kcal = 1.5, protein = 0.05, carbs = 0.3, fat = 0.01)
     private val crea = PerGram(kcal = 1.3, protein = 0.04, carbs = 0.28, fat = 0.005)

@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,7 +52,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.crea.CreaTable
+import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.formatKcal
@@ -88,10 +91,10 @@ fun PhotoReviewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Analisi foto") },
+                title = { Text(stringResource(R.string.photo_title)) },
                 navigationIcon = {
                     IconButton(onClick = requestExit) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
             )
@@ -107,7 +110,7 @@ fun PhotoReviewScreen(
         ) {
             AsyncImage(
                 model = File(viewModel.photoPath),
-                contentDescription = "Foto del pasto",
+                contentDescription = stringResource(R.string.photo_content_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,14 +121,14 @@ fun PhotoReviewScreen(
             OutlinedTextField(
                 value = viewModel.notes,
                 onValueChange = viewModel::onNotesChange,
-                label = { Text("Note (facoltative)") },
-                placeholder = { Text("es. con olio, porzione grande") },
+                label = { Text(stringResource(R.string.photo_notes)) },
+                placeholder = { Text(stringResource(R.string.photo_notes_placeholder)) },
                 enabled = !isAnalyzing,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            val analyzeLabel = if (viewModel.hasAnalyzed) "Analizza di nuovo" else "Analizza"
+            val analyzeLabel = stringResource(if (viewModel.hasAnalyzed) R.string.photo_analyze_again else R.string.photo_analyze)
             if (viewModel.hasAnalyzed) {
                 OutlinedButton(
                     onClick = viewModel::analyze,
@@ -173,13 +176,13 @@ fun PhotoReviewScreen(
             if (viewModel.hasAnalyzed) {
                 if (viewModel.items.isEmpty()) {
                     Text(
-                        "Nessun alimento riconosciuto. Puoi aggiungerli a mano.",
+                        stringResource(R.string.photo_nothing_found),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else {
                     Text(
-                        "Controlla e correggi i valori: cambiando i grammi, kcal e macro si ricalcolano.",
+                        stringResource(R.string.photo_review_hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -197,14 +200,14 @@ fun PhotoReviewScreen(
                 TextButton(onClick = viewModel::addItem) {
                     Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Aggiungi alimento")
+                    Text(stringResource(R.string.photo_add_food))
                 }
 
                 if (viewModel.items.isNotEmpty()) {
                     MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Totale", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                        Text(stringResource(R.string.label_total), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                         Text(
                             "${viewModel.totalKcal.formatKcal()} kcal",
                             style = MaterialTheme.typography.titleMedium,
@@ -214,7 +217,7 @@ fun PhotoReviewScreen(
 
                     if (viewModel.usesCrea) {
                         Text(
-                            "Fonte valori nutrizionali: ${CreaTable.SOURCE}",
+                            stringResource(R.string.photo_nutrition_source, CreaTable.SOURCE),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -224,7 +227,7 @@ fun PhotoReviewScreen(
                         onClick = viewModel::save,
                         enabled = !isAnalyzing,
                         modifier = Modifier.fillMaxWidth(),
-                    ) { Text("Salva") }
+                    ) { Text(stringResource(R.string.action_save)) }
                 }
             }
         }
@@ -233,16 +236,16 @@ fun PhotoReviewScreen(
     if (confirmDiscard) {
         AlertDialog(
             onDismissRequest = { confirmDiscard = false },
-            title = { Text("Scartare l'analisi?") },
-            text = { Text("Gli alimenti non salvati andranno persi.") },
+            title = { Text(stringResource(R.string.photo_discard_title)) },
+            text = { Text(stringResource(R.string.photo_discard_text)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmDiscard = false
                     onDone()
-                }) { Text("Scarta") }
+                }) { Text(stringResource(R.string.photo_discard)) }
             },
             dismissButton = {
-                TextButton(onClick = { confirmDiscard = false }) { Text("Annulla") }
+                TextButton(onClick = { confirmDiscard = false }) { Text(stringResource(R.string.action_cancel)) }
             },
         )
     }
@@ -253,7 +256,7 @@ private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
     if (isAnalyzing) {
         CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(12.dp))
-        Text("Analisi in corso…")
+        Text(stringResource(R.string.photo_analyzing))
     } else {
         Text(label)
     }
@@ -261,7 +264,7 @@ private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
 
 @Composable
 private fun ErrorCard(
-    message: String,
+    message: UiText,
     needsSettings: Boolean,
     canRetry: Boolean,
     onRetry: () -> Unit,
@@ -274,17 +277,17 @@ private fun ErrorCard(
     ) {
         Column(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
             Text(
-                message,
+                message.asString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onErrorContainer,
             )
             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
                 if (needsSettings) {
-                    TextButton(onClick = onOpenSettings) { Text("Impostazioni") }
+                    TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
                 } else if (canRetry) {
-                    TextButton(onClick = onRetry) { Text("Riprova") }
+                    TextButton(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
                 }
-                TextButton(onClick = onManual) { Text("Inserisci a mano") }
+                TextButton(onClick = onManual) { Text(stringResource(R.string.action_manual_entry)) }
             }
         }
     }
@@ -306,43 +309,44 @@ private fun ReviewItemCard(
                 OutlinedTextField(
                     value = item.name,
                     onValueChange = { text -> onChange { it.copy(name = text) } },
-                    label = { Text("Alimento") },
+                    label = { Text(stringResource(R.string.photo_food)) },
                     isError = showErrors && !item.nameValid,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     modifier = Modifier.weight(1f),
                 )
                 IconButton(onClick = onRemove) {
-                    Icon(Icons.Default.Close, contentDescription = "Rimuovi alimento")
+                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.photo_remove_food))
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     item.confidence?.let { ConfidenceLabel(it) }
                     Text(
-                        text = if (item.usingCrea) "Valori CREA: ${item.creaName}" else "Valori stimati dall'AI",
+                        text = if (item.usingCrea) stringResource(R.string.photo_values_crea, item.creaName.orEmpty())
+                        else stringResource(R.string.photo_values_ai),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 if (item.creaPerGram != null && item.aiPerGram != null) {
                     TextButton(onClick = { onChange { it.withCrea(!item.usingCrea) } }) {
-                        Text(if (item.usingCrea) "Usa stima AI" else "Usa CREA")
+                        Text(stringResource(if (item.usingCrea) R.string.photo_use_ai else R.string.photo_use_crea))
                     }
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SmallNumberField(item.grams, { t -> onChange { it.withGrams(t) } }, "Grammi",
+                SmallNumberField(item.grams, { t -> onChange { it.withGrams(t) } }, stringResource(R.string.label_grams),
                     showErrors && !item.gramsValid, Modifier.weight(1f))
-                SmallNumberField(item.kcal, { t -> onChange { it.withKcal(t) } }, "Kcal",
+                SmallNumberField(item.kcal, { t -> onChange { it.withKcal(t) } }, stringResource(R.string.label_kcal),
                     showErrors && !item.kcalValid, Modifier.weight(1f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SmallNumberField(item.protein, { t -> onChange { it.withProtein(t) } }, "Prot. g",
+                SmallNumberField(item.protein, { t -> onChange { it.withProtein(t) } }, stringResource(R.string.photo_protein_short),
                     showErrors && !item.proteinValid, Modifier.weight(1f))
-                SmallNumberField(item.carbs, { t -> onChange { it.withCarbs(t) } }, "Carb. g",
+                SmallNumberField(item.carbs, { t -> onChange { it.withCarbs(t) } }, stringResource(R.string.photo_carbs_short),
                     showErrors && !item.carbsValid, Modifier.weight(1f))
-                SmallNumberField(item.fat, { t -> onChange { it.withFat(t) } }, "Grassi g",
+                SmallNumberField(item.fat, { t -> onChange { it.withFat(t) } }, stringResource(R.string.entry_fat_g),
                     showErrors && !item.fatValid, Modifier.weight(1f))
             }
         }
@@ -351,13 +355,14 @@ private fun ReviewItemCard(
 
 @Composable
 private fun ConfidenceLabel(confidence: String) {
-    val color = when (confidence) {
-        "alta" -> MaterialTheme.colorScheme.primary
-        "media" -> MaterialTheme.colorScheme.tertiary
-        else -> MaterialTheme.colorScheme.error
+    // The schema uses language-neutral values: high / medium / low
+    val (color, label) = when (confidence) {
+        "high" -> MaterialTheme.colorScheme.primary to R.string.confidence_high
+        "medium" -> MaterialTheme.colorScheme.tertiary to R.string.confidence_medium
+        else -> MaterialTheme.colorScheme.error to R.string.confidence_low
     }
     Text(
-        text = "Affidabilità: $confidence",
+        text = stringResource(R.string.confidence_label, stringResource(label)),
         style = MaterialTheme.typography.labelMedium,
         color = color,
     )

@@ -17,7 +17,16 @@ android {
         versionName = "0.1.0"
     }
 
+    androidResources {
+        // Declares the supported languages to the system ("App language" on Android 13+)
+        generateLocaleConfig = true
+    }
+
     buildTypes {
+        debug {
+            // en-XA / ar-XB pseudo-locales to spot hardcoded or truncated text
+            isPseudoLocalesEnabled = true
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -33,10 +42,15 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

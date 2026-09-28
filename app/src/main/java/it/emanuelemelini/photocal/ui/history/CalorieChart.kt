@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextMeasurer
@@ -24,9 +25,10 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import it.emanuelemelini.photocal.AppLocale
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.ui.formatKcal
 import java.time.format.TextStyle as DateTextStyle
-import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -68,6 +70,9 @@ fun CalorieChart(
     val barColor = if (isDark) BAR_DARK else BAR_LIGHT
     val overGoalColor = if (isDark) BAR_OVER_DARK else BAR_OVER_LIGHT
 
+    val chartDescription = pluralStringResource(R.plurals.history_chart_description, days.size, days.size, kcalGoal)
+    val locale = AppLocale.current
+
     val maxKcal = days.maxOf { it.kcal }
     val step = niceStep(max(kcalGoal.toDouble(), maxKcal))
     val axisMax = ceil(max(kcalGoal.toDouble(), maxKcal) * 1.05 / step) * step
@@ -84,7 +89,7 @@ fun CalorieChart(
                 }
             }
             .semantics {
-                contentDescription = "Grafico delle calorie degli ultimi ${days.size} giorni, obiettivo $kcalGoal kcal"
+                contentDescription = chartDescription
             },
     ) {
         val plotLeft = AXIS_WIDTH.toPx()
@@ -148,7 +153,7 @@ fun CalorieChart(
         days.forEachIndexed { index, day ->
             if ((days.lastIndex - index) % labelEvery != 0) return@forEachIndexed
             val text = if (days.size <= 7) {
-                day.date.dayOfWeek.getDisplayName(DateTextStyle.SHORT, Locale.ITALIAN)
+                day.date.dayOfWeek.getDisplayName(DateTextStyle.SHORT, locale)
             } else {
                 day.date.dayOfMonth.toString()
             }

@@ -1,7 +1,12 @@
 # Piano di localizzazione
 
-Obiettivo: tutti i testi dell'app seguono la lingua del dispositivo. Oggi sono in italiano,
-scritti direttamente nel codice.
+Obiettivo: tutti i testi dell'app seguono la lingua del dispositivo, con in più la possibilità
+di sceglierla dentro l'app.
+
+> **Stato: implementato.** Decisioni prese: italiano come lingua predefinita (`values/`),
+> inglese in `values-en/`, tabelle CREA sempre attive, selettore della lingua anche nell'app
+> (Impostazioni → Aspetto → Lingua: Sistema / Italiano / English). Le sezioni qui sotto
+> descrivono il piano iniziale; dove l'implementazione differisce è indicato in fondo.
 
 ## 1. Situazione attuale
 
@@ -105,3 +110,32 @@ In totale sono circa 190 occorrenze, cioè circa 170 stringhe distinte.
 Passo 1 → 2 → 3 in un unico blocco, così da non mescolare testi estratti e testi nel
 codice; poi il 4, poi il 5 (tocca i prompt: da riprovare con la API key); il 6 alla fine
 di ogni passo.
+
+## 6. Come è stato implementato
+
+- **Risorse**: 165 stringhe e 7 plurali in `res/values/strings.xml` (italiano) e
+  `res/values-en/strings.xml` (inglese). `resources.properties` dichiara
+  `unqualifiedResLocale=it`; `generateLocaleConfig` genera l'elenco delle lingue per il sistema.
+- **Selettore nell'app**: `AppLocale.choose()` usa `AppCompatDelegate.setApplicationLocales`.
+  Su Android 13+ è la stessa "Lingua dell'app" delle impostazioni di sistema; prima di
+  Android 13 la scelta la salva AppCompat (`AppLocalesMetadataHolderService`). Per questo
+  `MainActivity` è una `AppCompatActivity` con tema AppCompat.
+- **Lingua corrente**: `AppLocale.current`, aggiornata da `MainActivity` a ogni creazione
+  (l'activity viene ricreata a ogni cambio di lingua). Le lingue non tradotte usano
+  l'italiano per i testi e le proprie convenzioni per numeri e date.
+- **Testi fuori dalla UI**: `UiText` (`ui/UiText.kt`); le eccezioni hanno solo un messaggio
+  tecnico in inglese e la UI le traduce in `ui/ErrorMessages.kt`.
+- **Enum**: `labelRes` / `nameRes` / `menuRes`. Anche i nomi delle costanti sono in inglese
+  (`BREAKFAST`, `WINE_GLASS`, `DARK`...). Non ci sono migrazioni: l'app non è ancora
+  installata altrove, quindi il database riparte dalla versione 1 con lo schema attuale.
+- **Date**: `DateFormat.getBestDateTimePattern`, quindi "Lunedì 28 settembre 2026" /
+  "Monday, September 28, 2026".
+- **Gemini**: prompt unico in inglese; nomi e note arrivano nella lingua mostrata
+  dall'app. `confidence` usa `high`/`medium`/`low`.
+- **Open Food Facts**: nome del prodotto nella lingua dell'app (`product_name_it` /
+  `product_name_en`), con `product_name` come ripiego.
+- **Verifica**: test JVM (`FormatTest`), Lint senza traduzioni mancanti, controllo in
+  pseudo-locale en-XA. La pseudo-lingua en-XA deriva dai testi predefiniti, cioè
+  dall'italiano.
+- **Aggiungere una lingua**: una nuova `AppLanguage` in `AppLocale.kt` e un file
+  `res/values-<codice>/strings.xml`.

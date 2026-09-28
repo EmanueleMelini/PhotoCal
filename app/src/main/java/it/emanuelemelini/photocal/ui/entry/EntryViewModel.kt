@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
@@ -16,8 +17,11 @@ import it.emanuelemelini.photocal.data.estimate.FoodEstimator
 import it.emanuelemelini.photocal.data.estimate.PerGram
 import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.ui.EntryRoute
+import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.parseDecimal
+import it.emanuelemelini.photocal.ui.toUiText
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -27,7 +31,7 @@ data class EntryForm(
     val name: String = "",
     val mealType: MealType = MealType.suggestedFor(),
     val quantity: String = "",
-    val unit: ServingUnit = ServingUnit.GRAMMI,
+    val unit: ServingUnit = ServingUnit.GRAMS,
     val kcal: String = "",
     val protein: String = "",
     val carbs: String = "",
@@ -51,8 +55,9 @@ data class EntryForm(
 sealed interface AiEstimate {
     data object Idle : AiEstimate
     data object Running : AiEstimate
-    data class Done(val notes: String?) : AiEstimate
-    data class Failed(val message: String, val needsSettings: Boolean) : AiEstimate
+    /** [notes] come from the AI (already in the app language); [creaNames] are the CREA foods used. */
+    data class Done(val notes: String?, val creaNames: List<String>) : AiEstimate
+    data class Failed(val message: UiText, val needsSettings: Boolean) : AiEstimate
 }
 
 class EntryViewModel(
@@ -130,7 +135,7 @@ class EntryViewModel(
     fun estimateWithAi() {
         val current = form
         if (!current.nameValid) {
-            aiEstimate = AiEstimate.Failed("Scrivi prima nel campo Nome cosa hai mangiato o bevuto.", false)
+            aiEstimate = AiEstimate.Failed(uiText(R.string.entry_ai_name_first), false)
             return
         }
         if (aiEstimate == AiEstimate.Running) return
@@ -147,7 +152,10 @@ class EntryViewModel(
                 }
                 val totalGrams = items.sumOf { (item, _) -> item.grams }
                 if (items.isEmpty()) {
-                    AiEstimate.Failed(result.notes.ifBlank { "L'AI non ha riconosciuto alimenti nella descrizione." }, false)
+                    AiEstimate.Failed(
+                        result.notes.takeIf { it.isNotBlank() }?.let(UiText::Raw) ?: uiText(R.string.entry_ai_nothing_found),
+                        false,
+                    )
                 } else {
                     // Several foods in a single entry: they are summed up
                     val ratios = PerGram(
@@ -161,20 +169,16 @@ class EntryViewModel(
                     form = if (userGrams != null) {
                         form.scaledTo(userGrams, ratios)
                     } else {
-                        form.copy(quantity = totalGrams.formatAmount(), unit = ServingUnit.GRAMMI)
+                        form.copy(quantity = totalGrams.formatAmount(), unit = ServingUnit.GRAMS)
                             .scaledTo(totalGrams, ratios)
                     }
-                    val creaNames = items.mapNotNull { (item, _) -> item.crea?.name }
                     AiEstimate.Done(
-                        listOfNotNull(
-                            result.notes.ifBlank { null },
-                            creaNames.takeIf { it.isNotEmpty() }
-                                ?.joinToString(prefix = "Valori dalle tabelle CREA: ", postfix = "."),
-                        ).joinToString("\n").ifBlank { null }
+                        notes = result.notes.ifBlank { null },
+                        creaNames = items.mapNotNull { (item, _) -> item.crea?.name },
                     )
                 }
             } catch (e: GeminiException) {
-                AiEstimate.Failed(e.message.orEmpty(), e.needsSettings)
+                AiEstimate.Failed(e.toUiText(), e.needsSettings)
             }
         }
     }
@@ -188,7 +192,7 @@ class EntryViewModel(
         val name = current.name.trim()
         val grams = current.grams
         // For grams the grams column is enough; for other units the choice is stored too
-        val servingUnit = current.unit.takeIf { it != ServingUnit.GRAMMI }
+        val servingUnit = current.unit.takeIf { it != ServingUnit.GRAMS }
         val servings = if (servingUnit != null) parseDecimal(current.quantity) else null
         val kcal = parseDecimal(current.kcal)!!
         val protein = parseDecimal(current.protein)
@@ -249,21 +253,16 @@ class EntryViewModel(
         fat = ratios.fat?.let { (it * grams).formatAmount() } ?: fat,
     )
 
-    private fun describeQuantity(form: EntryForm, grams: Double): String {
-        val count = parseDecimal(form.quantity) ?: return "${grams.formatAmount()} g"
-        return when (form.unit) {
-            ServingUnit.GRAMMI -> "${grams.formatAmount()} g"
-            ServingUnit.MILLILITRI -> "${grams.formatAmount()} ml"
-            else -> "${count.formatAmount()} ${form.unit.labelFor(count)} (${grams.formatAmount()} ml)"
-        }
-    }
+    /** Total amount for the AI prompt: grams, or ml for liquid units. */
+    private fun describeQuantity(form: EntryForm, grams: Double): String =
+        "${grams.formatAmount()} ${if (form.unit.isLiquid) "ml" else "g"}"
 
     private fun <T> List<T>.sumOfOrNull(selector: (T) -> Double?): Double? =
         mapNotNull(selector).takeIf { it.isNotEmpty() }?.sum()
 
     private fun FoodEntry.toForm(): EntryForm {
-        val unit = servingUnit ?: ServingUnit.GRAMMI
-        val quantity = if (unit != ServingUnit.GRAMMI) servings else grams
+        val unit = servingUnit ?: ServingUnit.GRAMS
+        val quantity = if (unit != ServingUnit.GRAMS) servings else grams
         return EntryForm(
             name = name,
             mealType = mealType,

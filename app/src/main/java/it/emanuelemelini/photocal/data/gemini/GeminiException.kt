@@ -1,6 +1,9 @@
 package it.emanuelemelini.photocal.data.gemini
 
-/** Gemini errors with a message ready to show to the user. */
+/**
+ * Gemini errors. The message is technical (logs); the UI shows a translated text
+ * chosen from the error type (see ui/ErrorMessages.kt).
+ */
 sealed class GeminiException(
     message: String,
     /** true if the user has to fix something in Settings. */
@@ -8,35 +11,19 @@ sealed class GeminiException(
     cause: Throwable? = null,
 ) : Exception(message, cause) {
 
-    class MissingApiKey : GeminiException(
-        "API key Gemini mancante: inseriscila nelle Impostazioni.",
-        needsSettings = true,
-    )
+    class MissingApiKey : GeminiException("Missing Gemini API key", needsSettings = true)
 
-    class InvalidApiKey : GeminiException(
-        "API key non valida o senza permessi: controllala nelle Impostazioni.",
-        needsSettings = true,
-    )
+    class InvalidApiKey : GeminiException("Invalid Gemini API key or missing permissions", needsSettings = true)
 
-    class ModelNotFound(model: String) : GeminiException(
-        "Modello \"$model\" non disponibile: controlla il nome nelle Impostazioni.",
-        needsSettings = true,
-    )
+    class ModelNotFound(val model: String) : GeminiException("Model not found: $model", needsSettings = true)
 
-    class RateLimited : GeminiException("Limite richieste raggiunto, riprova tra poco.")
+    class RateLimited : GeminiException("Rate limit reached")
 
-    class Network(cause: Throwable) : GeminiException(
-        "Nessuna connessione a Internet: controlla la rete e riprova.",
-        cause = cause,
-    )
+    class Network(cause: Throwable) : GeminiException("Network error", cause = cause)
 
-    class InvalidResponse : GeminiException(
-        "Risposta dell'AI non valida. Riprova oppure inserisci gli alimenti a mano.",
-    )
+    class InvalidResponse : GeminiException("Invalid JSON response")
 
-    class Blocked(reason: String) : GeminiException("L'AI ha rifiutato la richiesta ($reason).")
+    class Blocked(val reason: String) : GeminiException("Request blocked: $reason")
 
-    class Http(code: Int, detail: String) : GeminiException(
-        "Errore del servizio Gemini ($code)" + if (detail.isNotBlank()) ": $detail" else ".",
-    )
+    class Http(val code: Int, val detail: String) : GeminiException("HTTP $code: $detail")
 }

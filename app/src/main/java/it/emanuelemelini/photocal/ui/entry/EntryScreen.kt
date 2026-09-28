@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,7 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.components.NumberField
@@ -76,16 +78,16 @@ fun EntryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (viewModel.isEditing) "Modifica voce" else "Nuova voce") },
+                title = { Text(stringResource(if (viewModel.isEditing) R.string.entry_title_edit else R.string.entry_title_new)) },
                 navigationIcon = {
                     IconButton(onClick = dropUnlessResumed(block = onDone)) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 actions = {
                     if (viewModel.isEditing) {
                         IconButton(onClick = { confirmDelete = true }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Elimina")
+                            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.action_delete))
                         }
                     }
                 },
@@ -113,7 +115,7 @@ fun EntryScreen(
             viewModel.photoPath?.let { path ->
                 AsyncImage(
                     model = File(path),
-                    contentDescription = "Foto del pasto",
+                    contentDescription = stringResource(R.string.photo_content_description),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -125,11 +127,11 @@ fun EntryScreen(
             OutlinedTextField(
                 value = form.name,
                 onValueChange = { viewModel.onFormChange(form.copy(name = it)) },
-                label = { Text("Nome") },
-                placeholder = { Text("es. 2 fette di pane integrale") },
+                label = { Text(stringResource(R.string.entry_name)) },
+                placeholder = { Text(stringResource(R.string.entry_name_placeholder)) },
                 isError = showErrors && !form.nameValid,
-                supportingText = errorText(showErrors && !form.nameValid, "Inserisci un nome")
-                    ?: { Text("La stima AI usa il nome e, se c'è, la quantità") },
+                supportingText = errorText(showErrors && !form.nameValid, stringResource(R.string.entry_name_required))
+                    ?: { Text(stringResource(R.string.entry_name_ai_hint)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
@@ -160,37 +162,37 @@ fun EntryScreen(
             NumberField(
                 value = form.kcal,
                 onValueChange = { viewModel.onFormChange(form.copy(kcal = it)) },
-                label = "Kcal",
+                label = stringResource(R.string.label_kcal),
                 isError = showErrors && !form.kcalValid,
-                error = "Obbligatorie",
-                helper = if (viewModel.autoScales) "Si ricalcolano cambiando la quantità" else null,
+                error = stringResource(R.string.error_required_pl),
+                helper = if (viewModel.autoScales) stringResource(R.string.entry_kcal_auto_scale) else null,
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Text("Macronutrienti (facoltativi)", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.entry_macros_optional), style = MaterialTheme.typography.labelLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 NumberField(
                     value = form.protein,
                     onValueChange = { viewModel.onFormChange(form.copy(protein = it)) },
-                    label = "Proteine g",
+                    label = stringResource(R.string.entry_protein_g),
                     isError = showErrors && !form.proteinValid,
-                    error = "Non valido",
+                    error = stringResource(R.string.error_invalid),
                     modifier = Modifier.weight(1f),
                 )
                 NumberField(
                     value = form.carbs,
                     onValueChange = { viewModel.onFormChange(form.copy(carbs = it)) },
-                    label = "Carboidr. g",
+                    label = stringResource(R.string.entry_carbs_g),
                     isError = showErrors && !form.carbsValid,
-                    error = "Non valido",
+                    error = stringResource(R.string.error_invalid),
                     modifier = Modifier.weight(1f),
                 )
                 NumberField(
                     value = form.fat,
                     onValueChange = { viewModel.onFormChange(form.copy(fat = it)) },
-                    label = "Grassi g",
+                    label = stringResource(R.string.entry_fat_g),
                     isError = showErrors && !form.fatValid,
-                    error = "Non valido",
+                    error = stringResource(R.string.error_invalid),
                     imeAction = ImeAction.Done,
                     modifier = Modifier.weight(1f),
                 )
@@ -201,23 +203,23 @@ fun EntryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-            ) { Text("Salva") }
+            ) { Text(stringResource(R.string.action_save)) }
         }
     }
 
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Eliminare la voce?") },
-            text = { Text("\"${form.name}\" verrà rimossa dal diario.") },
+            title = { Text(stringResource(R.string.entry_delete_title)) },
+            text = { Text(stringResource(R.string.entry_delete_text, form.name)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false
                     viewModel.delete()
-                }) { Text("Elimina") }
+                }) { Text(stringResource(R.string.action_delete)) }
             },
             dismissButton = {
-                TextButton(onClick = { confirmDelete = false }) { Text("Annulla") }
+                TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.action_cancel)) }
             },
         )
     }
@@ -238,24 +240,31 @@ private fun AiEstimateSection(
         if (running) {
             CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(12.dp))
-            Text("Stima in corso…")
+            Text(stringResource(R.string.entry_ai_running))
         } else {
-            Text("Stima con AI")
+            Text(stringResource(R.string.entry_ai_button))
         }
     }
     when (estimate) {
-        is AiEstimate.Done -> estimate.notes?.let {
-            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        is AiEstimate.Done -> {
+            val text = listOfNotNull(
+                estimate.notes,
+                estimate.creaNames.takeIf { it.isNotEmpty() }
+                    ?.let { stringResource(R.string.entry_ai_crea_values, it.joinToString()) },
+            ).joinToString("\n")
+            if (text.isNotEmpty()) {
+                Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
         is AiEstimate.Failed -> Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                estimate.message,
+                estimate.message.asString(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.weight(1f),
             )
             if (estimate.needsSettings) {
-                TextButton(onClick = onOpenSettings) { Text("Impostazioni") }
+                TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
             }
         }
         else -> Unit

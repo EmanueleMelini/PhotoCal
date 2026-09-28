@@ -39,13 +39,13 @@ class PhotoStorage(private val context: Context) {
         withContext(Dispatchers.IO) {
             val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
             BitmapFactory.decodeFile(path, bounds)
-            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) throw IOException("Foto non leggibile")
+            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) throw IOException("Unreadable photo")
 
             // Cheap first pass: power-of-two subsampling
             var sampleSize = 1
             while (max(bounds.outWidth, bounds.outHeight) / (sampleSize * 2) >= maxSide) sampleSize *= 2
             val decoded = BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = sampleSize })
-                ?: throw IOException("Foto non leggibile")
+                ?: throw IOException("Unreadable photo")
 
             val rotation = ExifInterface(path).rotationDegrees
             val scale = min(1f, maxSide.toFloat() / max(decoded.width, decoded.height))

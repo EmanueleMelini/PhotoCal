@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
@@ -16,8 +17,11 @@ import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
 import it.emanuelemelini.photocal.data.openfoodfacts.Product
 import it.emanuelemelini.photocal.data.openfoodfacts.ProductLookupException
 import it.emanuelemelini.photocal.ui.BarcodeRoute
+import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.parseDecimal
+import it.emanuelemelini.photocal.ui.toUiText
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -29,7 +33,7 @@ sealed interface BarcodeStatus {
     data class Loading(val barcode: String) : BarcodeStatus
     data class Found(val product: Product) : BarcodeStatus
     data class NotFound(val barcode: String) : BarcodeStatus
-    data class Error(val message: String, val barcode: String?) : BarcodeStatus
+    data class Error(val message: UiText, val barcode: String?) : BarcodeStatus
 }
 
 /** Nutrition values computed for the chosen quantity. */
@@ -56,7 +60,7 @@ class BarcodeViewModel(
         private set
     var quantity by mutableStateOf("")
         private set
-    var unit by mutableStateOf(ServingUnit.GRAMMI)
+    var unit by mutableStateOf(ServingUnit.GRAMS)
         private set
     var mealType by mutableStateOf(MealType.suggestedFor())
         private set
@@ -107,10 +111,10 @@ class BarcodeViewModel(
     /** Serving or whole package: sets the quantity in g/ml. */
     fun useAmount(amount: Double, isLiquid: Boolean) {
         quantity = amount.formatAmount()
-        unit = if (isLiquid) ServingUnit.MILLILITRI else ServingUnit.GRAMMI
+        unit = if (isLiquid) ServingUnit.MILLILITERS else ServingUnit.GRAMS
     }
 
-    fun onScanFailed(message: String) {
+    fun onScanFailed(message: UiText) {
         status = BarcodeStatus.Error(message, barcode = null)
     }
 
@@ -123,18 +127,18 @@ class BarcodeViewModel(
             status = try {
                 val product = openFoodFactsClient.getProduct(code)
                 name = product.displayName
-                unit = if (product.isLiquid) ServingUnit.MILLILITRI else ServingUnit.GRAMMI
+                unit = if (product.isLiquid) ServingUnit.MILLILITERS else ServingUnit.GRAMS
                 quantity = product.servingQuantity?.formatAmount().orEmpty()
                 showErrors = false
                 if (product.hasNutrition) BarcodeStatus.Found(product)
                 else BarcodeStatus.Error(
-                    "\"${product.displayName}\" è su Open Food Facts ma senza valori nutrizionali.",
+                    uiText(R.string.barcode_no_nutrition, product.displayName),
                     barcode = code,
                 )
             } catch (_: ProductLookupException.NotFound) {
                 BarcodeStatus.NotFound(code)
             } catch (e: ProductLookupException) {
-                BarcodeStatus.Error(e.message.orEmpty(), barcode = code)
+                BarcodeStatus.Error(e.toUiText(), barcode = code)
             }
         }
     }
@@ -146,7 +150,7 @@ class BarcodeViewModel(
             showErrors = true
             return
         }
-        val servingUnit = unit.takeIf { it != ServingUnit.GRAMMI }
+        val servingUnit = unit.takeIf { it != ServingUnit.GRAMS }
         viewModelScope.launch {
             foodRepository.add(
                 FoodEntry(

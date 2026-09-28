@@ -1,6 +1,8 @@
 package it.emanuelemelini.photocal.data.openfoodfacts
 
 import android.util.Log
+import it.emanuelemelini.photocal.AppLanguage
+import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.data.http.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,10 +15,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
+/** Open Food Facts errors; the UI shows a translated text chosen from the type. */
 sealed class ProductLookupException(message: String) : Exception(message) {
-    class NotFound : ProductLookupException("Prodotto non presente su Open Food Facts.")
-    class Network : ProductLookupException("Nessuna connessione a Internet: controlla la rete e riprova.")
-    class Server(code: Int) : ProductLookupException("Open Food Facts non risponde (errore $code). Riprova più tardi.")
+    class NotFound : ProductLookupException("Product not found")
+    class Network : ProductLookupException("Network error")
+    class Server(val code: Int) : ProductLookupException("Server error $code")
 }
 
 /** Reads products from the public Open Food Facts API v3. */
@@ -61,9 +64,10 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
         val quantityText = string("quantity")?.lowercase().orEmpty()
         return Product(
             barcode = barcode,
-            name = string("product_name_it")?.takeIf { it.isNotBlank() }
+            // Name in the app language when available, otherwise the generic one
+            name = string("product_name_${AppLocale.language.tag}")?.takeIf { it.isNotBlank() }
                 ?: string("product_name")?.takeIf { it.isNotBlank() }
-                ?: "Prodotto $barcode",
+                ?: barcode,
             brand = string("brands")?.split(',')?.firstOrNull()?.trim()?.takeIf { it.isNotEmpty() },
             kcalPer100 = kcal,
             proteinPer100 = nutriments?.double("proteins_100g"),
@@ -88,7 +92,7 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
         const val USER_AGENT = "PhotoCal/0.1 (personal Android app)"
         const val KJ_PER_KCAL = 4.184
         val FIELDS = listOf(
-            "product_name", "product_name_it", "brands", "nutriments", "quantity",
+            "product_name", *AppLanguage.entries.map { "product_name_${it.tag}" }.toTypedArray(), "brands", "nutriments", "quantity",
             "serving_quantity", "product_quantity", "product_quantity_unit", "image_front_small_url",
         ).joinToString(",")
         val LIQUID_QUANTITY = Regex("""\d\s*(ml|cl|l)\b""")

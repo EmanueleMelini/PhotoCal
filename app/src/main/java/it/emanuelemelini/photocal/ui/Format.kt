@@ -1,5 +1,11 @@
 package it.emanuelemelini.photocal.ui
 
+import android.text.format.DateFormat
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import it.emanuelemelini.photocal.AppLocale
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.ServingUnit
 import java.time.LocalDate
@@ -7,43 +13,50 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.roundToInt
 
-private val ITALIAN: Locale = Locale.ITALIAN
-private val shortDateFormatter = DateTimeFormatter.ofPattern("EEE d MMM yyyy", ITALIAN)
-private val longDateFormatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", ITALIAN)
-
 fun Double.formatKcal(): String = roundToInt().toString()
 
-/** Grams and macros: whole numbers without decimals, otherwise one decimal with a comma. */
-fun Double.formatAmount(): String {
+/** Grams and macros: whole numbers without decimals, otherwise one decimal (locale separator). */
+fun Double.formatAmount(locale: Locale = AppLocale.current): String {
     val rounded = (this * 10).roundToInt() / 10.0
     return if (rounded % 1.0 == 0.0) rounded.toLong().toString()
-    else String.format(ITALIAN, "%.1f", rounded)
+    else String.format(locale, "%.1f", rounded)
 }
 
-/** Accepts both comma and dot as decimal separator. */
+/** Accepts both comma and dot as decimal separator, whatever the language. */
 fun parseDecimal(text: String): Double? = text.trim().replace(',', '.').toDoubleOrNull()
 
-/** "Oggi", "Ieri", "Domani" (today, yesterday, tomorrow), or null for other dates. */
+/** Today / Yesterday / Tomorrow, or null for other dates. */
+@Composable
 fun LocalDate.relativeLabel(today: LocalDate = LocalDate.now()): String? = when (this) {
-    today -> "Oggi"
-    today.minusDays(1) -> "Ieri"
-    today.plusDays(1) -> "Domani"
+    today -> stringResource(R.string.day_today)
+    today.minusDays(1) -> stringResource(R.string.day_yesterday)
+    today.plusDays(1) -> stringResource(R.string.day_tomorrow)
     else -> null
 }
 
-fun LocalDate.shortLabel(): String = format(shortDateFormatter).capitalized()
+/** e.g. "Lun 28 set 2026" / "Mon, Sep 28, 2026": field order follows the language. */
+fun LocalDate.shortLabel(locale: Locale = AppLocale.current): String = formatted("EEEdMMMyyyy", locale)
 
-fun LocalDate.longLabel(): String = format(longDateFormatter).capitalized()
+/** e.g. "Lunedì 28 settembre 2026" / "Monday, September 28, 2026". */
+fun LocalDate.longLabel(locale: Locale = AppLocale.current): String = formatted("EEEEdMMMMyyyy", locale)
 
-private fun String.capitalized() = replaceFirstChar { it.titlecase(ITALIAN) }
+private fun LocalDate.formatted(skeleton: String, locale: Locale): String {
+    val pattern = DateFormat.getBestDateTimePattern(locale, skeleton)
+    return format(DateTimeFormatter.ofPattern(pattern, locale)).replaceFirstChar { it.titlecase(locale) }
+}
+
+/** Plural quantity for a decimal count: "1 calice", "1,5 calici". */
+fun pluralCount(count: Double): Int = if (count == 1.0) 1 else 2
 
 /** Quantity shown in the diary, e.g. "120 g" or "2 calici (300 ml)". */
+@Composable
 fun FoodEntry.quantityLabel(): String? {
     val unit = servingUnit
     val count = servings
-    if (unit != null && unit != ServingUnit.GRAMMI && count != null) {
-        return if (unit == ServingUnit.MILLILITRI) "${count.formatAmount()} ml"
-        else "${count.formatAmount()} ${unit.labelFor(count)} (${(count * unit.gramsPerUnit).formatAmount()} ml)"
+    if (unit != null && unit != ServingUnit.GRAMS && count != null) {
+        if (unit == ServingUnit.MILLILITERS) return "${count.formatAmount()} ml"
+        val name = pluralStringResource(unit.nameRes, pluralCount(count))
+        return "${count.formatAmount()} $name (${(count * unit.gramsPerUnit).formatAmount()} ml)"
     }
     return grams?.let { "${it.formatAmount()} g" }
 }

@@ -66,6 +66,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -137,13 +138,17 @@ fun TodayScreen(
         if (success) onPhotoTaken(path, LocalDate.ofEpochDay(day)) else photoStorage.delete(path)
     }
 
+    val photoNeedsKey = stringResource(R.string.today_photo_needs_key)
+    val settingsLabel = stringResource(R.string.action_settings)
+    val noCamera = stringResource(R.string.today_no_camera)
+
     fun startPhoto() {
         fabExpanded = false
         if (!state.hasApiKey) {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = "Per l'analisi delle foto serve la API key Gemini",
-                    actionLabel = "Impostazioni",
+                    message = photoNeedsKey,
+                    actionLabel = settingsLabel,
                     duration = SnackbarDuration.Long,
                 )
                 if (result == SnackbarResult.ActionPerformed) onOpenSettings()
@@ -158,20 +163,20 @@ fun TodayScreen(
         } catch (_: ActivityNotFoundException) {
             pendingPhotoPath = null
             pendingPhotoDay = null
-            scope.launch { snackbarHostState.showSnackbar("Nessuna app fotocamera disponibile") }
+            scope.launch { snackbarHostState.showSnackbar(noCamera) }
         }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("PhotoCal") },
+                title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onOpenHistory) {
-                        Icon(painterResource(R.drawable.ic_bar_chart), contentDescription = "Storico")
+                        Icon(painterResource(R.drawable.ic_bar_chart), contentDescription = stringResource(R.string.today_history))
                     }
                     IconButton(onClick = onOpenSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = "Impostazioni")
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.action_settings))
                     }
                 },
             )
@@ -214,7 +219,7 @@ fun TodayScreen(
             if (!state.isLoading && state.meals.isEmpty()) {
                 item {
                     Text(
-                        text = "Nessuna voce per questo giorno.\nTocca + per aggiungere un alimento.",
+                        text = stringResource(R.string.today_empty),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
@@ -248,13 +253,13 @@ fun TodayScreen(
                         viewModel.selectDate(Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate())
                     }
                     showDatePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.action_ok)) }
             },
             dismissButton = {
                 TextButton(onClick = {
                     viewModel.selectDate(LocalDate.now())
                     showDatePicker = false
-                }) { Text("Vai a oggi") }
+                }) { Text(stringResource(R.string.today_go_to_today)) }
             },
         ) {
             DatePicker(state = pickerState)
@@ -276,7 +281,7 @@ private fun DateSelector(
             .padding(horizontal = 8.dp),
     ) {
         IconButton(onClick = onPrevious) {
-            Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Giorno precedente")
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = stringResource(R.string.today_previous_day))
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -299,7 +304,7 @@ private fun DateSelector(
             }
         }
         IconButton(onClick = onNext) {
-            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Giorno successivo")
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = stringResource(R.string.today_next_day))
         }
     }
 }
@@ -339,8 +344,8 @@ private fun SummaryCard(totals: Totals, kcalGoal: Int) {
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = if (overGoal) "Oltre l'obiettivo di ${(-remaining).formatKcal()} kcal"
-                else "Rimangono ${remaining.formatKcal()} kcal",
+                text = if (overGoal) stringResource(R.string.today_over_goal, (-remaining).formatKcal())
+                else stringResource(R.string.today_remaining, remaining.formatKcal()),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (overGoal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -348,9 +353,9 @@ private fun SummaryCard(totals: Totals, kcalGoal: Int) {
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                MacroItem("Proteine", totals.proteinG)
-                MacroItem("Carboidrati", totals.carbsG)
-                MacroItem("Grassi", totals.fatG)
+                MacroItem(stringResource(R.string.macro_protein), totals.proteinG)
+                MacroItem(stringResource(R.string.macro_carbs), totals.carbsG)
+                MacroItem(stringResource(R.string.macro_fat), totals.fatG)
             }
         }
     }
@@ -377,7 +382,7 @@ private fun MealHeader(group: MealGroup) {
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
     ) {
         Text(
-            text = group.mealType.label,
+            text = stringResource(group.mealType.labelRes),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f),
@@ -394,9 +399,9 @@ private fun MealHeader(group: MealGroup) {
 private fun EntryRow(entry: FoodEntry, onClick: () -> Unit) {
     val details = listOfNotNull(
         entry.quantityLabel(),
-        entry.proteinG?.let { "P ${it.formatAmount()}" },
-        entry.carbsG?.let { "C ${it.formatAmount()}" },
-        entry.fatG?.let { "G ${it.formatAmount()}" },
+        entry.proteinG?.let { stringResource(R.string.macro_short_protein, it.formatAmount()) },
+        entry.carbsG?.let { stringResource(R.string.macro_short_carbs, it.formatAmount()) },
+        entry.fatG?.let { stringResource(R.string.macro_short_fat, it.formatAmount()) },
     ).joinToString(" · ")
 
     ListItem(
@@ -446,15 +451,15 @@ private fun AddFab(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(end = 4.dp),
             ) {
-                FabAction("Foto", painterResource(R.drawable.ic_photo_camera), onClick = onPhoto)
-                FabAction("Barcode", painterResource(R.drawable.ic_barcode), onClick = onBarcode)
-                FabAction("Manuale", rememberVectorPainter(Icons.Default.Edit), onClick = onManual)
+                FabAction(stringResource(R.string.fab_photo), painterResource(R.drawable.ic_photo_camera), onClick = onPhoto)
+                FabAction(stringResource(R.string.fab_barcode), painterResource(R.drawable.ic_barcode), onClick = onBarcode)
+                FabAction(stringResource(R.string.fab_manual), rememberVectorPainter(Icons.Default.Edit), onClick = onManual)
             }
         }
         FloatingActionButton(onClick = { onExpandedChange(!expanded) }) {
             Icon(
                 imageVector = if (expanded) Icons.Default.Close else Icons.Default.Add,
-                contentDescription = if (expanded) "Chiudi" else "Aggiungi",
+                contentDescription = stringResource(if (expanded) R.string.action_close else R.string.action_add),
             )
         }
     }

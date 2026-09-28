@@ -25,7 +25,7 @@ data class AnalyzedFood(
     @SerialName("protein_g") val proteinG: Double? = null,
     @SerialName("carbs_g") val carbsG: Double? = null,
     @SerialName("fat_g") val fatG: Double? = null,
-    /** "alta", "media" or "bassa" (high, medium, low). */
+    /** "high", "medium" or "low". */
     val confidence: String? = null,
     /** Code of the matching CREA food (empty if none or if the tables are disabled). */
     @SerialName("crea_code") val creaCode: String? = null,
@@ -40,19 +40,19 @@ internal val FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
             putJsonObject("items") {
                 put("type", "OBJECT")
                 putJsonObject("properties") {
-                    property("name", "STRING", "Nome breve dell'alimento in italiano")
-                    property("grams", "NUMBER", "Peso stimato in grammi (per le bevande, ml)")
-                    property("kcal", "NUMBER", "Chilocalorie per il peso stimato")
-                    property("protein_g", "NUMBER", "Proteine in grammi")
-                    property("carbs_g", "NUMBER", "Carboidrati in grammi")
-                    property("fat_g", "NUMBER", "Grassi in grammi")
-                    property("crea_code", "STRING", "Codice CREA dell'alimento corrispondente, vuoto se nessuno")
+                    property("name", "STRING", "Short food name")
+                    property("grams", "NUMBER", "Estimated weight in grams (ml for drinks)")
+                    property("kcal", "NUMBER", "Kilocalories for the estimated weight")
+                    property("protein_g", "NUMBER", "Protein in grams")
+                    property("carbs_g", "NUMBER", "Carbohydrates in grams")
+                    property("fat_g", "NUMBER", "Fat in grams")
+                    property("crea_code", "STRING", "CREA code of the matching food, empty if none")
                     putJsonObject("confidence") {
                         put("type", "STRING")
                         putJsonArray("enum") {
-                            add("alta")
-                            add("media")
-                            add("bassa")
+                            add("high")
+                            add("medium")
+                            add("low")
                         }
                     }
                 }
@@ -61,7 +61,7 @@ internal val FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
                 putJsonArray("propertyOrdering") { fields.forEach { add(it) } }
             }
         }
-        property("notes", "STRING", "Osservazioni brevi: condimenti ipotizzati, incertezze")
+        property("notes", "STRING", "Short remarks: assumed condiments, uncertainties")
     }
     putJsonArray("required") {
         add("items")

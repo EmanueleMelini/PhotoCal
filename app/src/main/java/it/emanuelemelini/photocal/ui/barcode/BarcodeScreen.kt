@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -61,6 +62,7 @@ import it.emanuelemelini.photocal.ui.components.QuantityRow
 import it.emanuelemelini.photocal.ui.components.errorText
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -88,13 +90,13 @@ fun BarcodeScreen(
                 viewModel.onScanFailed(
                     if (e.errorCode == MlKitException.UNAVAILABLE) {
                         // The Play services module is downloaded on first use
-                        "Lo scanner si sta scaricando da Google Play services: riprova tra qualche istante."
+                        uiText(R.string.barcode_scanner_downloading)
                     } else {
-                        "Scanner non disponibile. Riprova o inserisci il codice a mano."
+                        uiText(R.string.barcode_scanner_unavailable)
                     }
                 )
             } catch (_: Exception) {
-                viewModel.onScanFailed("Scanner non disponibile. Riprova o inserisci il codice a mano.")
+                viewModel.onScanFailed(uiText(R.string.barcode_scanner_unavailable))
             }
         }
     }
@@ -112,10 +114,10 @@ fun BarcodeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Barcode") },
+                title = { Text(stringResource(R.string.barcode_title)) },
                 navigationIcon = {
                     IconButton(onClick = dropUnlessResumed(block = onDone)) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
             )
@@ -140,17 +142,17 @@ fun BarcodeScreen(
                 is BarcodeStatus.Loading -> Row(verticalAlignment = Alignment.CenterVertically) {
                     CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
                     Spacer(Modifier.width(16.dp))
-                    Text("Cerco il prodotto ${status.barcode}…")
+                    Text(stringResource(R.string.barcode_searching, status.barcode))
                 }
 
                 is BarcodeStatus.NotFound -> MessageCard(
-                    message = "Nessun prodotto con codice ${status.barcode} su Open Food Facts.",
+                    message = stringResource(R.string.barcode_not_found, status.barcode),
                     onScanAgain = ::startScan,
                     onManualEntry = { onManualEntry(null) },
                 )
 
                 is BarcodeStatus.Error -> MessageCard(
-                    message = status.message,
+                    message = status.message.asString(),
                     onRetry = status.barcode?.let { code -> { viewModel.lookup(code) } },
                     onScanAgain = ::startScan,
                     onManualEntry = { onManualEntry(viewModel.name.ifBlank { null }) },
@@ -183,13 +185,13 @@ private fun ScanPrompt(
     onSearch: () -> Unit,
 ) {
     Text(
-        "Inquadra il codice a barre di un prodotto confezionato: i valori nutrizionali arrivano da Open Food Facts.",
+        stringResource(R.string.barcode_intro),
         style = MaterialTheme.typography.bodyMedium,
     )
     Button(onClick = onScan, modifier = Modifier.fillMaxWidth()) {
         Icon(painterResource(R.drawable.ic_barcode), contentDescription = null)
         Spacer(Modifier.width(8.dp))
-        Text("Scansiona")
+        Text(stringResource(R.string.barcode_scan))
     }
     ManualCodeField(manualCode, onManualCodeChange, onSearch)
 }
@@ -204,13 +206,13 @@ private fun ManualCodeField(
         OutlinedTextField(
             value = manualCode,
             onValueChange = onManualCodeChange,
-            label = { Text("Oppure digita il codice") },
+            label = { Text(stringResource(R.string.barcode_type_code)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { if (manualCode.length >= 8) onSearch() }),
             modifier = Modifier.weight(1f),
         )
-        OutlinedButton(onClick = onSearch, enabled = manualCode.length >= 8) { Text("Cerca") }
+        OutlinedButton(onClick = onSearch, enabled = manualCode.length >= 8) { Text(stringResource(R.string.barcode_search)) }
     }
 }
 
@@ -228,9 +230,9 @@ private fun MessageCard(
         Column(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
             Text(message, color = MaterialTheme.colorScheme.onErrorContainer)
             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                onRetry?.let { TextButton(onClick = it) { Text("Riprova") } }
-                TextButton(onClick = onScanAgain) { Text("Scansiona") }
-                TextButton(onClick = onManualEntry) { Text("Inserisci a mano") }
+                onRetry?.let { TextButton(onClick = it) { Text(stringResource(R.string.action_retry)) } }
+                TextButton(onClick = onScanAgain) { Text(stringResource(R.string.barcode_scan)) }
+                TextButton(onClick = onManualEntry) { Text(stringResource(R.string.action_manual_entry)) }
             }
         }
     }
@@ -267,7 +269,7 @@ private fun ProductForm(
                     Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(
-                    text = "Per 100 $unitLabel: " + per100Summary(product),
+                    text = stringResource(R.string.barcode_per_100, unitLabel, per100Summary(product)),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 4.dp),
                 )
@@ -278,9 +280,9 @@ private fun ProductForm(
     OutlinedTextField(
         value = viewModel.name,
         onValueChange = viewModel::onNameChange,
-        label = { Text("Nome nel diario") },
+        label = { Text(stringResource(R.string.barcode_diary_name)) },
         isError = viewModel.showErrors && !viewModel.nameValid,
-        supportingText = errorText(viewModel.showErrors && !viewModel.nameValid, "Inserisci un nome"),
+        supportingText = errorText(viewModel.showErrors && !viewModel.nameValid, stringResource(R.string.entry_name_required)),
         singleLine = true,
         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
         modifier = Modifier.fillMaxWidth(),
@@ -299,13 +301,13 @@ private fun ProductForm(
             product.servingQuantity?.let { serving ->
                 AssistChip(
                     onClick = { viewModel.useAmount(serving, product.isLiquid) },
-                    label = { Text("1 porzione (${serving.formatAmount()} $unitLabel)") },
+                    label = { Text(stringResource(R.string.barcode_one_serving, serving.formatAmount(), unitLabel)) },
                 )
             }
             product.packageQuantity?.takeIf { it != product.servingQuantity }?.let { pack ->
                 AssistChip(
                     onClick = { viewModel.useAmount(pack, product.isLiquid) },
-                    label = { Text("Confezione (${pack.formatAmount()} $unitLabel)") },
+                    label = { Text(stringResource(R.string.barcode_package, pack.formatAmount(), unitLabel)) },
                 )
             }
         }
@@ -314,7 +316,7 @@ private fun ProductForm(
     viewModel.nutrition?.let { values ->
         HorizontalDivider()
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Totale", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            Text(stringResource(R.string.label_total), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             Text(
                 "${values.kcal.formatKcal()} kcal",
                 style = MaterialTheme.typography.titleMedium,
@@ -323,9 +325,9 @@ private fun ProductForm(
         }
         Text(
             listOfNotNull(
-                values.proteinG?.let { "Proteine ${it.formatAmount()} g" },
-                values.carbsG?.let { "Carboidrati ${it.formatAmount()} g" },
-                values.fatG?.let { "Grassi ${it.formatAmount()} g" },
+                values.proteinG?.let { stringResource(R.string.macro_protein_g, it.formatAmount()) },
+                values.carbsG?.let { stringResource(R.string.macro_carbs_g, it.formatAmount()) },
+                values.fatG?.let { stringResource(R.string.macro_fat_g, it.formatAmount()) },
             ).joinToString(" · "),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -334,13 +336,14 @@ private fun ProductForm(
 
     MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)
 
-    Button(onClick = viewModel::save, modifier = Modifier.fillMaxWidth()) { Text("Salva") }
-    TextButton(onClick = onScanAgain, modifier = Modifier.fillMaxWidth()) { Text("Scansiona un altro prodotto") }
+    Button(onClick = viewModel::save, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.action_save)) }
+    TextButton(onClick = onScanAgain, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.barcode_scan_another)) }
 }
 
+@Composable
 private fun per100Summary(product: Product): String = listOfNotNull(
     product.kcalPer100?.let { "${it.formatKcal()} kcal" },
-    product.proteinPer100?.let { "P ${it.formatAmount()}" },
-    product.carbsPer100?.let { "C ${it.formatAmount()}" },
-    product.fatPer100?.let { "G ${it.formatAmount()}" },
+    product.proteinPer100?.let { stringResource(R.string.macro_short_protein, it.formatAmount()) },
+    product.carbsPer100?.let { stringResource(R.string.macro_short_carbs, it.formatAmount()) },
+    product.fatPer100?.let { stringResource(R.string.macro_short_fat, it.formatAmount()) },
 ).joinToString(" · ")

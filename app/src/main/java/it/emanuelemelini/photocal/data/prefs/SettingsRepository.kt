@@ -1,27 +1,30 @@
 package it.emanuelemelini.photocal.data.prefs
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import it.emanuelemelini.photocal.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 
-enum class ThemeMode(val label: String) {
-    SISTEMA("Sistema"),
-    CHIARO("Chiaro"),
-    SCURO("Scuro"),
+/** The constant names are stored in the preferences: don't rename them. */
+enum class ThemeMode(@StringRes val labelRes: Int) {
+    SYSTEM(R.string.theme_system),
+    LIGHT(R.string.theme_light),
+    DARK(R.string.theme_dark),
 }
 
 data class Settings(
     val dailyKcalGoal: Int = SettingsRepository.DEFAULT_KCAL_GOAL,
     val geminiApiKey: String = "",
     val geminiModel: String = SettingsRepository.DEFAULT_GEMINI_MODEL,
-    val themeMode: ThemeMode = ThemeMode.SISTEMA,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
     /** Material You colors taken from the wallpaper (Android 12+). */
     val dynamicColor: Boolean = true,
     /** Kcal and macros from the CREA tables when the AI finds the matching food. */
@@ -35,7 +38,7 @@ class SettingsRepository(private val context: Context) {
             dailyKcalGoal = prefs[KCAL_GOAL] ?: DEFAULT_KCAL_GOAL,
             geminiApiKey = prefs[GEMINI_API_KEY].orEmpty(),
             geminiModel = prefs[GEMINI_MODEL]?.takeIf { it.isNotBlank() } ?: DEFAULT_GEMINI_MODEL,
-            themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.find { it.name == name } } ?: ThemeMode.SISTEMA,
+            themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.find { it.name == name } } ?: ThemeMode.SYSTEM,
             dynamicColor = prefs[DYNAMIC_COLOR] ?: true,
             useCrea = prefs[USE_CREA] ?: true,
         )

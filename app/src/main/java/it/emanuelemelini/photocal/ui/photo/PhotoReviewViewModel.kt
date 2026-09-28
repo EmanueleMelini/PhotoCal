@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
@@ -17,8 +18,11 @@ import it.emanuelemelini.photocal.data.estimate.PerGram
 import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.ui.PhotoReviewRoute
+import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.parseDecimal
+import it.emanuelemelini.photocal.ui.toUiText
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.time.Instant
@@ -102,7 +106,7 @@ sealed interface ReviewStatus {
     data object Ready : ReviewStatus
     data object Analyzing : ReviewStatus
     data class Error(
-        val message: String,
+        val message: UiText,
         val needsSettings: Boolean,
         val canRetry: Boolean = true,
     ) : ReviewStatus
@@ -158,7 +162,7 @@ class PhotoReviewViewModel(
                 ReviewStatus.Ready
             } catch (_: IOException) {
                 ReviewStatus.Error(
-                    "Impossibile leggere la foto. Puoi comunque inserire gli alimenti a mano.",
+                    uiText(R.string.photo_unreadable),
                     needsSettings = false,
                     canRetry = false,
                 )
@@ -187,7 +191,7 @@ class PhotoReviewViewModel(
                 showErrors = false
                 ReviewStatus.Ready
             } catch (e: GeminiException) {
-                ReviewStatus.Error(e.message.orEmpty(), e.needsSettings)
+                ReviewStatus.Error(e.toUiText(), e.needsSettings)
             }
         }
     }

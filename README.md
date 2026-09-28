@@ -29,6 +29,10 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   CREA e indica per ogni voce il codice corrispondente; kcal e macro vengono allora dalla
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove
   arrivano i valori e si può passare alla stima dell'AI.
+- **Lingua**: italiano e inglese. Segue la lingua del telefono oppure la scelta in
+  Impostazioni → Aspetto → Lingua. I testi sono in `res/values/strings.xml` (italiano,
+  predefinito) e `res/values-en/strings.xml`; dettagli in
+  [docs/LOCALIZATION_PLAN.md](docs/LOCALIZATION_PLAN.md).
 - **Barcode**: lo scanner è quello di Google Play services (nessun permesso fotocamera); il
   modulo viene scaricato all'installazione. I valori nutrizionali arrivano da
   [Open Food Facts](https://world.openfoodfacts.org) (API v3). Il codice si può anche digitare.

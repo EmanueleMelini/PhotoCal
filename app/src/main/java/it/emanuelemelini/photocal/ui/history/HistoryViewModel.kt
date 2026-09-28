@@ -1,8 +1,10 @@
 package it.emanuelemelini.photocal.ui.history
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,9 +15,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 
-enum class HistoryRange(val days: Int, val label: String) {
-    WEEK(7, "7 giorni"),
-    MONTH(30, "30 giorni"),
+enum class HistoryRange(val days: Int, @StringRes val labelRes: Int) {
+    WEEK(7, R.string.history_range_week),
+    MONTH(30, R.string.history_range_month),
 }
 
 data class DayKcal(val date: LocalDate, val kcal: Double)

@@ -2,6 +2,7 @@ package it.emanuelemelini.photocal.data.gemini
 
 import android.util.Base64
 import android.util.Log
+import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.data.http.await
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.Dispatchers
@@ -44,13 +45,13 @@ class GeminiClient(
             Part(inlineData = InlineData("image/jpeg", Base64.encodeToString(jpeg, Base64.NO_WRAP))),
             Part(text = GeminiPrompts.photoUserPrompt(userNotes)),
         )
-        return generateFoodAnalysis(GeminiPrompts.PHOTO_SYSTEM, parts, creaCatalog)
+        return generateFoodAnalysis(GeminiPrompts.photoSystem(answerLanguage()), parts, creaCatalog)
     }
 
     /** Estimate from a text description, e.g. "2 fette di pane integrale". */
     suspend fun estimateFromText(description: String, quantity: String?, creaCatalog: String?): FoodAnalysis =
         generateFoodAnalysis(
-            GeminiPrompts.TEXT_SYSTEM,
+            GeminiPrompts.textSystem(answerLanguage()),
             listOf(Part(text = GeminiPrompts.textUserPrompt(description, quantity))),
             creaCatalog,
         )
@@ -72,6 +73,9 @@ class GeminiClient(
             json.parseToJsonElement(body).jsonObject["displayName"]?.jsonPrimitive?.content
         }.getOrNull() ?: modelId
     }
+
+    /** Food names and notes come back in the language the UI is shown in. */
+    private fun answerLanguage(): String = AppLocale.language.englishName
 
     private suspend fun generateFoodAnalysis(
         systemPrompt: String,

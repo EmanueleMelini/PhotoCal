@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Window theme before Compose draws: avoids a flash of the wrong color -->
-    <style name="Theme.PhotoCal" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Window theme before Compose draws: avoids a flash of the wrong color.
+         AppCompat parent because MainActivity is an AppCompatActivity (in-app language). -->
+    <style name="Theme.PhotoCal" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>

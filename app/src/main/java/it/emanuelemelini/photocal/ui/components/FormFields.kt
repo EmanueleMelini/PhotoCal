@@ -22,9 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.ui.formatAmount
@@ -69,12 +71,12 @@ fun QuantityRow(
         NumberField(
             value = quantity,
             onValueChange = onQuantityChange,
-            label = "Quantità",
+            label = stringResource(R.string.label_quantity),
             isError = isError,
-            error = "Obbligatoria",
+            error = stringResource(R.string.error_required_f),
             helper = ml
-                ?.takeIf { unit != ServingUnit.GRAMMI && unit != ServingUnit.MILLILITRI }
-                ?.let { "= ${it.formatAmount()} ml" },
+                ?.takeIf { unit != ServingUnit.GRAMS && unit != ServingUnit.MILLILITERS }
+                ?.let { stringResource(R.string.quantity_ml_equivalent, it.formatAmount()) },
             modifier = Modifier.weight(1f),
         )
         UnitSelector(
@@ -99,11 +101,11 @@ fun UnitSelector(
         modifier = modifier,
     ) {
         OutlinedTextField(
-            value = selected.menuLabel,
+            value = unitMenuLabel(selected),
             onValueChange = {},
             readOnly = true,
             singleLine = true,
-            label = { Text("Unità") },
+            label = { Text(stringResource(R.string.label_unit)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,7 +114,7 @@ fun UnitSelector(
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             ServingUnit.entries.forEach { unit ->
                 DropdownMenuItem(
-                    text = { Text(unit.menuLabel) },
+                    text = { Text(unitMenuLabel(unit)) },
                     onClick = {
                         onSelect(unit)
                         expanded = false
@@ -131,18 +133,22 @@ fun MealSelector(
     modifier: Modifier = Modifier,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = modifier) {
-        Text("Pasto", style = MaterialTheme.typography.labelLarge)
+        Text(stringResource(R.string.label_meal), style = MaterialTheme.typography.labelLarge)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             MealType.entries.forEach { meal ->
                 FilterChip(
                     selected = selected == meal,
                     onClick = { onSelect(meal) },
-                    label = { Text(meal.label) },
+                    label = { Text(stringResource(meal.labelRes)) },
                 )
             }
         }
     }
 }
+
+/** Picker label of a unit, e.g. "calice (150 ml)". */
+@Composable
+private fun unitMenuLabel(unit: ServingUnit): String = stringResource(unit.menuRes, unit.gramsPerUnit.toInt())
 
 fun errorText(show: Boolean, message: String): (@Composable () -> Unit)? =
     if (show) {

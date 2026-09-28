@@ -5,11 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
+import it.emanuelemelini.photocal.ui.UiText
+import it.emanuelemelini.photocal.ui.toUiText
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,8 +24,8 @@ import kotlinx.coroutines.launch
 sealed interface ConnectionTest {
     data object Idle : ConnectionTest
     data object Running : ConnectionTest
-    data class Success(val message: String) : ConnectionTest
-    data class Failure(val message: String) : ConnectionTest
+    data class Success(val message: UiText) : ConnectionTest
+    data class Failure(val message: UiText) : ConnectionTest
 }
 
 class SettingsViewModel(
@@ -90,9 +94,9 @@ class SettingsViewModel(
         testJob = viewModelScope.launch {
             connectionTest = try {
                 val name = geminiClient.testConnection(apiKey, model.ifBlank { SettingsRepository.DEFAULT_GEMINI_MODEL })
-                ConnectionTest.Success("Connessione riuscita: $name")
+                ConnectionTest.Success(uiText(R.string.settings_connection_ok, name))
             } catch (e: GeminiException) {
-                ConnectionTest.Failure(e.message.orEmpty())
+                ConnectionTest.Failure(e.toUiText())
             }
         }
     }

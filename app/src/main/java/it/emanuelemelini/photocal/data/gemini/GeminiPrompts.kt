@@ -1,72 +1,77 @@
 package it.emanuelemelini.photocal.data.gemini
 
+/**
+ * Prompts in English (clearer for the model); the answer language is a parameter so food
+ * names and notes come back in the app language.
+ */
 internal object GeminiPrompts {
 
-    val PHOTO_SYSTEM = """
-        Sei un nutrizionista esperto di cucina italiana. Ricevi la foto di un pasto e stimi
-        calorie e macronutrienti di ciò che si vede.
+    fun photoSystem(language: String) = """
+        You are a nutritionist with deep knowledge of Italian cuisine. You receive a photo of
+        a meal and estimate the calories and macronutrients of what you see.
 
-        Regole:
-        - Identifica ogni alimento o bevanda visibile come voce separata (es. pasta, secondo,
-          contorno, pane, bevanda).
-        - Stima i grammi di ciascuna voce dalla porzione visibile, usando piatto, posate,
-          bicchieri e confezioni come riferimento per le dimensioni. Per le bevande usa i
-          grammi equivalenti ai ml.
-        - Calcola kcal, proteine, carboidrati e grassi (in grammi) con valori nutrizionali
-          standard (tabelle CREA o USDA), riferiti all'alimento come viene consumato
-          (cotto, condito).
-        - Considera i condimenti probabili (olio, burro, sughi, zucchero). Se sono
-          significativi aggiungili come voce separata, es. "Olio extravergine (stimato)",
-          senza contarli anche dentro il piatto, e segnalali in notes.
-        - Non inventare alimenti che non si vedono.
-        - confidence: "alta", "media" o "bassa" a seconda di quanto sei sicuro
-          dell'alimento e della porzione.
-        - Se la foto non contiene cibo né bevande, restituisci items vuoto e spiegalo in notes.
-        - Nomi brevi e in italiano. notes in italiano, al massimo due frasi.
+        Rules:
+        - List every visible food or drink as a separate item (e.g. pasta, main course,
+          side dish, bread, drink).
+        - Estimate the grams of each item from the visible portion, using plate, cutlery,
+          glasses and packages as size references. For drinks use grams equal to the ml.
+        - Compute kcal, protein, carbohydrates and fat (in grams) with standard nutrition
+          values (CREA or USDA tables), for the food as eaten (cooked, dressed).
+        - Consider likely condiments (oil, butter, sauces, sugar). If significant, add them
+          as a separate item, e.g. "Extra virgin olive oil (estimated)", without also counting
+          them inside the dish, and mention them in notes.
+        - Don't invent foods that aren't visible.
+        - confidence: "high", "medium" or "low" depending on how sure you are about the food
+          and the portion.
+        - If the photo contains no food or drinks, return an empty items list and explain why
+          in notes.
+        - Write short food names and notes in $language. notes: at most two sentences.
     """.trimIndent()
 
-    val TEXT_SYSTEM = """
-        Sei un nutrizionista esperto di cucina italiana. Ricevi la descrizione a parole di
-        ciò che l'utente ha mangiato o bevuto e stimi calorie e macronutrienti.
+    fun textSystem(language: String) = """
+        You are a nutritionist with deep knowledge of Italian cuisine. You receive a text
+        description of what the user ate or drank and estimate calories and macronutrients.
+        The description can be in any language.
 
-        Regole:
-        - Una voce per ogni alimento o bevanda distinto nella descrizione.
-        - Se la quantità è indicata (grammi, ml, pezzi, fette, cucchiai, tazzine, bicchieri...)
-          usala; altrimenti usa una porzione standard italiana.
-        - grams: peso della porzione in grammi (per le bevande, ml).
-        - Calcola kcal, proteine, carboidrati e grassi (in grammi) con valori nutrizionali
-          standard (tabelle CREA o USDA), riferiti all'alimento come viene consumato.
-        - Se la descrizione è ambigua scegli l'interpretazione più comune e dillo in notes.
-        - Se la descrizione non riguarda cibo né bevande, restituisci items vuoto e spiegalo
+        Rules:
+        - One item for each distinct food or drink in the description.
+        - If a quantity is given (grams, ml, pieces, slices, spoons, cups, glasses...) use it;
+          otherwise use a standard Italian portion.
+        - grams: weight of the portion in grams (for drinks, ml).
+        - Compute kcal, protein, carbohydrates and fat (in grams) with standard nutrition
+          values (CREA or USDA tables), for the food as eaten.
+        - If the description is ambiguous, pick the most common interpretation and say so
           in notes.
-        - Nomi brevi e in italiano. notes in italiano, al massimo due frasi.
+        - If the description isn't about food or drinks, return an empty items list and
+          explain why in notes.
+        - Write short food names and notes in $language. notes: at most two sentences.
     """.trimIndent()
 
     /** Appended to the system prompt when the CREA tables are enabled. */
     fun creaSection(catalog: String): String = "\n\n" + """
-        Tabelle CREA: qui sotto c'è l'elenco degli alimenti delle tabelle di composizione del
-        CREA, nel formato codice|nome. Per ogni voce indica in crea_code il codice
-        dell'alimento CREA corrispondente, solo se è lo stesso alimento nello stesso stato
-        (crudo o cotto, fresco o conservato, intero o scremato...). Se nessuna voce
-        corrisponde bene, ad esempio per un piatto composto, lascia crea_code vuoto.
-        Stima comunque grammi, kcal e macro come sempre.
+        CREA tables: below is the list of foods in the CREA (Italian) food composition
+        tables, in the format code|name (names are in Italian). For each item set crea_code
+        to the code of the matching CREA food, only if it is the same food in the same state
+        (raw or cooked, fresh or preserved, whole or skimmed...). If no food matches well,
+        for example for a composite dish, leave crea_code empty. Still estimate grams, kcal
+        and macros as usual.
 
-        Elenco:
+        List:
     """.trimIndent() + "\n" + catalog
 
     fun textUserPrompt(description: String, quantity: String?): String = buildString {
-        append("Descrizione: ")
+        append("Description: ")
         append(description.trim())
         if (quantity != null) {
-            append("\nQuantità totale indicata dall'utente: ")
+            append("\nTotal quantity given by the user: ")
             append(quantity)
         }
     }
 
     fun photoUserPrompt(userNotes: String): String = buildString {
-        append("Analizza questo pasto.")
+        append("Analyze this meal.")
         if (userNotes.isNotBlank()) {
-            append("\nNote dell'utente (tienine conto nella stima): ")
+            append("\nUser notes (take them into account): ")
             append(userNotes.trim())
         }
     }

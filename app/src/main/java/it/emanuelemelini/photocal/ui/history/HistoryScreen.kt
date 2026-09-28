@@ -30,12 +30,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.relativeLabel
@@ -59,10 +61,10 @@ fun HistoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Storico") },
+                title = { Text(stringResource(R.string.history_title)) },
                 navigationIcon = {
                     IconButton(onClick = dropUnlessResumed(block = onBack)) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
             )
@@ -80,7 +82,7 @@ fun HistoryScreen(
                             selected = state.range == range,
                             onClick = { viewModel.setRange(range) },
                             shape = SegmentedButtonDefaults.itemShape(index, HistoryRange.entries.size),
-                        ) { Text(range.label) }
+                        ) { Text(stringResource(range.labelRes)) }
                     }
                 }
             }
@@ -109,18 +111,18 @@ fun HistoryScreen(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
                 ) {
                     StatTile(
-                        label = "Media giornaliera",
+                        label = stringResource(R.string.history_average),
                         value = state.averageKcal?.let { "${it.formatKcal()} kcal" } ?: "—",
                         modifier = Modifier.weight(1f),
                     )
                     StatTile(
-                        label = "Giorni registrati",
-                        value = "${state.loggedDays.size} su ${state.completedDays.size}",
+                        label = stringResource(R.string.history_logged_days),
+                        value = stringResource(R.string.history_x_of_y, state.loggedDays.size, state.completedDays.size),
                         modifier = Modifier.weight(1f),
                     )
                     StatTile(
-                        label = "Entro l'obiettivo",
-                        value = "${state.daysWithinGoal} su ${state.loggedDays.size}",
+                        label = stringResource(R.string.history_within_goal),
+                        value = stringResource(R.string.history_x_of_y, state.daysWithinGoal, state.loggedDays.size),
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -128,7 +130,7 @@ fun HistoryScreen(
 
             item {
                 Text(
-                    "Statistiche sui giorni conclusi, oggi escluso.",
+                    stringResource(R.string.history_stats_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -137,7 +139,7 @@ fun HistoryScreen(
 
             item {
                 Text(
-                    "Giorni",
+                    stringResource(R.string.history_days),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
                 )
@@ -148,14 +150,14 @@ fun HistoryScreen(
                     headlineContent = { Text(day.date.relativeLabel() ?: day.date.shortLabel()) },
                     trailingContent = {
                         Text(
-                            if (day.kcal > 0) "${day.kcal.formatKcal()} kcal" else "nessuna voce",
+                            if (day.kcal > 0) "${day.kcal.formatKcal()} kcal" else stringResource(R.string.history_no_entries),
                             style = MaterialTheme.typography.bodyLarge,
                             color = if (day.kcal > 0) MaterialTheme.colorScheme.onSurface
                             else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     },
                     supportingContent = if (day.kcal > state.kcalGoal) {
-                        { Text("Oltre l'obiettivo di ${(day.kcal - state.kcalGoal).formatKcal()} kcal") }
+                        { Text(stringResource(R.string.history_over_goal_by, (day.kcal - state.kcalGoal).formatKcal())) }
                     } else null,
                     modifier = Modifier.clickable { onOpenDay(day.date) },
                 )
@@ -176,22 +178,26 @@ private fun SelectionReadout(day: DayKcal?, kcalGoal: Int, onOpenDay: (LocalDate
         Column(Modifier.weight(1f)) {
             if (day == null) {
                 Text(
-                    "Linea tratteggiata: obiettivo di $kcalGoal kcal. Tocca una colonna per i dettagli.",
+                    stringResource(R.string.history_chart_hint, kcalGoal),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
                 Text(day.date.relativeLabel() ?: day.date.shortLabel(), style = MaterialTheme.typography.labelLarge)
                 val detail = when {
-                    day.kcal <= 0 -> "nessuna voce"
-                    day.kcal > kcalGoal -> "${day.kcal.formatKcal()} kcal · oltre l'obiettivo di ${(day.kcal - kcalGoal).formatKcal()}"
-                    else -> "${day.kcal.formatKcal()} kcal · ${(kcalGoal - day.kcal).formatKcal()} sotto l'obiettivo"
+                    day.kcal <= 0 -> stringResource(R.string.history_no_entries)
+                    day.kcal > kcalGoal -> stringResource(
+                        R.string.history_day_over, day.kcal.formatKcal(), (day.kcal - kcalGoal).formatKcal(),
+                    )
+                    else -> stringResource(
+                        R.string.history_day_under, day.kcal.formatKcal(), (kcalGoal - day.kcal).formatKcal(),
+                    )
                 }
                 Text(detail, style = MaterialTheme.typography.bodyMedium)
             }
         }
         if (day != null) {
-            TextButton(onClick = { onOpenDay(day.date) }) { Text("Apri giorno") }
+            TextButton(onClick = { onOpenDay(day.date) }) { Text(stringResource(R.string.history_open_day)) }
         }
     }
 }
