@@ -1,0 +1,27 @@
+# Gradle / build
+.gradle/
+.kotlin/
+build/
+/app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Local configuration (sdk.dir, keystore passwords if any)
+local.properties
+
+# Keystore
+*.jks
+*.keystore
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Generated APK/AAB
+*.apk
+*.aab
+
+# Cache of the CREA pages downloaded by tools/crea/build_crea_table.py
+tools/crea/.cache/

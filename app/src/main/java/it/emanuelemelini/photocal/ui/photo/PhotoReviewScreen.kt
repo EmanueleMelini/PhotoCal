@@ -1,0 +1,383 @@
+package it.emanuelemelini.photocal.ui.photo
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import it.emanuelemelini.photocal.data.crea.CreaTable
+import it.emanuelemelini.photocal.ui.appContainer
+import it.emanuelemelini.photocal.ui.components.MealSelector
+import it.emanuelemelini.photocal.ui.formatKcal
+import java.io.File
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PhotoReviewScreen(
+    onDone: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    val container = appContainer()
+    val viewModel: PhotoReviewViewModel = viewModel {
+        PhotoReviewViewModel(
+            createSavedStateHandle(),
+            container.foodRepository,
+            container.photoStorage,
+            container.foodEstimator,
+        )
+    }
+    val status = viewModel.status
+    val isAnalyzing = status == ReviewStatus.Analyzing
+    var confirmDiscard by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(viewModel.isDone) {
+        if (viewModel.isDone) onDone()
+    }
+
+    // Asks for confirmation before leaving if there are unsaved foods
+    val hasUnsavedWork = viewModel.items.isNotEmpty()
+    val requestExit = { if (hasUnsavedWork) confirmDiscard = true else onDone() }
+    BackHandler(enabled = hasUnsavedWork) { confirmDiscard = true }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Analisi foto") },
+                navigationIcon = {
+                    IconButton(onClick = requestExit) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .padding(padding)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+        ) {
+            AsyncImage(
+                model = File(viewModel.photoPath),
+                contentDescription = "Foto del pasto",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(MaterialTheme.shapes.medium),
+            )
+
+            OutlinedTextField(
+                value = viewModel.notes,
+                onValueChange = viewModel::onNotesChange,
+                label = { Text("Note (facoltative)") },
+                placeholder = { Text("es. con olio, porzione grande") },
+                enabled = !isAnalyzing,
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            val analyzeLabel = if (viewModel.hasAnalyzed) "Analizza di nuovo" else "Analizza"
+            if (viewModel.hasAnalyzed) {
+                OutlinedButton(
+                    onClick = viewModel::analyze,
+                    enabled = viewModel.canAnalyze && !isAnalyzing,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { AnalyzeButtonContent(isAnalyzing, analyzeLabel) }
+            } else {
+                Button(
+                    onClick = viewModel::analyze,
+                    enabled = viewModel.canAnalyze && !isAnalyzing,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { AnalyzeButtonContent(isAnalyzing, analyzeLabel) }
+            }
+
+            if (status is ReviewStatus.Error) {
+                ErrorCard(
+                    message = status.message,
+                    needsSettings = status.needsSettings,
+                    canRetry = status.canRetry,
+                    onRetry = viewModel::analyze,
+                    onOpenSettings = {
+                        viewModel.dismissError()
+                        onOpenSettings()
+                    },
+                    onManual = {
+                        viewModel.dismissError()
+                        viewModel.addItem()
+                    },
+                )
+            }
+
+            viewModel.aiNotes?.let { notes ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = notes,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(12.dp),
+                    )
+                }
+            }
+
+            if (viewModel.hasAnalyzed) {
+                if (viewModel.items.isEmpty()) {
+                    Text(
+                        "Nessun alimento riconosciuto. Puoi aggiungerli a mano.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Text(
+                        "Controlla e correggi i valori: cambiando i grammi, kcal e macro si ricalcolano.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                viewModel.items.forEach { item ->
+                    ReviewItemCard(
+                        item = item,
+                        showErrors = viewModel.showErrors,
+                        onChange = { transform -> viewModel.updateItem(item.key, transform) },
+                        onRemove = { viewModel.removeItem(item.key) },
+                    )
+                }
+
+                TextButton(onClick = viewModel::addItem) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Aggiungi alimento")
+                }
+
+                if (viewModel.items.isNotEmpty()) {
+                    MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("Totale", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                        Text(
+                            "${viewModel.totalKcal.formatKcal()} kcal",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+
+                    if (viewModel.usesCrea) {
+                        Text(
+                            "Fonte valori nutrizionali: ${CreaTable.SOURCE}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+
+                    Button(
+                        onClick = viewModel::save,
+                        enabled = !isAnalyzing,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text("Salva") }
+                }
+            }
+        }
+    }
+
+    if (confirmDiscard) {
+        AlertDialog(
+            onDismissRequest = { confirmDiscard = false },
+            title = { Text("Scartare l'analisi?") },
+            text = { Text("Gli alimenti non salvati andranno persi.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDiscard = false
+                    onDone()
+                }) { Text("Scarta") }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDiscard = false }) { Text("Annulla") }
+            },
+        )
+    }
+}
+
+@Composable
+private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
+    if (isAnalyzing) {
+        CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(12.dp))
+        Text("Analisi in corso…")
+    } else {
+        Text(label)
+    }
+}
+
+@Composable
+private fun ErrorCard(
+    message: String,
+    needsSettings: Boolean,
+    canRetry: Boolean,
+    onRetry: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onManual: () -> Unit,
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
+            Text(
+                message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+            )
+            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                if (needsSettings) {
+                    TextButton(onClick = onOpenSettings) { Text("Impostazioni") }
+                } else if (canRetry) {
+                    TextButton(onClick = onRetry) { Text("Riprova") }
+                }
+                TextButton(onClick = onManual) { Text("Inserisci a mano") }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReviewItemCard(
+    item: ReviewItem,
+    showErrors: Boolean,
+    onChange: ((ReviewItem) -> ReviewItem) -> Unit,
+    onRemove: () -> Unit,
+) {
+    OutlinedCard(Modifier.fillMaxWidth()) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(12.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    value = item.name,
+                    onValueChange = { text -> onChange { it.copy(name = text) } },
+                    label = { Text("Alimento") },
+                    isError = showErrors && !item.nameValid,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = onRemove) {
+                    Icon(Icons.Default.Close, contentDescription = "Rimuovi alimento")
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    item.confidence?.let { ConfidenceLabel(it) }
+                    Text(
+                        text = if (item.usingCrea) "Valori CREA: ${item.creaName}" else "Valori stimati dall'AI",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                if (item.creaPerGram != null && item.aiPerGram != null) {
+                    TextButton(onClick = { onChange { it.withCrea(!item.usingCrea) } }) {
+                        Text(if (item.usingCrea) "Usa stima AI" else "Usa CREA")
+                    }
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SmallNumberField(item.grams, { t -> onChange { it.withGrams(t) } }, "Grammi",
+                    showErrors && !item.gramsValid, Modifier.weight(1f))
+                SmallNumberField(item.kcal, { t -> onChange { it.withKcal(t) } }, "Kcal",
+                    showErrors && !item.kcalValid, Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SmallNumberField(item.protein, { t -> onChange { it.withProtein(t) } }, "Prot. g",
+                    showErrors && !item.proteinValid, Modifier.weight(1f))
+                SmallNumberField(item.carbs, { t -> onChange { it.withCarbs(t) } }, "Carb. g",
+                    showErrors && !item.carbsValid, Modifier.weight(1f))
+                SmallNumberField(item.fat, { t -> onChange { it.withFat(t) } }, "Grassi g",
+                    showErrors && !item.fatValid, Modifier.weight(1f))
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfidenceLabel(confidence: String) {
+    val color = when (confidence) {
+        "alta" -> MaterialTheme.colorScheme.primary
+        "media" -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.error
+    }
+    Text(
+        text = "Affidabilità: $confidence",
+        style = MaterialTheme.typography.labelMedium,
+        color = color,
+    )
+}
+
+@Composable
+private fun SmallNumberField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isError: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { text -> onValueChange(text.filter { it.isDigit() || it == ',' || it == '.' }) },
+        label = { Text(label, maxLines = 1) },
+        isError = isError,
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        modifier = modifier,
+    )
+}

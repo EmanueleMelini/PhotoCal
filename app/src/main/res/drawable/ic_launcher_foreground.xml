@@ -1,0 +1,40 @@
+<!-- Camera viewfinder framing a plate with fork and knife -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Viewfinder corners -->
+    <path
+        android:pathData="M31,42V31H42M66,31H77V42M77,66V77H66M42,77H31V66"
+        android:strokeWidth="3.5"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <!-- Plate -->
+    <path
+        android:pathData="M43,55a11,11 0,1 0,22 0a11,11 0,1 0,-22 0"
+        android:strokeWidth="2.6"
+        android:strokeColor="#FFFFFFFF" />
+    <path
+        android:pathData="M47.5,55a6.5,6.5 0,1 0,13 0a6.5,6.5 0,1 0,-13 0"
+        android:strokeAlpha="0.8"
+        android:strokeWidth="1.4"
+        android:strokeColor="#FFFFFFFF" />
+    <!-- Fork -->
+    <path
+        android:pathData="M36.3,44V50M38.5,44V50M40.7,44V50M36.3,50Q36.3,53.5 38.5,53.5Q40.7,53.5 40.7,50M38.5,53.5V66"
+        android:strokeWidth="1.6"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <!-- Knife -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M68,44C71.5,46 71.5,52 70.5,56L68,56Z" />
+    <path
+        android:pathData="M69.2,56V66"
+        android:strokeWidth="2.2"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+</vector>
