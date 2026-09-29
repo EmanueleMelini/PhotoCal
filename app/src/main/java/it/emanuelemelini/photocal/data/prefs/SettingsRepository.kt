@@ -21,6 +21,15 @@ enum class ThemeMode(@StringRes val labelRes: Int) {
     SYSTEM(R.string.theme_system),
     LIGHT(R.string.theme_light),
     DARK(R.string.theme_dark),
+
+    /** Medium purple surfaces with pink accents, whatever the system mode. */
+    PURPLE(R.string.theme_purple),
+
+    /** Deep purple surfaces with pink accents, whatever the system mode. */
+    PURPLE_DARK(R.string.theme_purple_dark);
+
+    /** Themes with their own palette, where dynamic colors don't apply. */
+    val isPurple: Boolean get() = this == PURPLE || this == PURPLE_DARK
 }
 
 data class Settings(

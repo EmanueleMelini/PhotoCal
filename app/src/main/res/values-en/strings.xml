@@ -7,6 +7,9 @@
     <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_purple_dark">Dark purple</string>
+    <string name="settings_dynamic_colors_purple">Purple themes always use their own palette</string>
     <string name="history_range_week">7 days</string>
     <string name="history_range_month">30 days</string>
     <string name="unit_menu_grams">grams</string>
@@ -193,6 +196,11 @@
         <item quantity="one">Calorie chart of the last day, goal %2$d kcal</item>
         <item quantity="other">Calorie chart of the last %1$d days, goal %2$d kcal</item>
     </plurals>
+    <string name="app_icon_title">App icon</string>
+    <string name="app_icon_green">Green</string>
+    <string name="app_icon_black">Black</string>
+    <string name="app_icon_purple">Purple</string>
+    <string name="app_icon_hint">The new icon shows up in the launcher after a few seconds.</string>
     <!-- Reminders -->
     <string name="reminder_daily_summary">Evening summary</string>
     <string name="reminder_weekly_summary">Weekly summary</string>

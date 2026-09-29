@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
                 ThemeMode.LIGHT -> false
                 ThemeMode.DARK -> true
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                // Both purple themes have dark surfaces
+                ThemeMode.PURPLE, ThemeMode.PURPLE_DARK -> true
             }
 
             // Status and navigation bar icons follow the chosen theme, not the system one
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 onDispose {}
             }
 
-            PhotoCalTheme(darkTheme = darkTheme, dynamicColor = current.dynamicColor) {
+            PhotoCalTheme(themeMode = current.themeMode, darkTheme = darkTheme, dynamicColor = current.dynamicColor) {
                 PhotoCalNavHost(
                     launchRequest = launchRequest,
                     onLaunchRequestHandled = { launchRequest = null },

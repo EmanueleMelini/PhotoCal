@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.theme.LocalChartColors
 import java.time.format.TextStyle as DateTextStyle
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -41,12 +41,6 @@ private val MAX_BAR_WIDTH = 24.dp
 private val BAR_GAP = 2.dp
 private val BAR_RADIUS = 4.dp
 
-// Fixed (non-dynamic) colors checked for color blindness: the theme's green/red can't be told
-// apart with deuteranopia, teal/orange can. One pair for the light theme, one for the dark.
-private val BAR_LIGHT = Color(0xFF00897B)
-private val BAR_OVER_LIGHT = Color(0xFFD84315)
-private val BAR_DARK = Color(0xFF26A69A)
-private val BAR_OVER_DARK = Color(0xFFF4511E)
 
 /**
  * Daily kcal columns with the dashed goal line.
@@ -66,9 +60,9 @@ fun CalorieChart(
     val colors = MaterialTheme.colorScheme
     val labelStyle = MaterialTheme.typography.labelSmall.copy(color = colors.onSurfaceVariant)
     val goalLabelStyle = labelStyle.copy(color = colors.onSurface, fontWeight = FontWeight.Bold)
-    val isDark = colors.background.luminance() < 0.5f
-    val barColor = if (isDark) BAR_DARK else BAR_LIGHT
-    val overGoalColor = if (isDark) BAR_OVER_DARK else BAR_OVER_LIGHT
+    // Color-blind safe pair chosen by the theme
+    val barColor = LocalChartColors.current.withinGoal
+    val overGoalColor = LocalChartColors.current.overGoal
 
     val chartDescription = pluralStringResource(R.plurals.history_chart_description, days.size, days.size, kcalGoal)
     val locale = AppLocale.current

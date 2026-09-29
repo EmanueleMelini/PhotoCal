@@ -8,6 +8,9 @@
     <string name="theme_system">Sistema</string>
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
+    <string name="theme_purple">Viola</string>
+    <string name="theme_purple_dark">Viola scuro</string>
+    <string name="settings_dynamic_colors_purple">I temi viola usano sempre la loro palette</string>
     <string name="history_range_week">7 giorni</string>
     <string name="history_range_month">30 giorni</string>
     <string name="unit_menu_grams">grammi</string>
@@ -194,6 +197,11 @@
         <item quantity="one">Grafico delle calorie dell\'ultimo giorno, obiettivo %2$d kcal</item>
         <item quantity="other">Grafico delle calorie degli ultimi %1$d giorni, obiettivo %2$d kcal</item>
     </plurals>
+    <string name="app_icon_title">Icona dell\'app</string>
+    <string name="app_icon_green">Verde</string>
+    <string name="app_icon_black">Nero</string>
+    <string name="app_icon_purple">Viola</string>
+    <string name="app_icon_hint">La nuova icona compare nel launcher dopo qualche secondo.</string>
     <!-- Reminders -->
     <string name="reminder_daily_summary">Riepilogo serale</string>
     <string name="reminder_weekly_summary">Riepilogo settimanale</string>

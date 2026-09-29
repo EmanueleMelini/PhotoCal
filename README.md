@@ -24,7 +24,12 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   ricalcolano; se li modifichi a mano, comandano i tuoi valori.
 - **Storico**: grafico 7/30 giorni (Canvas), media, giorni registrati ed entro l'obiettivo,
   calcolati sui giorni conclusi. I colori del grafico sono fissi e verificati per il daltonismo.
-- **Tema**: Sistema/Chiaro/Scuro e colori dinamici (Android 12+) in Impostazioni.
+- **Tema**: Sistema / Chiaro / Scuro / Viola / Viola scuro in Impostazioni. I primi tre usano
+  la palette verde (o i colori dinamici di Android 12+); Viola (viola medio) e Viola scuro
+  (viola profondo) hanno superfici viola con accenti rosa, non dipendono dalla modalità del
+  telefono e non usano i colori dinamici.
+- **Icona dell'app**: verde (predefinita), nera o viola, in Impostazioni → Aspetto. Ogni icona
+  è un `activity-alias` nel manifest e ne è attivo uno solo alla volta (`AppIcon.kt`).
 - **Tabelle CREA**: con l'opzione attiva (Impostazioni) l'AI riceve l'elenco degli alimenti
   CREA e indica per ogni voce il codice corrispondente; kcal e macro vengono allora dalla
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove

@@ -153,28 +153,40 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
 
             Text(stringResource(R.string.settings_theme), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                ThemeMode.entries.forEachIndexed { index, mode ->
-                    SegmentedButton(
+            // Chips instead of a segmented row: five options don't fit a phone width
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                ThemeMode.entries.forEach { mode ->
+                    FilterChip(
                         selected = appearance.themeMode == mode,
                         onClick = { viewModel.setThemeMode(mode) },
-                        shape = SegmentedButtonDefaults.itemShape(index, ThemeMode.entries.size),
-                    ) { Text(stringResource(mode.labelRes)) }
+                        label = { Text(stringResource(mode.labelRes)) },
+                    )
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // The purple theme always uses its own palette
+                val dynamicAvailable = !appearance.themeMode.isPurple
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.settings_dynamic_colors), style = MaterialTheme.typography.bodyLarge)
                         Text(
-                            stringResource(R.string.settings_dynamic_colors_hint),
+                            stringResource(
+                                if (dynamicAvailable) R.string.settings_dynamic_colors_hint
+                                else R.string.settings_dynamic_colors_purple
+                            ),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    Switch(checked = appearance.dynamicColor, onCheckedChange = viewModel::setDynamicColor)
+                    Switch(
+                        checked = appearance.dynamicColor && dynamicAvailable,
+                        onCheckedChange = viewModel::setDynamicColor,
+                        enabled = dynamicAvailable,
+                    )
                 }
             }
+
+            AppIconPicker()
 
             HorizontalDivider()
 
