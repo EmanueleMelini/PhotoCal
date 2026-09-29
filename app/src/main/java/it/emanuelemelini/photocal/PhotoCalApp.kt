@@ -3,6 +3,7 @@ package it.emanuelemelini.photocal
 import android.app.Application
 import android.content.Context
 import it.emanuelemelini.photocal.data.FoodRepository
+import it.emanuelemelini.photocal.data.WeightRepository
 import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.data.db.AppDatabase
 import it.emanuelemelini.photocal.data.estimate.FoodEstimator
@@ -50,6 +51,7 @@ class AppContainer(context: Context) {
 
     val photoStorage = PhotoStorage(context)
     val settingsRepository = SettingsRepository(context)
+    val weightRepository = WeightRepository(database.weightDao())
     val foodRepository: FoodRepository = FoodRepository(database.foodDao(), photoStorage) { date, meal ->
         // A meal logged today makes its pending reminder pointless
         if (date == LocalDate.now()) reminderNotifier.cancelMeal(meal)

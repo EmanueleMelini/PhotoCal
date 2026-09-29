@@ -1,0 +1,113 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d4064a739e051d2ed1d7590eff2d8a50",
+    "entities": [
+      {
+        "tableName": "food_entries",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `mealType` TEXT NOT NULL, `name` TEXT NOT NULL, `grams` REAL, `kcal` REAL NOT NULL, `proteinG` REAL, `carbsG` REAL, `fatG` REAL, `source` TEXT NOT NULL, `photoPath` TEXT, `createdAt` INTEGER NOT NULL, `servingUnit` TEXT, `servings` REAL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealType",
+            "columnName": "mealType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grams",
+            "columnName": "grams",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "kcal",
+            "columnName": "kcal",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proteinG",
+            "columnName": "proteinG",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "carbsG",
+            "columnName": "carbsG",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "fatG",
+            "columnName": "fatG",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photoPath",
+            "columnName": "photoPath",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "servingUnit",
+            "columnName": "servingUnit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "servings",
+            "columnName": "servings",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_food_entries_date",
+            "unique": false,
+            "columnNames": [
+              "date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_food_entries_date` ON `${TABLE_NAME}` (`date`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd4064a739e051d2ed1d7590eff2d8a50')"
+    ]
+  }
+}

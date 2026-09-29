@@ -13,9 +13,11 @@ import it.emanuelemelini.photocal.ui.barcode.BarcodeScreen
 import it.emanuelemelini.photocal.ui.entry.EntryScreen
 import it.emanuelemelini.photocal.ui.history.HistoryScreen
 import it.emanuelemelini.photocal.ui.photo.PhotoReviewScreen
+import it.emanuelemelini.photocal.ui.profile.ProfileScreen
 import it.emanuelemelini.photocal.ui.settings.SettingsScreen
 import it.emanuelemelini.photocal.ui.today.PhotoRequest
 import it.emanuelemelini.photocal.ui.today.TodayScreen
+import it.emanuelemelini.photocal.ui.weight.WeightScreen
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
@@ -48,6 +50,12 @@ data class BarcodeRoute(val dateEpochDay: Long)
 @Serializable
 object HistoryRoute
 
+@Serializable
+object ProfileRoute
+
+@Serializable
+object WeightRoute
+
 /** Key the History screen uses to ask the Today screen to open a day. */
 private const val KEY_OPEN_DAY = "open_day"
 
@@ -75,6 +83,7 @@ fun PhotoCalNavHost(
                 requestedPhotoMeal = requestedPhoto?.let { name -> PhotoRequest(MealType.entries.find { it.name == name }) },
                 onRequestedPhotoHandled = { backStackEntry.savedStateHandle[KEY_TAKE_PHOTO] = null },
                 onOpenHistory = { navController.navigate(HistoryRoute) },
+                onOpenGoals = { navController.navigate(ProfileRoute) },
                 onAddManual = { date -> navController.navigate(EntryRoute(date.toEpochDay())) },
                 onEditEntry = { entry ->
                     navController.navigate(EntryRoute(entry.date.toEpochDay(), entry.id))
@@ -117,10 +126,23 @@ fun PhotoCalNavHost(
                     navController.previousBackStackEntry?.savedStateHandle?.set(KEY_OPEN_DAY, date.toEpochDay())
                     navController.popBackStack()
                 },
+                onOpenWeight = { navController.navigate(WeightRoute) },
             )
         }
         composable<SettingsRoute> {
-            SettingsScreen(onBack = { navController.popBackStack() })
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onOpenProfile = { navController.navigate(ProfileRoute) },
+            )
+        }
+        composable<ProfileRoute> {
+            ProfileScreen(
+                onBack = { navController.popBackStack() },
+                onOpenWeightLog = { navController.navigate(WeightRoute) },
+            )
+        }
+        composable<WeightRoute> {
+            WeightScreen(onBack = { navController.popBackStack() })
         }
     }
 

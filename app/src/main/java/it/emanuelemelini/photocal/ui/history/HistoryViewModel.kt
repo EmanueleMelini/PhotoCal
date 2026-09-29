@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
+import it.emanuelemelini.photocal.data.WeightRepository
+import it.emanuelemelini.photocal.data.db.WeightEntry
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,7 +30,11 @@ data class HistoryUiState(
     val days: List<DayKcal> = emptyList(),
     val kcalGoal: Int = SettingsRepository.DEFAULT_KCAL_GOAL,
     val isLoading: Boolean = true,
+    /** Weigh-ins in the range, oldest first. */
+    val weights: List<WeightEntry> = emptyList(),
 ) {
+    val weightChange: Double? get() = if (weights.size >= 2) weights.last().weightKg - weights.first().weightKg else null
+
     /** Stats exclude today: the day isn't over and would lower the average. */
     val completedDays: List<DayKcal> get() = days.dropLast(1)
     val loggedDays: List<DayKcal> get() = completedDays.filter { it.kcal > 0 }
@@ -41,6 +47,7 @@ class HistoryViewModel(
     private val savedStateHandle: SavedStateHandle,
     foodRepository: FoodRepository,
     settingsRepository: SettingsRepository,
+    weightRepository: WeightRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<HistoryUiState> = savedStateHandle
@@ -51,7 +58,8 @@ class HistoryViewModel(
             combine(
                 foodRepository.observeTotalsBetween(from, today),
                 settingsRepository.settings,
-            ) { totals, settings ->
+                weightRepository.observeBetween(from, today),
+            ) { totals, settings, weights ->
                 // The DAO returns only days with entries: the gaps are filled here
                 val byDate = totals.associate { it.date to it.kcal }
                 HistoryUiState(
@@ -62,6 +70,7 @@ class HistoryViewModel(
                     },
                     kcalGoal = settings.dailyKcalGoal,
                     isLoading = false,
+                    weights = weights,
                 )
             }
         }

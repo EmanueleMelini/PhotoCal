@@ -60,3 +60,10 @@ fun FoodEntry.quantityLabel(): String? {
     }
     return grams?.let { "${it.formatAmount()} g" }
 }
+
+/** Signed change with a real minus sign, e.g. "+0,4" or "−1,6". */
+fun Double.formatSignedAmount(): String = when {
+    this > 0 -> "+" + formatAmount()
+    this < 0 -> "\u2212" + (-this).formatAmount()
+    else -> formatAmount()
+}

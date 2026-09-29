@@ -1,5 +1,9 @@
 package it.emanuelemelini.photocal.ui.settings
 
+import it.emanuelemelini.photocal.data.prefs.Settings
+import androidx.compose.material3.ListItem
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.foundation.clickable
 import android.os.Build
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.SegmentedButton
@@ -70,7 +74,10 @@ private const val AI_STUDIO_URL = "https://aistudio.google.com/apikey"
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onOpenProfile: () -> Unit,
+) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
         SettingsViewModel(container.settingsRepository, container.geminiClient, container.reminderScheduler)
@@ -78,7 +85,6 @@ fun SettingsScreen(onBack: () -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
-    val goalError = viewModel.showErrors && !viewModel.kcalGoalValid
     var showApiKey by rememberSaveable { mutableStateOf(false) }
     val appearance by viewModel.appearance.collectAsStateWithLifecycle()
     val savedMessage = stringResource(R.string.settings_saved)
@@ -105,24 +111,14 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .padding(16.dp),
         ) {
             Text(stringResource(R.string.settings_goal_section), style = MaterialTheme.typography.titleMedium)
-            OutlinedTextField(
-                value = viewModel.kcalGoal,
-                onValueChange = viewModel::onKcalGoalChange,
-                label = { Text(stringResource(R.string.settings_goal_label)) },
-                isError = goalError,
-                supportingText = {
-                    val range = SettingsViewModel.KCAL_GOAL_RANGE
-                    Text(
-                        if (goalError) stringResource(R.string.settings_goal_range_error, range.first, range.last)
-                        else stringResource(R.string.settings_goal_hint)
-                    )
+            // Goals are set in their own screen, with the profile-based suggestion
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.profile_title)) },
+                supportingContent = { Text(goalsSummary(appearance)) },
+                trailingContent = {
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
                 },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.clickable(onClick = onOpenProfile),
             )
 
             HorizontalDivider()
@@ -283,7 +279,8 @@ fun SettingsScreen(onBack: () -> Unit) {
             Button(
                 onClick = {
                     scope.launch {
-                        if (viewModel.save()) snackbarHostState.showSnackbar(savedMessage)
+                        viewModel.save()
+                        snackbarHostState.showSnackbar(savedMessage)
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -291,3 +288,12 @@ fun SettingsScreen(onBack: () -> Unit) {
         }
     }
 }
+
+/** e.g. "1850 kcal · P 130 g · C 210 g · G 55 g". */
+@Composable
+private fun goalsSummary(settings: Settings): String = listOfNotNull(
+    "${settings.dailyKcalGoal} kcal",
+    settings.proteinGoalG?.let { stringResource(R.string.macro_short_protein, "$it g") },
+    settings.carbsGoalG?.let { stringResource(R.string.macro_short_carbs, "$it g") },
+    settings.fatGoalG?.let { stringResource(R.string.macro_short_fat, "$it g") },
+).joinToString(" · ")

@@ -34,6 +34,15 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   CREA e indica per ogni voce il codice corrispondente; kcal e macro vengono allora dalla
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove
   arrivano i valori e si può passare alla stima dell'AI.
+- **Profilo e obiettivi** (Impostazioni → Obiettivo, oppure toccando il riepilogo in Oggi):
+  sesso, anno di nascita, altezza, peso, attività e obiettivo. L'app stima metabolismo basale
+  (formula di Mifflin-St Jeor), fabbisogno giornaliero e calorie suggerite, con un minimo di
+  sicurezza durante il dimagrimento (1200/1500 kcal, deficit al massimo del 25%), e propone
+  proteine, carboidrati e grassi. I valori suggeriti si applicano con un tocco, ma tutti gli
+  obiettivi si possono scrivere a mano (per esempio quelli dati dal medico). Con gli obiettivi
+  dei macro, Oggi mostra i progressi anche per proteine, carboidrati e grassi.
+- **Registro peso**: pesate (una al giorno) con grafico a 30/90/365 giorni; il peso del
+  profilo è l'ultima pesata. Si apre dal profilo o dallo Storico.
 - **Promemoria**: notifiche locali (nessun server) per colazione, pranzo, spuntino e cena,
   più un riepilogo serale e uno settimanale (domenica). Si attivano in Impostazioni →
   Promemoria, dove si sceglie anche l'orario; il permesso notifiche viene chiesto solo allora.
@@ -86,6 +95,12 @@ secret `PHOTOCAL_KEYSTORE_BASE64`, `PHOTOCAL_KEYSTORE_PASSWORD` e `PHOTOCAL_KEY_
 aggiornare (bisognerebbe disinstallarla, perdendo i dati). Gli APK di debug hanno un'altra
 firma: per passare da debug a release serve disinstallare.
 
+## Database
+
+Gli schemi di Room sono esportati in `app/schemas/` (versionati). Dalla 1.0.0 l'app è
+installata con dati veri: ogni modifica allo schema richiede una migrazione in
+`AppDatabase.kt` (v1 → v2 aggiunge il registro del peso).
+
 ## Build e installazione
 
 Serve `local.properties` con il percorso dell'Android SDK (Android Studio lo crea da solo):
@@ -115,6 +130,7 @@ app/src/main/java/it/emanuelemelini/photocal/
 │   ├── gemini/           client REST generateContent, prompt, schema
 │   ├── crea/             tabelle CREA (da assets/crea_foods.tsv)
 │   ├── estimate/         stima AI + sostituzione con i valori CREA
+│   ├── nutrition/        profilo, formula del fabbisogno, macro
 │   ├── openfoodfacts/    client API v3, prodotti
 │   ├── http/             utilità OkHttp condivise
 │   ├── photo/            file delle foto, ridimensionamento
@@ -126,6 +142,8 @@ app/src/main/java/it/emanuelemelini/photocal/
     ├── photo/            revisione dell'analisi foto
     ├── barcode/          scansione e prodotto da Open Food Facts
     ├── history/          storico e grafico
+    ├── profile/          profilo e obiettivi
+    ├── weight/           registro del peso
     ├── components/       campi del form condivisi (quantità/unità, pasto)
     ├── settings/         impostazioni
     └── theme/

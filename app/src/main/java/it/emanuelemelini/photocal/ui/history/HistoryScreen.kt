@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +40,8 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.ui.appContainer
+import it.emanuelemelini.photocal.ui.formatAmount
+import it.emanuelemelini.photocal.ui.formatSignedAmount
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.relativeLabel
 import it.emanuelemelini.photocal.ui.shortLabel
@@ -49,10 +52,11 @@ import java.time.LocalDate
 fun HistoryScreen(
     onBack: () -> Unit,
     onOpenDay: (LocalDate) -> Unit,
+    onOpenWeight: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: HistoryViewModel = viewModel {
-        HistoryViewModel(createSavedStateHandle(), container.foodRepository, container.settingsRepository)
+        HistoryViewModel(createSavedStateHandle(), container.foodRepository, container.settingsRepository, container.weightRepository)
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     // Selection reset when the range changes
@@ -134,6 +138,29 @@ fun HistoryScreen(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+
+            item {
+                // Weight in the same period, linking to the weight log
+                val latest = state.weights.lastOrNull()
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.weight_log_title)) },
+                    supportingContent = {
+                        Text(
+                            when {
+                                latest == null -> stringResource(R.string.history_weight_empty)
+                                else -> listOfNotNull(
+                                    "${latest.weightKg.formatAmount()} kg",
+                                    state.weightChange?.let { change ->
+                                        stringResource(R.string.weight_change_in_range, change.formatSignedAmount())
+                                    },
+                                ).joinToString(" · ")
+                            }
+                        )
+                    },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null) },
+                    modifier = Modifier.clickable(onClick = onOpenWeight),
                 )
             }
 

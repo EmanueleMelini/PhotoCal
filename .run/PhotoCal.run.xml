@@ -1,0 +1,21 @@
+<!-- Shared Android Studio run configuration. It launches MainActivity directly instead of
+     the "default activity": the default one is the .LauncherGreen alias, which is disabled
+     when another app icon is chosen in Settings, and then fails with "does not exist". -->
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PhotoCal" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+    <module name="PhotoCal.app" />
+    <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+    <option name="DEPLOY" value="true" />
+    <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+    <option name="DEPLOY_AS_INSTANT" value="false" />
+    <option name="MODE" value="specific_activity" />
+    <option name="ACTIVITY_CLASS" value="it.emanuelemelini.photocal.MainActivity" />
+    <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+    <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+    <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+    <option name="DEBUGGER_TYPE" value="Auto" />
+    <method v="2">
+      <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -77,7 +77,6 @@ import coil3.compose.AsyncImage
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
-import it.emanuelemelini.photocal.data.db.Totals
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
@@ -99,6 +98,7 @@ fun TodayScreen(
     requestedPhotoMeal: PhotoRequest?,
     onRequestedPhotoHandled: () -> Unit,
     onOpenHistory: () -> Unit,
+    onOpenGoals: () -> Unit,
     onAddManual: (LocalDate) -> Unit,
     onEditEntry: (FoodEntry) -> Unit,
     onOpenSettings: () -> Unit,
@@ -231,7 +231,7 @@ fun TodayScreen(
                 )
             }
             item {
-                SummaryCard(totals = state.totals, kcalGoal = state.kcalGoal)
+                SummaryCard(state = state, onClick = onOpenGoals)
             }
             if (!state.isLoading && state.meals.isEmpty()) {
                 item {
@@ -327,12 +327,15 @@ private fun DateSelector(
 }
 
 @Composable
-private fun SummaryCard(totals: Totals, kcalGoal: Int) {
+private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
+    val totals = state.totals
+    val kcalGoal = state.kcalGoal
     val progress = if (kcalGoal > 0) (totals.kcal / kcalGoal).toFloat() else 0f
     val remaining = kcalGoal - totals.kcal
     val overGoal = remaining < 0
 
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -370,18 +373,30 @@ private fun SummaryCard(totals: Totals, kcalGoal: Int) {
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                MacroItem(stringResource(R.string.macro_protein), totals.proteinG)
-                MacroItem(stringResource(R.string.macro_carbs), totals.carbsG)
-                MacroItem(stringResource(R.string.macro_fat), totals.fatG)
+                MacroItem(stringResource(R.string.macro_protein), totals.proteinG, state.proteinGoalG)
+                MacroItem(stringResource(R.string.macro_carbs), totals.carbsG, state.carbsGoalG)
+                MacroItem(stringResource(R.string.macro_fat), totals.fatG, state.fatGoalG)
             }
         }
     }
 }
 
 @Composable
-private fun MacroItem(label: String, grams: Double) {
+private fun MacroItem(label: String, grams: Double, goal: Int?) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("${grams.formatAmount()} g", style = MaterialTheme.typography.titleMedium)
+        // With a goal: "45 / 120 g" and a small progress bar
+        Text(
+            if (goal != null) "${grams.formatAmount()} / $goal g" else "${grams.formatAmount()} g",
+            style = MaterialTheme.typography.titleMedium,
+        )
+        if (goal != null && goal > 0) {
+            LinearProgressIndicator(
+                progress = { (grams / goal).toFloat().coerceIn(0f, 1f) },
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .width(72.dp),
+            )
+        }
         Text(
             label,
             style = MaterialTheme.typography.bodySmall,

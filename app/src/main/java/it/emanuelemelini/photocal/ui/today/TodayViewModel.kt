@@ -26,6 +26,9 @@ data class TodayUiState(
     val meals: List<MealGroup> = emptyList(),
     val totals: Totals = Totals(0.0, 0.0, 0.0, 0.0),
     val kcalGoal: Int = SettingsRepository.DEFAULT_KCAL_GOAL,
+    val proteinGoalG: Int? = null,
+    val carbsGoalG: Int? = null,
+    val fatGoalG: Int? = null,
     val hasApiKey: Boolean = true,
     val isLoading: Boolean = true,
 )
@@ -58,6 +61,9 @@ class TodayViewModel(
                     },
                     totals = totals,
                     kcalGoal = settings.dailyKcalGoal,
+                    proteinGoalG = settings.proteinGoalG,
+                    carbsGoalG = settings.carbsGoalG,
+                    fatGoalG = settings.fatGoalG,
                     hasApiKey = settings.geminiApiKey.isNotBlank(),
                     isLoading = false,
                 )

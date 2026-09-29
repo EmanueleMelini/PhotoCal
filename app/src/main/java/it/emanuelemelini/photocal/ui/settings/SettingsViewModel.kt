@@ -37,13 +37,9 @@ class SettingsViewModel(
     private val reminderScheduler: ReminderScheduler,
 ) : ViewModel() {
 
-    var kcalGoal by mutableStateOf("")
-        private set
     var apiKey by mutableStateOf("")
         private set
     var model by mutableStateOf("")
-        private set
-    var showErrors by mutableStateOf(false)
         private set
     var connectionTest by mutableStateOf<ConnectionTest>(ConnectionTest.Idle)
         private set
@@ -54,19 +50,12 @@ class SettingsViewModel(
     val appearance: StateFlow<Settings> = settingsRepository.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Settings())
 
-    val kcalGoalValid get() = kcalGoal.toIntOrNull()?.let { it in KCAL_GOAL_RANGE } == true
-
     init {
         viewModelScope.launch {
             val settings = settingsRepository.settings.first()
-            kcalGoal = settings.dailyKcalGoal.toString()
             apiKey = settings.geminiApiKey
             model = settings.geminiModel
         }
-    }
-
-    fun onKcalGoalChange(value: String) {
-        kcalGoal = value.filter(Char::isDigit).take(5)
     }
 
     fun onApiKeyChange(value: String) {
@@ -119,22 +108,11 @@ class SettingsViewModel(
         }
     }
 
-    /** Returns true if the values were valid and have been saved. */
-    suspend fun save(): Boolean {
-        if (!kcalGoalValid) {
-            showErrors = true
-            return false
-        }
-        showErrors = false
-        settingsRepository.save(
-            kcalGoal = kcalGoal.toInt(),
+    /** Saves the Gemini key and model (the other settings apply immediately). */
+    suspend fun save() {
+        settingsRepository.saveGemini(
             geminiApiKey = apiKey,
             geminiModel = model.ifBlank { SettingsRepository.DEFAULT_GEMINI_MODEL },
         )
-        return true
-    }
-
-    companion object {
-        val KCAL_GOAL_RANGE = 500..10_000
     }
 }
