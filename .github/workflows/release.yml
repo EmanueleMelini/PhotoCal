@@ -43,7 +43,7 @@ jobs:
           PHOTOCAL_KEYSTORE_PATH: ${{ runner.temp }}/photocal-release.jks
           PHOTOCAL_KEYSTORE_PASSWORD: ${{ secrets.PHOTOCAL_KEYSTORE_PASSWORD }}
           PHOTOCAL_KEY_ALIAS: ${{ secrets.PHOTOCAL_KEY_ALIAS }}
-        run: ./gradlew assembleRelease testReleaseUnitTest
+        run: ./gradlew testDebugUnitTest assembleRelease
 
       - name: Publish the GitHub Release
         env:
