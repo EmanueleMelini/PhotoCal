@@ -11,6 +11,8 @@ import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
+import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
+import it.emanuelemelini.photocal.data.reminders.ReminderType
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.toUiText
 import it.emanuelemelini.photocal.ui.uiText
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 
 sealed interface ConnectionTest {
     data object Idle : ConnectionTest
@@ -31,6 +34,7 @@ sealed interface ConnectionTest {
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val geminiClient: GeminiClient,
+    private val reminderScheduler: ReminderScheduler,
 ) : ViewModel() {
 
     var kcalGoal by mutableStateOf("")
@@ -46,7 +50,7 @@ class SettingsViewModel(
 
     private var testJob: Job? = null
 
-    /** Theme, colors and CREA tables apply immediately, without the Save button. */
+    /** Theme, colors, CREA tables and reminders apply immediately, without the Save button. */
     val appearance: StateFlow<Settings> = settingsRepository.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Settings())
 
@@ -85,6 +89,20 @@ class SettingsViewModel(
 
     fun setUseCrea(enabled: Boolean) {
         viewModelScope.launch { settingsRepository.setUseCrea(enabled) }
+    }
+
+    fun setReminderEnabled(type: ReminderType, enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setReminderEnabled(type, enabled)
+            reminderScheduler.reschedule(type)
+        }
+    }
+
+    fun setReminderTime(type: ReminderType, time: LocalTime) {
+        viewModelScope.launch {
+            settingsRepository.setReminderTime(type, time)
+            reminderScheduler.reschedule(type)
+        }
     }
 
     /** Tests the entered values (even if not saved yet). */

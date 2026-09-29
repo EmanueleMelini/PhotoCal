@@ -1,0 +1,35 @@
+<!-- Status bar icon: the launcher foreground (viewfinder and plate), cropped around the drawing -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+    <group
+        android:translateX="-28"
+        android:translateY="-28">
+        <path
+            android:pathData="M31,42V31H42M66,31H77V42M77,66V77H66M42,77H31V66"
+            android:strokeWidth="4"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M43,55a11,11 0,1 0,22 0a11,11 0,1 0,-22 0"
+            android:strokeWidth="3"
+            android:strokeColor="#FFFFFFFF" />
+        <path
+            android:pathData="M36.3,44V50M38.5,44V50M40.7,44V50M36.3,50Q36.3,53.5 38.5,53.5Q40.7,53.5 40.7,50M38.5,53.5V66"
+            android:strokeWidth="1.8"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M68,44C71.5,46 71.5,52 70.5,56L68,56Z" />
+        <path
+            android:pathData="M69.2,56V66"
+            android:strokeWidth="2.4"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round" />
+    </group>
+</vector>

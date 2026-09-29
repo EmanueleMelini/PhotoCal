@@ -1,5 +1,8 @@
 package it.emanuelemelini.photocal
 
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
@@ -27,6 +30,17 @@ object AppLocale {
         val locales = AppCompatDelegate.getApplicationLocales()
         if (locales.isEmpty) return null
         return AppLanguage.entries.find { it.tag == locales[0]?.language }
+    }
+
+    /**
+     * Context whose resources use the app language, for text built outside an activity
+     * (notifications). From Android 13 the system already applies it to the whole app.
+     */
+    fun localizedContext(context: Context): Context {
+        val locales = AppCompatDelegate.getApplicationLocales()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || locales.isEmpty) return context
+        val configuration = Configuration(context.resources.configuration).apply { setLocale(locales[0]) }
+        return context.createConfigurationContext(configuration)
     }
 
     /** null = follow the device language. The activity is recreated with the new language. */

@@ -8,8 +8,11 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import it.emanuelemelini.photocal.R
+import it.emanuelemelini.photocal.data.reminders.ReminderConfig
+import it.emanuelemelini.photocal.data.reminders.ReminderType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalTime
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 
@@ -29,6 +32,8 @@ data class Settings(
     val dynamicColor: Boolean = true,
     /** Kcal and macros from the CREA tables when the AI finds the matching food. */
     val useCrea: Boolean = true,
+    /** All reminders are off until the user turns them on. */
+    val reminders: Map<ReminderType, ReminderConfig> = ReminderType.entries.associateWith { ReminderConfig(it) },
 )
 
 class SettingsRepository(private val context: Context) {
@@ -41,6 +46,13 @@ class SettingsRepository(private val context: Context) {
             themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.find { it.name == name } } ?: ThemeMode.SYSTEM,
             dynamicColor = prefs[DYNAMIC_COLOR] ?: true,
             useCrea = prefs[USE_CREA] ?: true,
+            reminders = ReminderType.entries.associateWith { type ->
+                ReminderConfig(
+                    type = type,
+                    enabled = prefs[reminderEnabledKey(type)] ?: false,
+                    time = prefs[reminderTimeKey(type)]?.let { LocalTime.ofSecondOfDay(it * 60L) } ?: type.defaultTime,
+                )
+            },
         )
     }
 
@@ -64,6 +76,14 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[USE_CREA] = enabled }
     }
 
+    suspend fun setReminderEnabled(type: ReminderType, enabled: Boolean) {
+        context.dataStore.edit { it[reminderEnabledKey(type)] = enabled }
+    }
+
+    suspend fun setReminderTime(type: ReminderType, time: LocalTime) {
+        context.dataStore.edit { it[reminderTimeKey(type)] = time.hour * 60 + time.minute }
+    }
+
     companion object {
         const val DEFAULT_KCAL_GOAL = 2000
 
@@ -79,5 +99,12 @@ class SettingsRepository(private val context: Context) {
         private val THEME_MODE = stringPreferencesKey("theme_mode")
         private val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
         private val USE_CREA = booleanPreferencesKey("use_crea")
+
+        private fun reminderEnabledKey(type: ReminderType) =
+            booleanPreferencesKey("reminder_${type.name.lowercase()}_enabled")
+
+        /** Minutes after midnight. */
+        private fun reminderTimeKey(type: ReminderType) =
+            intPreferencesKey("reminder_${type.name.lowercase()}_time")
     }
 }

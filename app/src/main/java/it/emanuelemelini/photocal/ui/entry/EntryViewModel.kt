@@ -99,6 +99,7 @@ class EntryViewModel(
 
     init {
         route.prefillName?.let { form = form.copy(name = it) }
+        MealType.entries.find { it.name == route.meal }?.let { form = form.copy(mealType = it) }
         if (isEditing) {
             viewModelScope.launch {
                 original = foodRepository.get(route.entryId)

@@ -193,4 +193,27 @@
         <item quantity="one">Calorie chart of the last day, goal %2$d kcal</item>
         <item quantity="other">Calorie chart of the last %1$d days, goal %2$d kcal</item>
     </plurals>
+    <!-- Reminders -->
+    <string name="reminder_daily_summary">Evening summary</string>
+    <string name="reminder_weekly_summary">Weekly summary</string>
+    <string name="reminder_weekly_day">On Sundays</string>
+    <string name="channel_meal_reminders">Meal reminders</string>
+    <string name="channel_summaries">Summaries</string>
+    <string name="reminder_breakfast_title">Did you log breakfast?</string>
+    <string name="reminder_lunch_title">Did you log lunch?</string>
+    <string name="reminder_snack_title">Did you log your snack?</string>
+    <string name="reminder_dinner_title">Did you log dinner?</string>
+    <string name="reminder_meal_text">Add a photo, a barcode or a manual entry.</string>
+    <string name="reminder_daily_title">Today\'s summary</string>
+    <string name="reminder_daily_empty">Nothing logged today: tap to add your meals.</string>
+    <string name="reminder_daily_within">%1$s / %2$d kcal: %3$s kcal left.</string>
+    <string name="reminder_daily_over">%1$s / %2$d kcal: %3$s kcal over the goal.</string>
+    <string name="reminder_weekly_title">Your week</string>
+    <string name="reminder_weekly_empty">No days logged in the last 7 days.</string>
+    <string name="reminder_weekly_text">Average %1$s kcal a day · within goal: %2$d/%3$d</string>
+    <string name="settings_reminders">Reminders</string>
+    <string name="settings_reminders_hint">Notifications from the phone itself, even offline. Meal reminders are skipped if the meal is already logged.</string>
+    <string name="settings_notifications_off">PhotoCal notifications are turned off.</string>
+    <string name="settings_notifications_enable">Turn on</string>
+    <string name="settings_reminder_time">Time</string>
 </resources>

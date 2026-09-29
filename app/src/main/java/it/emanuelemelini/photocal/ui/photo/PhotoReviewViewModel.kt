@@ -130,7 +130,7 @@ class PhotoReviewViewModel(
     // Compose state (not StateFlow) because TextFields must be updated synchronously
     var notes by mutableStateOf("")
         private set
-    var mealType by mutableStateOf(MealType.suggestedFor())
+    var mealType by mutableStateOf(MealType.entries.find { it.name == route.meal } ?: MealType.suggestedFor())
         private set
     var items by mutableStateOf<List<ReviewItem>>(emptyList())
         private set

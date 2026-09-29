@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Accent of the notifications (primary of the static light palette) -->
+    <color name="notification_accent">#FF386A20</color>
+</resources>

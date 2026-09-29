@@ -73,7 +73,7 @@ private const val AI_STUDIO_URL = "https://aistudio.google.com/apikey"
 fun SettingsScreen(onBack: () -> Unit) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
-        SettingsViewModel(container.settingsRepository, container.geminiClient)
+        SettingsViewModel(container.settingsRepository, container.geminiClient, container.reminderScheduler)
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -175,6 +175,14 @@ fun SettingsScreen(onBack: () -> Unit) {
                     Switch(checked = appearance.dynamicColor, onCheckedChange = viewModel::setDynamicColor)
                 }
             }
+
+            HorizontalDivider()
+
+            RemindersSection(
+                reminders = appearance.reminders,
+                onEnabledChange = viewModel::setReminderEnabled,
+                onTimeChange = viewModel::setReminderTime,
+            )
 
             HorizontalDivider()
 

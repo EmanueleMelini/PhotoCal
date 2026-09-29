@@ -10,11 +10,14 @@ import it.emanuelemelini.photocal.data.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
 import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.reminders.ReminderNotifier
+import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 class PhotoCalApp : Application() {
@@ -25,7 +28,12 @@ class PhotoCalApp : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
-        container.applicationScope.launch { container.foodRepository.deleteOrphanPhotos() }
+        container.reminderNotifier.createChannels()
+        container.applicationScope.launch {
+            container.foodRepository.deleteOrphanPhotos()
+            // Cheap and robust: alarms are rebuilt from the settings at every start
+            container.reminderScheduler.rescheduleAll()
+        }
     }
 }
 
@@ -41,8 +49,13 @@ class AppContainer(context: Context) {
         .build()
 
     val photoStorage = PhotoStorage(context)
-    val foodRepository = FoodRepository(database.foodDao(), photoStorage)
     val settingsRepository = SettingsRepository(context)
+    val foodRepository: FoodRepository = FoodRepository(database.foodDao(), photoStorage) { date, meal ->
+        // A meal logged today makes its pending reminder pointless
+        if (date == LocalDate.now()) reminderNotifier.cancelMeal(meal)
+    }
+    val reminderNotifier: ReminderNotifier = ReminderNotifier(context, foodRepository, settingsRepository)
+    val reminderScheduler = ReminderScheduler(context, settingsRepository)
     val geminiClient = GeminiClient(settingsRepository, httpClient)
     val foodEstimator = FoodEstimator(geminiClient, CreaTable(context), settingsRepository)
     val openFoodFactsClient = OpenFoodFactsClient(httpClient)

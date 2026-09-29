@@ -76,6 +76,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
+import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.Totals
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.formatAmount
@@ -95,11 +96,13 @@ import java.time.ZoneOffset
 fun TodayScreen(
     requestedDay: LocalDate?,
     onRequestedDayHandled: () -> Unit,
+    requestedPhotoMeal: PhotoRequest?,
+    onRequestedPhotoHandled: () -> Unit,
     onOpenHistory: () -> Unit,
     onAddManual: (LocalDate) -> Unit,
     onEditEntry: (FoodEntry) -> Unit,
     onOpenSettings: () -> Unit,
-    onPhotoTaken: (photoPath: String, date: LocalDate) -> Unit,
+    onPhotoTaken: (photoPath: String, date: LocalDate, meal: MealType?) -> Unit,
     onScanBarcode: (LocalDate) -> Unit,
 ) {
     val container = appContainer()
@@ -129,20 +132,23 @@ fun TodayScreen(
     // while the camera is open
     var pendingPhotoPath by rememberSaveable { mutableStateOf<String?>(null) }
     var pendingPhotoDay by rememberSaveable { mutableStateOf<Long?>(null) }
+    var pendingPhotoMeal by rememberSaveable { mutableStateOf<String?>(null) }
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         val path = pendingPhotoPath
         val day = pendingPhotoDay
+        val meal = MealType.entries.find { it.name == pendingPhotoMeal }
         pendingPhotoPath = null
         pendingPhotoDay = null
+        pendingPhotoMeal = null
         if (path == null || day == null) return@rememberLauncherForActivityResult
-        if (success) onPhotoTaken(path, LocalDate.ofEpochDay(day)) else photoStorage.delete(path)
+        if (success) onPhotoTaken(path, LocalDate.ofEpochDay(day), meal) else photoStorage.delete(path)
     }
 
     val photoNeedsKey = stringResource(R.string.today_photo_needs_key)
     val settingsLabel = stringResource(R.string.action_settings)
     val noCamera = stringResource(R.string.today_no_camera)
 
-    fun startPhoto() {
+    fun startPhoto(meal: MealType? = null, date: LocalDate = state.date) {
         fabExpanded = false
         if (!state.hasApiKey) {
             scope.launch {
@@ -157,13 +163,24 @@ fun TodayScreen(
         }
         val file = photoStorage.newPhotoFile()
         pendingPhotoPath = file.absolutePath
-        pendingPhotoDay = state.date.toEpochDay()
+        pendingPhotoDay = date.toEpochDay()
+        pendingPhotoMeal = meal?.name
         try {
             takePicture.launch(photoStorage.uriFor(file))
         } catch (_: ActivityNotFoundException) {
             pendingPhotoPath = null
             pendingPhotoDay = null
+            pendingPhotoMeal = null
             scope.launch { snackbarHostState.showSnackbar(noCamera) }
+        }
+    }
+
+    // Photo requested from a reminder notification
+    LaunchedEffect(requestedPhotoMeal) {
+        requestedPhotoMeal?.let {
+            onRequestedPhotoHandled()
+            // Reminders are always about today, whatever day is being shown
+            startPhoto(it.meal, LocalDate.now())
         }
     }
 
@@ -186,7 +203,7 @@ fun TodayScreen(
             AddFab(
                 expanded = fabExpanded,
                 onExpandedChange = { fabExpanded = it },
-                onPhoto = ::startPhoto,
+                onPhoto = { startPhoto() },
                 onBarcode = {
                     fabExpanded = false
                     onScanBarcode(state.date)
@@ -487,3 +504,6 @@ private fun FabAction(label: String, icon: Painter, onClick: () -> Unit) {
         }
     }
 }
+
+/** Photo requested from outside (a reminder), for [meal] if known. */
+data class PhotoRequest(val meal: MealType?)

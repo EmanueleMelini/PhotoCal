@@ -194,4 +194,27 @@
         <item quantity="one">Grafico delle calorie dell\'ultimo giorno, obiettivo %2$d kcal</item>
         <item quantity="other">Grafico delle calorie degli ultimi %1$d giorni, obiettivo %2$d kcal</item>
     </plurals>
+    <!-- Reminders -->
+    <string name="reminder_daily_summary">Riepilogo serale</string>
+    <string name="reminder_weekly_summary">Riepilogo settimanale</string>
+    <string name="reminder_weekly_day">La domenica</string>
+    <string name="channel_meal_reminders">Promemoria pasti</string>
+    <string name="channel_summaries">Riepiloghi</string>
+    <string name="reminder_breakfast_title">Hai registrato la colazione?</string>
+    <string name="reminder_lunch_title">Hai registrato il pranzo?</string>
+    <string name="reminder_snack_title">Hai registrato lo spuntino?</string>
+    <string name="reminder_dinner_title">Hai registrato la cena?</string>
+    <string name="reminder_meal_text">Aggiungi una foto, un barcode o una voce a mano.</string>
+    <string name="reminder_daily_title">Riepilogo di oggi</string>
+    <string name="reminder_daily_empty">Non hai registrato niente oggi: tocca per aggiungere i pasti.</string>
+    <string name="reminder_daily_within">%1$s / %2$d kcal: rimangono %3$s kcal.</string>
+    <string name="reminder_daily_over">%1$s / %2$d kcal: %3$s kcal oltre l\'obiettivo.</string>
+    <string name="reminder_weekly_title">La tua settimana</string>
+    <string name="reminder_weekly_empty">Nessun giorno registrato negli ultimi 7 giorni.</string>
+    <string name="reminder_weekly_text">Media %1$s kcal al giorno · entro l\'obiettivo: %2$d/%3$d</string>
+    <string name="settings_reminders">Promemoria</string>
+    <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione. Quelle dei pasti non arrivano se il pasto è già registrato.</string>
+    <string name="settings_notifications_off">Le notifiche di PhotoCal sono disattivate.</string>
+    <string name="settings_notifications_enable">Attiva</string>
+    <string name="settings_reminder_time">Orario</string>
 </resources>

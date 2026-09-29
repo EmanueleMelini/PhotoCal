@@ -29,6 +29,12 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   CREA e indica per ogni voce il codice corrispondente; kcal e macro vengono allora dalla
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove
   arrivano i valori e si può passare alla stima dell'AI.
+- **Promemoria**: notifiche locali (nessun server) per colazione, pranzo, spuntino e cena,
+  più un riepilogo serale e uno settimanale (domenica). Si attivano in Impostazioni →
+  Promemoria, dove si sceglie anche l'orario; il permesso notifiche viene chiesto solo allora.
+  Il promemoria di un pasto non arriva se quel pasto è già nel diario di oggi, e sparisce
+  appena lo registri. Arrivano entro 10 minuti dall'orario scelto (allarmi non esatti,
+  nessun permesso speciale) e vengono riprogrammati dopo un riavvio del telefono.
 - **Lingua**: italiano e inglese. Segue la lingua del telefono oppure la scelta in
   Impostazioni → Aspetto → Lingua. I testi sono in `res/values/strings.xml` (italiano,
   predefinito) e `res/values-en/strings.xml`; dettagli in
@@ -87,6 +93,7 @@ app/src/main/java/it/emanuelemelini/photocal/
 │   ├── openfoodfacts/    client API v3, prodotti
 │   ├── http/             utilità OkHttp condivise
 │   ├── photo/            file delle foto, ridimensionamento
+│   ├── reminders/        promemoria: orari, allarmi, notifiche
 │   └── FoodRepository.kt
 └── ui/
     ├── today/            schermata Oggi
