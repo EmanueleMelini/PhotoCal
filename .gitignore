@@ -25,3 +25,6 @@ local.properties
 
 # Cache of the CREA pages downloaded by tools/crea/build_crea_table.py
 tools/crea/.cache/
+
+# Local instructions for Claude Code (not part of the project)
+CLAUDE.md
