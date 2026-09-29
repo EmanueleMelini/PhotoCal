@@ -1,9 +1,23 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
+
+/**
+ * Release signing: from environment variables in CI (GitHub Actions secrets) or from
+ * local.properties on this machine. The keystore and its password never go in the repository.
+ */
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+}
+fun signingValue(env: String, property: String): String? =
+    System.getenv(env)?.takeIf { it.isNotBlank() } ?: localProperties.getProperty(property)
+
+val releaseKeystore = signingValue("PHOTOCAL_KEYSTORE_PATH", "photocal.keystore.path")
 
 android {
     namespace = "it.emanuelemelini.photocal"
@@ -14,12 +28,23 @@ android {
         minSdk = 26
         targetSdk = 37
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
     }
 
     androidResources {
         // Declares the supported languages to the system ("App language" on Android 13+)
         generateLocaleConfig = true
+    }
+
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = signingValue("PHOTOCAL_KEYSTORE_PASSWORD", "photocal.keystore.password")
+                keyAlias = signingValue("PHOTOCAL_KEY_ALIAS", "photocal.key.alias")
+                keyPassword = signingValue("PHOTOCAL_KEYSTORE_PASSWORD", "photocal.keystore.password")
+            }
+        }
     }
 
     buildTypes {
@@ -31,6 +56,8 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // Unsigned release APK when no keystore is configured (it can't be installed)
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
@@ -41,6 +68,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     testOptions {

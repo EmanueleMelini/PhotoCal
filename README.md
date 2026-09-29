@@ -67,6 +67,25 @@ python3 tools/crea/build_crea_table.py
 Fonte dei dati: CREA – Centro di ricerca Alimenti e Nutrizione, *Tabelle di composizione
 degli alimenti*. Le condizioni d'uso del sito chiedono di citare la fonte.
 
+## Rilasci
+
+Ogni tag di versione (`v1.0.0`, `v1.1.0`...) avvia il workflow
+[`.github/workflows/release.yml`](.github/workflows/release.yml): compila l'APK firmato e lo
+pubblica come file scaricabile nella **Release** del tag, nella pagina *Releases* della repo.
+
+Per una nuova versione:
+
+1. aggiorna `versionName` (e aumenta `versionCode`) in `app/build.gradle.kts`: il workflow si
+   ferma se il tag non corrisponde a `versionName`;
+2. `git tag v1.1.0 && git push origin v1.1.0`.
+
+**Firma**: gli APK sono firmati con la chiave `~/.android/photocal-release.jks` (fuori dalla
+repo). In locale la password è in `local.properties`; su GitHub chiave e password sono nei
+secret `PHOTOCAL_KEYSTORE_BASE64`, `PHOTOCAL_KEYSTORE_PASSWORD` e `PHOTOCAL_KEY_ALIAS`.
+**Conserva una copia della chiave e della password**: senza, l'app installata non si può più
+aggiornare (bisognerebbe disinstallarla, perdendo i dati). Gli APK di debug hanno un'altra
+firma: per passare da debug a release serve disinstallare.
+
 ## Build e installazione
 
 Serve `local.properties` con il percorso dell'Android SDK (Android Studio lo crea da solo):
@@ -77,6 +96,7 @@ sdk.dir=/Users/<utente>/Library/Android/sdk
 
 ```bash
 ./gradlew assembleDebug
+./gradlew assembleRelease     # APK firmato, se local.properties contiene la chiave
 ./gradlew testDebugUnitTest   # test JVM
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```

@@ -3,6 +3,7 @@ package it.emanuelemelini.photocal.data.openfoodfacts
 import android.util.Log
 import it.emanuelemelini.photocal.AppLanguage
 import it.emanuelemelini.photocal.AppLocale
+import it.emanuelemelini.photocal.BuildConfig
 import it.emanuelemelini.photocal.data.http.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -89,7 +90,7 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
     private companion object {
         const val TAG = "OpenFoodFacts"
         const val BASE_URL = "https://world.openfoodfacts.org/api/v3"
-        const val USER_AGENT = "PhotoCal/0.1 (personal Android app)"
+        const val USER_AGENT = "PhotoCal/${BuildConfig.VERSION_NAME} (personal Android app)"
         const val KJ_PER_KCAL = 4.184
         val FIELDS = listOf(
             "product_name", *AppLanguage.entries.map { "product_name_${it.tag}" }.toTypedArray(), "brands", "nutriments", "quantity",
