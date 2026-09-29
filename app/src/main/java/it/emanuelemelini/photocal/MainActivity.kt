@@ -19,6 +19,7 @@ import it.emanuelemelini.photocal.ui.LaunchRequest
 import it.emanuelemelini.photocal.ui.PhotoCalNavHost
 import it.emanuelemelini.photocal.ui.shortcuts.AppShortcuts
 import it.emanuelemelini.photocal.ui.theme.PhotoCalTheme
+import it.emanuelemelini.photocal.ui.update.UpdateDialogs
 import kotlinx.coroutines.launch
 
 /** AppCompatActivity (instead of ComponentActivity) so the in-app language works before Android 13. */
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         // Not on recreation (e.g. language change): the request was already handled
         if (savedInstanceState == null) launchRequest = LaunchRequest.from(intent)
         val container = (application as PhotoCalApp).container
+        // Once a day at most, and not again on recreation
+        if (savedInstanceState == null) container.appUpdater.checkAutomatically()
         val settingsRepository = container.settingsRepository
         // Also after a language change, which recreates the activity: widget and shortcut
         // labels follow it
@@ -69,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                     launchRequest = launchRequest,
                     onLaunchRequestHandled = { launchRequest = null },
                 )
+                UpdateDialogs()
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import it.emanuelemelini.photocal.R
@@ -18,6 +19,7 @@ import it.emanuelemelini.photocal.data.nutrition.WeightGoal
 import it.emanuelemelini.photocal.data.reminders.ReminderConfig
 import it.emanuelemelini.photocal.data.reminders.ReminderType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.LocalTime
 
@@ -145,6 +147,20 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[reminderTimeKey(type)] = time.hour * 60 + time.minute }
     }
 
+    /** Epoch day of the last successful update check (not a setting: kept out of [Settings]). */
+    suspend fun lastUpdateCheckDay(): Long? = context.dataStore.data.first()[LAST_UPDATE_CHECK]
+
+    suspend fun setLastUpdateCheckDay(epochDay: Long) {
+        context.dataStore.edit { it[LAST_UPDATE_CHECK] = epochDay }
+    }
+
+    /** versionCode whose changelog was last shown; null before 1.3.0 and on a fresh install. */
+    suspend fun lastSeenVersionCode(): Int? = context.dataStore.data.first()[LAST_SEEN_VERSION]
+
+    suspend fun setLastSeenVersionCode(versionCode: Int) {
+        context.dataStore.edit { it[LAST_SEEN_VERSION] = versionCode }
+    }
+
     companion object {
         const val DEFAULT_KCAL_GOAL = 2000
 
@@ -177,6 +193,8 @@ class SettingsRepository(private val context: Context) {
         private val THEME_MODE = stringPreferencesKey("theme_mode")
         private val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
         private val USE_CREA = booleanPreferencesKey("use_crea")
+        private val LAST_UPDATE_CHECK = longPreferencesKey("last_update_check_day")
+        private val LAST_SEEN_VERSION = intPreferencesKey("last_seen_version_code")
 
         private fun reminderEnabledKey(type: ReminderType) =
             booleanPreferencesKey("reminder_${type.name.lowercase()}_enabled")

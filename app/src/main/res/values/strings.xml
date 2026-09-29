@@ -386,4 +386,50 @@
         <item quantity="one">%1$s bicchiere</item>
         <item quantity="other">%1$s bicchieri</item>
     </plurals>
+
+    <!-- App updates (GitHub Releases) and changelog -->
+    <string name="settings_about">Info</string>
+    <string name="settings_version" translatable="false">PhotoCal %1$s</string>
+    <string name="settings_whats_new">Novità delle versioni</string>
+    <string name="settings_check_updates">Controlla aggiornamenti</string>
+    <string name="settings_up_to_date">Hai già l\'ultima versione.</string>
+    <string name="settings_check_failed">Controllo non riuscito: verifica la connessione e riprova.</string>
+    <string name="update_available_title">Aggiornamento disponibile</string>
+    <string name="update_available_text">È disponibile PhotoCal %1$s (hai la %2$s).</string>
+    <string name="update_available_whats_new">Novità:</string>
+    <string name="update_action_install">Aggiorna</string>
+    <string name="update_action_later">Più tardi</string>
+    <string name="update_action_allow">Consenti</string>
+    <string name="update_action_browser">Scarica dal browser</string>
+    <string name="update_permission_title">Permesso di installazione</string>
+    <string name="update_permission_text">Per installare l\'aggiornamento, PhotoCal deve poter installare app. Nella prossima schermata attiva \"Consenti da questa fonte\" e torna indietro. Se preferisci, puoi scaricarlo dal browser.</string>
+    <string name="update_permission_denied">Senza il permesso PhotoCal non può installare l\'aggiornamento. Puoi scaricarlo dal browser e aprirlo dai download.</string>
+    <string name="update_downloading_title">Download di PhotoCal %1$s</string>
+    <string name="update_downloading_progress" translatable="false">%1$d%%</string>
+    <string name="update_failed_title">Aggiornamento non riuscito</string>
+    <string name="update_error_download">Il download non è riuscito. Riprova più tardi oppure scaricalo dal browser.</string>
+    <string name="update_error_signature">L\'aggiornamento ha una firma diversa dall\'app installata (per esempio una versione di sviluppo), quindi Android non lo installa sopra.</string>
+    <string name="update_error_storage">Non c\'è abbastanza spazio per installare l\'aggiornamento.</string>
+    <string name="update_error_install">Android non ha installato l\'aggiornamento. Puoi scaricarlo dal browser.</string>
+    <string name="changelog_title">Novità</string>
+    <string name="changelog_title_version">Novità di PhotoCal %1$s</string>
+    <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_3_0">
+        <item>PhotoCal controlla se c\'è una nuova versione su GitHub (all\'avvio, al massimo una volta al giorno, oppure da Impostazioni → Info) e ti mostra le sue novità prima di aggiornare.</item>
+        <item>L\'aggiornamento si scarica e si installa dall\'app (con il permesso di installare app), oppure dal browser.</item>
+        <item>Alla prima apertura dopo un aggiornamento compaiono le novità, che si possono rileggere in Impostazioni → Info.</item>
+    </string-array>
+    <string-array name="changelog_1_2_0">
+        <item>Acqua: contatore dei bicchieri in Oggi, con l\'obiettivo suggerito dal profilo.</item>
+        <item>Widget per la schermata Home con i bicchieri di oggi e le scorciatoie per aggiungere un pasto.</item>
+        <item>Scorciatoie dell\'icona: foto pasto, pasto a mano, +1 bicchiere e condividi oggi.</item>
+        <item>Promemoria dell\'acqua a metà e al raggiungimento dell\'obiettivo.</item>
+        <item>Nome e foto nel profilo.</item>
+        <item>Condivisione di un giorno o di una settimana con un link che si apre in PhotoCal.</item>
+    </string-array>
+    <string-array name="changelog_1_1_0">
+        <item>Profilo e obiettivi: stima del fabbisogno con calorie e macro suggeriti, sempre modificabili a mano.</item>
+        <item>Obiettivi di proteine, carboidrati e grassi, con i progressi in Oggi.</item>
+        <item>Registro del peso con grafico a 30, 90 e 365 giorni.</item>
+    </string-array>
 </resources>

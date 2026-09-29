@@ -82,6 +82,18 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   Impostazioni → Aspetto → Lingua. I testi sono in `res/values/strings.xml` (italiano,
   predefinito) e `res/values-en/strings.xml`; dettagli in
   [docs/LOCALIZATION_PLAN.md](docs/LOCALIZATION_PLAN.md).
+- **Aggiornamenti**: all'avvio (solo nelle build release, al massimo una volta al giorno)
+  PhotoCal legge l'ultima Release dall'API pubblica di GitHub (senza token) e, se la versione è
+  più nuova di quella installata, propone "Aggiorna" o "Più tardi" (che vuol dire: ne riparliamo
+  domani). Il controllo si può lanciare anche da Impostazioni → Info, in ogni build. "Aggiorna"
+  scarica l'APK dentro una sessione di `PackageInstaller` e Android chiede la conferma; serve il
+  permesso "Installa app sconosciute" per PhotoCal, chiesto solo allora. Senza il permesso, o se
+  qualcosa va storto, resta il link per scaricare l'APK dal browser. Android rifiuta un APK con
+  una firma diversa da quella dell'app installata, quindi sopra una build debug l'aggiornamento
+  non si installa.
+- **Novità**: alla prima apertura dopo un aggiornamento compare il changelog delle versioni
+  nuove, in italiano o in inglese secondo la lingua dell'app. Dopo un'installazione da zero non
+  compare. Si rilegge in Impostazioni → Info.
 - **Barcode**: lo scanner è quello di Google Play services (nessun permesso fotocamera); il
   modulo viene scaricato all'installazione. I valori nutrizionali arrivano da
   [Open Food Facts](https://world.openfoodfacts.org) (API v3). Il codice si può anche digitare.
@@ -115,7 +127,16 @@ Per una nuova versione:
 
 1. aggiorna `versionName` (e aumenta `versionCode`) in `app/build.gradle.kts`: il workflow si
    ferma se il tag non corrisponde a `versionName`;
-2. `git tag v1.1.0 && git push origin v1.1.0`.
+2. scrivi il changelog: un `string-array` `changelog_x_y_z` in `res/values/strings.xml`
+   (italiano) e in `res/values-en/strings.xml` (inglese), più la voce in cima a
+   `Changelog.entries` (`data/update/Changelog.kt`). `ChangelogTest` fallisce se manca la versione
+   corrente;
+3. `git tag v1.1.0 && git push origin v1.1.0`.
+
+Le note della Release su GitHub sono lo stesso testo inglese che l'app mostra dopo
+l'aggiornamento: le scrive `.github/scripts/release_notes.py` dall'array di `values-en`, e il
+workflow si ferma se l'array manca. Per vederle in anteprima:
+`python3 .github/scripts/release_notes.py 1.3.0`.
 
 **Firma**: gli APK sono firmati con la chiave `~/.android/photocal-release.jks` (fuori dalla
 repo). In locale la password è in `local.properties`; su GitHub chiave e password sono nei

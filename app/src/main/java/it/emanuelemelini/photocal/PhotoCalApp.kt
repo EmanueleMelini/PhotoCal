@@ -16,6 +16,10 @@ import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.reminders.ReminderNotifier
 import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import it.emanuelemelini.photocal.data.share.ShareBuilder
+import it.emanuelemelini.photocal.data.update.AppUpdater
+import it.emanuelemelini.photocal.data.update.GitHubReleasesClient
+import it.emanuelemelini.photocal.data.update.UpdateInstaller
+import it.emanuelemelini.photocal.data.update.WhatsNew
 import it.emanuelemelini.photocal.ui.shortcuts.AppShortcuts
 import it.emanuelemelini.photocal.ui.widget.WaterWidget
 import kotlinx.coroutines.CoroutineScope
@@ -93,4 +97,11 @@ class AppContainer(context: Context) {
     val foodEstimator = FoodEstimator(geminiClient, CreaTable(context), settingsRepository)
     val openFoodFactsClient = OpenFoodFactsClient(httpClient)
     val shareBuilder = ShareBuilder(foodRepository, waterRepository, weightRepository, settingsRepository, profilePhotoStorage)
+    val appUpdater = AppUpdater(
+        GitHubReleasesClient(httpClient),
+        UpdateInstaller(context, httpClient),
+        settingsRepository,
+        applicationScope,
+    )
+    val whatsNew = WhatsNew(context, settingsRepository)
 }

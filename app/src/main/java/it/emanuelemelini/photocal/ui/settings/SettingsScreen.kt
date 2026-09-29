@@ -64,10 +64,14 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.emanuelemelini.photocal.AppLanguage
 import it.emanuelemelini.photocal.AppLocale
+import it.emanuelemelini.photocal.BuildConfig
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.update.Changelog
+import it.emanuelemelini.photocal.data.update.UpdateState
 import it.emanuelemelini.photocal.ui.appContainer
+import it.emanuelemelini.photocal.ui.update.ChangelogDialog
 import kotlinx.coroutines.launch
 
 private const val AI_STUDIO_URL = "https://aistudio.google.com/apikey"
@@ -80,13 +84,14 @@ fun SettingsScreen(
 ) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
-        SettingsViewModel(container.settingsRepository, container.geminiClient, container.reminderScheduler)
+        SettingsViewModel(container.settingsRepository, container.geminiClient, container.reminderScheduler, container.appUpdater)
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     var showApiKey by rememberSaveable { mutableStateOf(false) }
     val appearance by viewModel.appearance.collectAsStateWithLifecycle()
+    val updateState by viewModel.updateState.collectAsStateWithLifecycle()
     val savedMessage = stringResource(R.string.settings_saved)
 
     Scaffold(
@@ -285,7 +290,59 @@ fun SettingsScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) { Text(stringResource(R.string.action_save)) }
+
+            HorizontalDivider()
+
+            AboutSection(
+                updateState = updateState,
+                onCheckForUpdates = viewModel::checkForUpdates,
+            )
         }
+    }
+}
+
+/** Installed version, changelog and manual update check. */
+@Composable
+private fun AboutSection(updateState: UpdateState, onCheckForUpdates: () -> Unit) {
+    var showChangelog by rememberSaveable { mutableStateOf(false) }
+    Text(stringResource(R.string.settings_about), style = MaterialTheme.typography.titleMedium)
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_version, BuildConfig.VERSION_NAME)) },
+        supportingContent = { Text(stringResource(R.string.settings_whats_new)) },
+        trailingContent = {
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
+        },
+        modifier = Modifier.clickable { showChangelog = true },
+    )
+    val checking = updateState == UpdateState.Checking
+    OutlinedButton(
+        onClick = onCheckForUpdates,
+        enabled = !checking,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        if (checking) {
+            CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(12.dp))
+        }
+        Text(stringResource(R.string.settings_check_updates))
+    }
+    when (updateState) {
+        UpdateState.UpToDate -> Text(
+            stringResource(R.string.settings_up_to_date),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        UpdateState.CheckFailed -> Text(
+            stringResource(R.string.settings_check_failed),
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        else -> Unit
+    }
+    if (showChangelog) {
+        // Every version installed so far, newest first
+        val entries = remember { Changelog.entries.filter { it.versionCode <= BuildConfig.VERSION_CODE } }
+        ChangelogDialog(entries, onDismiss = { showChangelog = false })
     }
 }
 

@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Reminder alarms are lost on reboot and must be scheduled again -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- In-app updates from GitHub Releases: the user still grants "Install unknown apps" and
+         confirms every install -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".PhotoCalApp"
@@ -119,6 +122,11 @@
         <!-- Widget buttons and midnight refresh (explicit intents only) -->
         <receiver
             android:name=".ui.widget.WaterWidgetActionReceiver"
+            android:exported="false" />
+
+        <!-- Result of the update install session (explicit PendingIntent from PackageInstaller) -->
+        <receiver
+            android:name=".data.update.UpdateInstallReceiver"
             android:exported="false" />
 
         <!-- Lets AppCompat persist the in-app language choice before Android 13 -->

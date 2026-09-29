@@ -33,6 +33,11 @@ jobs:
           fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
 
+      # Same English text the app shows after the update (values-en changelog_x_y_z):
+      # checked before the build, so a missing changelog stops the release early
+      - name: Write the release notes from the app changelog
+        run: python3 .github/scripts/release_notes.py "$VERSION" > "$RUNNER_TEMP/release-notes.md"
+
       - name: Restore the signing keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.PHOTOCAL_KEYSTORE_BASE64 }}
@@ -52,4 +57,4 @@ jobs:
         run: |
           apk="PhotoCal-$VERSION.apk"
           cp app/build/outputs/apk/release/app-release.apk "$apk"
-          gh release create "$GITHUB_REF_NAME" "$apk" --title "PhotoCal $VERSION" --generate-notes
+          gh release create "$GITHUB_REF_NAME" "$apk" --title "PhotoCal $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"

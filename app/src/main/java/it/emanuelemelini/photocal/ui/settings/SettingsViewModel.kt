@@ -13,6 +13,8 @@ import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
 import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import it.emanuelemelini.photocal.data.reminders.ReminderType
+import it.emanuelemelini.photocal.data.update.AppUpdater
+import it.emanuelemelini.photocal.data.update.UpdateState
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.toUiText
 import it.emanuelemelini.photocal.ui.uiText
@@ -35,6 +37,7 @@ class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val geminiClient: GeminiClient,
     private val reminderScheduler: ReminderScheduler,
+    private val appUpdater: AppUpdater,
 ) : ViewModel() {
 
     var apiKey by mutableStateOf("")
@@ -92,6 +95,16 @@ class SettingsViewModel(
             settingsRepository.setReminderTime(type, time)
             reminderScheduler.reschedule(type)
         }
+    }
+
+    /** A found update opens its dialog over every screen; the other results stay here. */
+    val updateState: StateFlow<UpdateState> = appUpdater.state
+
+    fun checkForUpdates() = appUpdater.checkNow()
+
+    override fun onCleared() {
+        // "Up to date" or "check failed" would be stale the next time Settings opens
+        if (updateState.value == UpdateState.UpToDate || updateState.value == UpdateState.CheckFailed) appUpdater.dismiss()
     }
 
     /** Tests the entered values (even if not saved yet). */

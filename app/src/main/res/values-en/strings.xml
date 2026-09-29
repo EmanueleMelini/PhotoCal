@@ -379,4 +379,48 @@
         <item quantity="one">%1$s glass</item>
         <item quantity="other">%1$s glasses</item>
     </plurals>
+
+    <!-- App updates (GitHub Releases) and changelog -->
+    <string name="settings_about">About</string>
+    <string name="settings_whats_new">What\'s new in each version</string>
+    <string name="settings_check_updates">Check for updates</string>
+    <string name="settings_up_to_date">You already have the latest version.</string>
+    <string name="settings_check_failed">Check failed: check your connection and try again.</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update_available_text">PhotoCal %1$s is available (you have %2$s).</string>
+    <string name="update_available_whats_new">What\'s new:</string>
+    <string name="update_action_install">Update</string>
+    <string name="update_action_later">Later</string>
+    <string name="update_action_allow">Allow</string>
+    <string name="update_action_browser">Download in the browser</string>
+    <string name="update_permission_title">Install permission</string>
+    <string name="update_permission_text">To install the update, PhotoCal needs to be allowed to install apps. On the next screen turn on \"Allow from this source\" and go back. If you prefer, you can download it in the browser.</string>
+    <string name="update_permission_denied">Without the permission PhotoCal can\'t install the update. You can download it in the browser and open it from your downloads.</string>
+    <string name="update_downloading_title">Downloading PhotoCal %1$s</string>
+    <string name="update_failed_title">Update failed</string>
+    <string name="update_error_download">The download failed. Try again later or download it in the browser.</string>
+    <string name="update_error_signature">The update is signed differently from the installed app (for example a development build), so Android won\'t install it over it.</string>
+    <string name="update_error_storage">There isn\'t enough space to install the update.</string>
+    <string name="update_error_install">Android didn\'t install the update. You can download it in the browser.</string>
+    <string name="changelog_title">What\'s new</string>
+    <string name="changelog_title_version">What\'s new in PhotoCal %1$s</string>
+    <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_3_0">
+        <item>PhotoCal checks GitHub for a new version (at startup, at most once a day, or from Settings → About) and shows you what\'s new in it before you update.</item>
+        <item>The update is downloaded and installed from the app (with the permission to install apps), or in the browser.</item>
+        <item>The first time you open the app after an update, it shows what\'s new; you can read it again in Settings → About.</item>
+    </string-array>
+    <string-array name="changelog_1_2_0">
+        <item>Water: a glass counter in Today, with a goal suggested by your profile.</item>
+        <item>Home screen widget with today\'s glasses and shortcuts to add a meal.</item>
+        <item>Icon shortcuts: meal photo, manual meal, +1 glass and share today.</item>
+        <item>Water reminders at half and at the full goal.</item>
+        <item>Name and photo in the profile.</item>
+        <item>Share a day or a week with a link that opens in PhotoCal.</item>
+    </string-array>
+    <string-array name="changelog_1_1_0">
+        <item>Profile and goals: an estimate of your needs with suggested calories and macros, which you can always type by hand.</item>
+        <item>Protein, carbs and fat goals, with the progress in Today.</item>
+        <item>Weight log with a 30, 90 and 365 day chart.</item>
+    </string-array>
 </resources>
