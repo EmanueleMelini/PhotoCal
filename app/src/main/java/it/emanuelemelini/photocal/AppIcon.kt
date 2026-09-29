@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import it.emanuelemelini.photocal.ui.shortcuts.AppShortcuts
+import kotlinx.coroutines.launch
 
 /**
  * Launcher icons, one activity-alias each in the manifest (".LauncherGreen" etc.).
@@ -20,7 +22,8 @@ enum class AppIcon(
     BLACK(".LauncherBlack", R.string.app_icon_black, R.drawable.ic_launcher_background_black),
     PURPLE(".LauncherPurple", R.string.app_icon_purple, R.drawable.ic_launcher_background_purple);
 
-    private fun component(context: Context) = ComponentName(context.packageName, context.packageName + aliasName)
+    /** The alias of this icon, where the launcher entry and the app shortcuts live. */
+    fun launcherComponent(context: Context) = ComponentName(context.packageName, context.packageName + aliasName)
 
     companion object {
         /** The icon enabled in the manifest before any choice. */
@@ -29,7 +32,7 @@ enum class AppIcon(
         fun current(context: Context): AppIcon {
             val packageManager = context.packageManager
             return entries.firstOrNull { icon ->
-                when (packageManager.getComponentEnabledSetting(icon.component(context))) {
+                when (packageManager.getComponentEnabledSetting(icon.launcherComponent(context))) {
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED -> true
                     PackageManager.COMPONENT_ENABLED_STATE_DEFAULT -> icon == DEFAULT
                     else -> false
@@ -41,17 +44,19 @@ enum class AppIcon(
         fun select(context: Context, icon: AppIcon) {
             val packageManager = context.packageManager
             packageManager.setComponentEnabledSetting(
-                icon.component(context),
+                icon.launcherComponent(context),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP,
             )
             entries.filter { it != icon }.forEach {
                 packageManager.setComponentEnabledSetting(
-                    it.component(context),
+                    it.launcherComponent(context),
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP,
                 )
             }
+            // Shortcuts attached to a disabled alias are removed: move them to the new one
+            (context.applicationContext as PhotoCalApp).container.applicationScope.launch { AppShortcuts.publish(context) }
         }
     }
 }

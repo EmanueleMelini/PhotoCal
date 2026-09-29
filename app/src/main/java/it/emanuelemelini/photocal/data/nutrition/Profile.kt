@@ -32,13 +32,15 @@ enum class WeightGoal(@StringRes val labelRes: Int, /** Daily kcal change from m
     GAIN(R.string.goal_gain, 250),
 }
 
-/** Data for the energy estimate; the weight comes from the weight log. */
+/** Data for the energy estimate (the weight comes from the weight log), plus the name. */
 data class Profile(
     val sex: Sex? = null,
     val birthYear: Int? = null,
     val heightCm: Int? = null,
     val activity: ActivityLevel? = null,
     val goal: WeightGoal = WeightGoal.MAINTAIN,
+    /** Shown in shared days; sharing needs it. */
+    val name: String = "",
 )
 
 /** Daily targets chosen by the user (suggested or typed); macros are optional. */
@@ -47,4 +49,8 @@ data class DailyGoals(
     val proteinG: Int? = null,
     val carbsG: Int? = null,
     val fatG: Int? = null,
+    /** Water to drink, a whole number of glasses of [glassMl]. */
+    val waterMl: Int,
+    /** Size of the glass the water counter adds or removes. */
+    val glassMl: Int,
 )

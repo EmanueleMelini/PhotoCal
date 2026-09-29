@@ -3,6 +3,8 @@ package it.emanuelemelini.photocal.ui.profile
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.emanuelemelini.photocal.data.WeightRepository
@@ -13,17 +15,24 @@ import it.emanuelemelini.photocal.data.nutrition.EnergyCalculator
 import it.emanuelemelini.photocal.data.nutrition.EnergyEstimate
 import it.emanuelemelini.photocal.data.nutrition.Profile
 import it.emanuelemelini.photocal.data.nutrition.Sex
+import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.nutrition.WeightGoal
+import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
+import it.emanuelemelini.photocal.data.share.ShareValidation
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.parseDecimal
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.io.InputStream
 import java.time.LocalDate
 
 class ProfileViewModel(
     private val settingsRepository: SettingsRepository,
     private val weightRepository: WeightRepository,
+    private val profilePhotoStorage: ProfilePhotoStorage,
 ) : ViewModel() {
 
     private val currentYear = LocalDate.now().year
@@ -31,7 +40,21 @@ class ProfileViewModel(
     /** Weight as first shown: only an edited value becomes a new weigh-in. */
     private var initialWeightText = ""
 
+    /**
+     * Water goal in ml, changed only by typing the glasses or applying the suggestion: a new
+     * glass size recomputes the glasses from it, without drifting while the size is typed.
+     */
+    private var waterGoalMl = SettingsRepository.DEFAULT_WATER_GOAL_ML
+
     // Compose state (not StateFlow) because TextFields must be updated synchronously
+    var name by mutableStateOf("")
+        private set
+    var photo by mutableStateOf<ImageBitmap?>(null)
+        private set
+
+    /** Emits when a chosen picture can't be read. */
+    val photoErrors = Channel<Unit>(Channel.CONFLATED)
+
     var sex by mutableStateOf<Sex?>(null)
         private set
     var birthYear by mutableStateOf("")
@@ -53,6 +76,10 @@ class ProfileViewModel(
         private set
     var fat by mutableStateOf("")
         private set
+    var glassSize by mutableStateOf("")
+        private set
+    var waterGlasses by mutableStateOf("")
+        private set
 
     var latestWeight by mutableStateOf<WeightEntry?>(null)
         private set
@@ -68,6 +95,21 @@ class ProfileViewModel(
     val proteinValid get() = isValidMacro(protein)
     val carbsValid get() = isValidMacro(carbs)
     val fatValid get() = isValidMacro(fat)
+    val glassSizeValid get() = validGlassMl != null
+    val waterValid: Boolean
+        get() {
+            val glasses = waterGlasses.toIntOrNull() ?: return false
+            return glasses in WATER_GLASSES_RANGE && glasses * (validGlassMl ?: 0) <= MAX_WATER_ML
+        }
+
+    private val validGlassMl: Int? get() = glassSize.toIntOrNull()?.takeIf { it in GLASS_ML_RANGE }
+
+    /** Water goal of the typed glasses, in ml (null while glasses or glass size are invalid). */
+    val waterGoalTypedMl: Int?
+        get() {
+            val glass = validGlassMl ?: return null
+            return waterGlasses.toIntOrNull()?.takeIf { it in WATER_GLASSES_RANGE }?.let { it * glass }
+        }
 
     val birthYearRange get() = (currentYear - 100)..(currentYear - MIN_AGE)
 
@@ -82,6 +124,17 @@ class ProfileViewModel(
             currentYear = currentYear,
         )
 
+    /** Suggested water to drink, in ml; needs only sex and activity (weight is optional). */
+    val waterSuggestionMl: Int?
+        get() = WaterCalculator.suggestedMl(sex, activity, parseDecimal(weight)?.takeIf { weightValid })
+
+    /** The suggestion in glasses of the typed size (null while the size is invalid). */
+    val waterSuggestionGlasses: Int?
+        get() {
+            val ml = waterSuggestionMl ?: return null
+            return validGlassMl?.let { WaterCalculator.glassesToReach(ml, it) }
+        }
+
     /** kcal of the typed macros, to compare with the kcal goal (null unless all three are set). */
     val kcalFromMacros: Int?
         get() {
@@ -95,6 +148,7 @@ class ProfileViewModel(
         viewModelScope.launch {
             val settings = settingsRepository.settings.first()
             val profile = settings.profile
+            name = profile.name
             sex = profile.sex
             birthYear = profile.birthYear?.toString().orEmpty()
             height = profile.heightCm?.toString().orEmpty()
@@ -104,10 +158,17 @@ class ProfileViewModel(
             protein = settings.proteinGoalG?.toString().orEmpty()
             carbs = settings.carbsGoalG?.toString().orEmpty()
             fat = settings.fatGoalG?.toString().orEmpty()
+            waterGoalMl = settings.waterGoalMl
+            glassSize = settings.glassMl.toString()
+            waterGlasses = WaterCalculator.goalGlasses(settings.waterGoalMl, settings.glassMl).toString()
             latestWeight = weightRepository.observeLatest().first()
             weight = latestWeight?.weightKg?.formatAmount().orEmpty()
             initialWeightText = weight
             isLoading = false
+        }
+        viewModelScope.launch {
+            // Saved or removed photos are applied at once, without the Save button
+            profilePhotoStorage.version.collect { photo = profilePhotoStorage.load()?.asImageBitmap() }
         }
         viewModelScope.launch {
             // Follows the weight log (e.g. a weigh-in added there), unless the field is being edited
@@ -121,7 +182,25 @@ class ProfileViewModel(
         }
     }
 
+    fun onNameChange(value: String) { name = value.take(ShareValidation.MAX_NAME) }
     fun onSexChange(value: Sex) { sex = value }
+
+    /** [open] reads the chosen picture (it may be called more than once). */
+    fun setPhoto(open: () -> InputStream, onDone: () -> Unit = {}) {
+        viewModelScope.launch {
+            try {
+                profilePhotoStorage.save(open)
+            } catch (_: IOException) {
+                photoErrors.trySend(Unit)
+            } finally {
+                onDone()
+            }
+        }
+    }
+
+    fun removePhoto() {
+        viewModelScope.launch { profilePhotoStorage.delete() }
+    }
     fun onBirthYearChange(value: String) { birthYear = value.filter(Char::isDigit).take(4) }
     fun onHeightChange(value: String) { height = value.filter(Char::isDigit).take(3) }
     fun onWeightChange(value: String) { weight = value.filter { it.isDigit() || it == ',' || it == '.' }.take(6) }
@@ -132,18 +211,38 @@ class ProfileViewModel(
     fun onCarbsChange(value: String) { carbs = value.filter(Char::isDigit).take(4) }
     fun onFatChange(value: String) { fat = value.filter(Char::isDigit).take(4) }
 
-    /** Copies the suggestion into the goals; they stay editable. */
+    fun onGlassSizeChange(value: String) {
+        glassSize = value.filter(Char::isDigit).take(4)
+        validGlassMl?.let { waterGlasses = WaterCalculator.goalGlasses(waterGoalMl, it).toString() }
+    }
+
+    fun onWaterGlassesChange(value: String) {
+        waterGlasses = value.filter(Char::isDigit).take(2)
+        waterGoalTypedMl?.let { waterGoalMl = it }
+    }
+
+    /** Copies the available suggestions into the goals; they stay editable. */
     fun applySuggestion() {
-        val suggestion = estimate ?: return
-        kcal = suggestion.suggestedKcal.toString()
-        protein = suggestion.proteinG.toString()
-        carbs = suggestion.carbsG.toString()
-        fat = suggestion.fatG.toString()
+        estimate?.let { suggestion ->
+            kcal = suggestion.suggestedKcal.toString()
+            protein = suggestion.proteinG.toString()
+            carbs = suggestion.carbsG.toString()
+            fat = suggestion.fatG.toString()
+        }
+        val waterMl = waterSuggestionMl
+        val glasses = waterSuggestionGlasses
+        if (waterMl != null && glasses != null) {
+            waterGoalMl = waterMl
+            waterGlasses = glasses.toString()
+        }
     }
 
     /** Returns true if everything was valid and has been saved. */
     suspend fun save(): Boolean {
-        if (!(birthYearValid && heightValid && weightValid && kcalValid && proteinValid && carbsValid && fatValid)) {
+        val valid = birthYearValid && heightValid && weightValid && kcalValid &&
+            proteinValid && carbsValid && fatValid && glassSizeValid && waterValid
+        val waterMl = waterGoalTypedMl
+        if (!valid || waterMl == null) {
             showErrors = true
             return false
         }
@@ -155,6 +254,8 @@ class ProfileViewModel(
                 proteinG = protein.toIntOrNull(),
                 carbsG = carbs.toIntOrNull(),
                 fatG = fat.toIntOrNull(),
+                waterMl = waterMl,
+                glassMl = glassSize.toInt(),
             )
         )
         // An edited weight here counts as today's weigh-in
@@ -167,6 +268,7 @@ class ProfileViewModel(
     }
 
     private fun profile() = Profile(
+        name = name.trim(),
         sex = sex,
         birthYear = birthYear.toIntOrNull()?.takeIf { birthYearValid },
         heightCm = height.toIntOrNull()?.takeIf { heightValid },
@@ -182,5 +284,8 @@ class ProfileViewModel(
         val WEIGHT_RANGE = 25.0..350.0
         val KCAL_RANGE = 500..10_000
         val MACRO_RANGE = 0..1_000
+        val GLASS_ML_RANGE = 50..1_000
+        val WATER_GLASSES_RANGE = 1..40
+        const val MAX_WATER_ML = 10_000
     }
 }

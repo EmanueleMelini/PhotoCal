@@ -85,9 +85,9 @@ fun RemindersSection(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(stringResource(type.labelRes), style = MaterialTheme.typography.bodyLarge)
-                if (type.weekly) {
+                type.hintRes?.let { hint ->
                     Text(
-                        stringResource(R.string.reminder_weekly_day),
+                        stringResource(hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

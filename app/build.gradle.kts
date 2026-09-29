@@ -20,6 +20,20 @@ fun signingValue(env: String, property: String): String? =
 
 val releaseKeystore = signingValue("PHOTOCAL_KEYSTORE_PATH", "photocal.keystore.path")
 
+/** Host of the share links (App Links, verified by site/.well-known/assetlinks.json). Public. */
+val shareHost: String = providers.gradleProperty("photocal.share.host").get()
+
+/**
+ * Key that signs the share links (HMAC). Same value in local.properties and in the
+ * PHOTOCAL_SHARE_KEY secret, never in the repository: the code is public, so a key there
+ * would let anyone forge links. Unsigned builds fall back to a development key (base64 of
+ * "photocal-development-key"), whose links the release builds reject.
+ */
+val shareKey: String? = signingValue("PHOTOCAL_SHARE_KEY", "photocal.share.key")
+if (releaseKeystore != null && shareKey == null) {
+    throw GradleException("Signed builds need photocal.share.key in local.properties (or PHOTOCAL_SHARE_KEY)")
+}
+
 android {
     namespace = "it.emanuelemelini.photocal"
     compileSdk = 37
@@ -28,8 +42,12 @@ android {
         applicationId = "it.emanuelemelini.photocal"
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
+
+        manifestPlaceholders["shareHost"] = shareHost
+        buildConfigField("String", "SHARE_HOST", "\"$shareHost\"")
+        buildConfigField("String", "SHARE_KEY", "\"${shareKey ?: "cGhvdG9jYWwtZGV2ZWxvcG1lbnQta2V5"}\"")
     }
 
     androidResources {

@@ -203,6 +203,22 @@
     <string name="reminder_daily_summary">Riepilogo serale</string>
     <string name="reminder_weekly_summary">Riepilogo settimanale</string>
     <string name="reminder_weekly_day">La domenica</string>
+    <string name="reminder_water_half">Acqua: metà obiettivo</string>
+    <string name="reminder_water_half_hint">Se non sei ancora a metà</string>
+    <string name="reminder_water_goal">Acqua: obiettivo</string>
+    <string name="reminder_water_goal_hint">Se non l\'hai ancora raggiunto</string>
+    <string name="channel_water_reminders">Promemoria acqua</string>
+    <string name="reminder_water_half_title">A metà dell\'acqua di oggi?</string>
+    <string name="reminder_water_goal_title">Obiettivo d\'acqua di oggi</string>
+    <string name="reminder_water_text">%1$s. %2$s</string>
+    <plurals name="reminder_water_missing_half">
+        <item quantity="one">Manca %1$s bicchiere per arrivare a metà obiettivo.</item>
+        <item quantity="other">Mancano %1$s bicchieri per arrivare a metà obiettivo.</item>
+    </plurals>
+    <plurals name="reminder_water_missing_goal">
+        <item quantity="one">Manca %1$s bicchiere per l\'obiettivo.</item>
+        <item quantity="other">Mancano %1$s bicchieri per l\'obiettivo.</item>
+    </plurals>
     <string name="channel_meal_reminders">Promemoria pasti</string>
     <string name="channel_summaries">Riepiloghi</string>
     <string name="reminder_breakfast_title">Hai registrato la colazione?</string>
@@ -218,7 +234,7 @@
     <string name="reminder_weekly_empty">Nessun giorno registrato negli ultimi 7 giorni.</string>
     <string name="reminder_weekly_text">Media %1$s kcal al giorno · entro l\'obiettivo: %2$d/%3$d</string>
     <string name="settings_reminders">Promemoria</string>
-    <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione. Quelle dei pasti non arrivano se il pasto è già registrato.</string>
+    <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione. Quelle dei pasti non arrivano se il pasto è già registrato, quelle dell\'acqua se hai già bevuto abbastanza.</string>
     <string name="settings_notifications_off">Le notifiche di PhotoCal sono disattivate.</string>
     <string name="settings_notifications_enable">Attiva</string>
     <string name="settings_reminder_time">Orario</string>
@@ -253,7 +269,7 @@
     <string name="profile_under_age">La formula è pensata per gli adulti: sotto i 18 anni chiedi a un pediatra o a un nutrizionista.</string>
     <string name="profile_activity">Attività</string>
     <string name="profile_goal">Obiettivo</string>
-    <string name="profile_estimate_title">Stima (formula di Mifflin-St Jeor)</string>
+    <string name="profile_estimate_title">Stima (formula di Mifflin-St Jeor; acqua: LARN)</string>
     <string name="profile_estimate_missing">Compila sesso, anno di nascita, altezza, peso e attività per vedere le calorie suggerite.</string>
     <string name="profile_bmr">Metabolismo basale</string>
     <string name="profile_tdee">Fabbisogno giornaliero</string>
@@ -265,7 +281,7 @@
     <string name="profile_kcal_goal">Kcal al giorno</string>
     <string name="profile_macros_kcal">I macronutrienti valgono %1$d kcal.</string>
     <string name="profile_macros_kcal_far">I macronutrienti valgono %1$d kcal, lontano dall\'obiettivo in kcal.</string>
-    <string name="profile_disclaimer">Le calorie e i macronutrienti suggeriti sono stime basate su formule per la popolazione generale: non sostituiscono il parere di un medico o di un nutrizionista.</string>
+    <string name="profile_disclaimer">Le calorie, i macronutrienti e l\'acqua suggeriti sono stime basate su formule per la popolazione generale: non sostituiscono il parere di un medico o di un nutrizionista.</string>
     <string name="weight_range_month">30 giorni</string>
     <string name="weight_range_quarter">90 giorni</string>
     <string name="weight_range_year">1 anno</string>
@@ -278,5 +294,96 @@
     <plurals name="weight_chart_description">
         <item quantity="one">Grafico del peso con %1$d pesata</item>
         <item quantity="other">Grafico del peso con %1$d pesate</item>
+    </plurals>
+    <!-- Water counter (Today and widget) -->
+    <string name="water_title">Acqua</string>
+    <string name="water_add_glass">Aggiungi un bicchiere d\'acqua</string>
+    <string name="water_remove_glass">Togli un bicchiere d\'acqua</string>
+    <string name="water_liters">%1$s di %2$s</string>
+    <plurals name="water_glasses_of_goal">
+        <item quantity="one">%1$s di %2$d bicchiere</item>
+        <item quantity="other">%1$s di %2$d bicchieri</item>
+    </plurals>
+    <string name="widget_water_name">Bicchieri d\'acqua</string>
+    <string name="widget_water_description">I bicchieri d\'acqua di oggi e le scorciatoie per aggiungere un pasto</string>
+    <string name="widget_water_count" translatable="false">%1$s/%2$d</string>
+    <string name="widget_water_preview_count" translatable="false">3/8</string>
+    <string name="widget_add_photo">Aggiungi un pasto da foto</string>
+    <string name="widget_add_manual">Aggiungi un pasto a mano</string>
+    <!-- App shortcuts (long press on the app icon) -->
+    <string name="shortcut_photo_short">Foto pasto</string>
+    <string name="shortcut_manual_short">Pasto a mano</string>
+    <string name="shortcut_share_short">Condividi</string>
+    <string name="shortcut_share_long">Condividi oggi</string>
+    <string name="shortcut_water_short">+1 acqua</string>
+    <string name="shortcut_water_long">+1 bicchiere</string>
+    <string name="shortcut_water_added">Bicchiere aggiunto: %1$s</string>
+    <string name="profile_water_goal">Acqua bicchieri</string>
+    <string name="profile_glass_ml">Bicchiere ml</string>
+    <string name="profile_water_goal_liters">Obiettivo acqua: %1$s al giorno.</string>
+    <string name="profile_water_suggested">Acqua da bere</string>
+    <plurals name="profile_water_glasses">
+        <item quantity="one">%1$d bicchiere</item>
+        <item quantity="other">%1$d bicchieri</item>
+    </plurals>
+    <string name="profile_water_hint" formatted="false">Riferimento LARN/EFSA: 2,5 L di acqua al giorno per gli uomini e 2,0 L per le donne (30 ml per kg se il peso è maggiore), di cui circa l\'80% dalle bevande, più 200 ml per ogni livello di attività.</string>
+
+    <!-- Profile name and photo -->
+    <string name="profile_name">Nome</string>
+    <string name="profile_name_hint">Serve per condividere le tue giornate.</string>
+    <string name="profile_photo_choose">Scegli foto</string>
+    <string name="profile_photo_take">Scatta</string>
+    <string name="profile_photo_remove">Rimuovi</string>
+    <string name="profile_photo_error">Impossibile leggere la foto</string>
+
+    <!-- Sharing a day or a week -->
+    <string name="share_day">Condividi la giornata</string>
+    <string name="share_needs_name">Per condividere aggiungi il tuo nome nel profilo.</string>
+    <string name="share_title">Condividi</string>
+    <string name="share_action">Condividi il link</string>
+    <string name="share_period_day">Giorno</string>
+    <string name="share_period_week">Ultimi 7 giorni</string>
+    <string name="share_what">Cosa mostrare</string>
+    <string name="share_photo">Foto profilo</string>
+    <string name="share_goals">Obiettivi</string>
+    <string name="share_nothing">Scegli almeno una cosa da mostrare.</string>
+    <string name="share_preview">Anteprima</string>
+    <string name="share_preview_hint">Così la vedrà chi apre il link con PhotoCal.</string>
+    <string name="share_text_day">La mia giornata su PhotoCal (%1$s):</string>
+    <string name="share_text_week">La mia settimana su PhotoCal (%1$s – %2$s):</string>
+
+    <!-- Shared day or week, read only -->
+    <string name="shared_title_day">Giornata condivisa</string>
+    <string name="shared_title_week">Settimana condivisa</string>
+    <string name="shared_calories">Calorie</string>
+    <string name="shared_macros">Macronutrienti</string>
+    <string name="shared_meals">Pasti</string>
+    <string name="shared_weight">Peso</string>
+    <string name="shared_weight_value">%1$s kg</string>
+    <string name="shared_weight_change">%1$s → %2$s kg (%3$s)</string>
+    <string name="shared_within_goal">Entro l\'obiettivo</string>
+    <string name="shared_goal_reached">Obiettivo raggiunto</string>
+    <string name="shared_no_meals">Nessun pasto registrato.</string>
+    <string name="shared_no_days">Nessun giorno registrato.</string>
+    <string name="shared_week_range">%1$s – %2$s</string>
+    <string name="shared_avg_kcal">Media: %1$s kcal al giorno</string>
+    <string name="shared_avg_macros">Media:</string>
+    <plurals name="shared_days_within">
+        <item quantity="one">Entro l\'obiettivo: %1$d su %2$d giorno registrato</item>
+        <item quantity="other">Entro l\'obiettivo: %1$d su %2$d giorni registrati</item>
+    </plurals>
+    <string name="shared_avg_water">Media: %1$s al giorno</string>
+    <plurals name="shared_days_water">
+        <item quantity="one">Obiettivo raggiunto: %1$d su %2$d giorno</item>
+        <item quantity="other">Obiettivo raggiunto: %1$d su %2$d giorni</item>
+    </plurals>
+    <string name="shared_days">Giorno per giorno</string>
+    <string name="shared_selected_day">%1$s: %2$s kcal</string>
+    <string name="shared_footer">Condiviso con PhotoCal il %1$s · sola lettura, non viene salvato nel tuo diario.</string>
+    <string name="shared_invalid">Questo link non è valido: è incompleto oppure è stato modificato.</string>
+    <string name="shared_newer_version">Questo link è stato creato con una versione più recente di PhotoCal: aggiorna l\'app per aprirlo.</string>
+    <plurals name="shared_water_glasses">
+        <item quantity="one">%1$s bicchiere</item>
+        <item quantity="other">%1$s bicchieri</item>
     </plurals>
 </resources>

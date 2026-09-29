@@ -45,6 +45,8 @@ data class Settings(
     val proteinGoalG: Int? = null,
     val carbsGoalG: Int? = null,
     val fatGoalG: Int? = null,
+    val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
+    val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
     val profile: Profile = Profile(),
     val geminiApiKey: String = "",
     val geminiModel: String = SettingsRepository.DEFAULT_GEMINI_MODEL,
@@ -65,7 +67,10 @@ class SettingsRepository(private val context: Context) {
             proteinGoalG = prefs[PROTEIN_GOAL],
             carbsGoalG = prefs[CARBS_GOAL],
             fatGoalG = prefs[FAT_GOAL],
+            waterGoalMl = prefs[WATER_GOAL] ?: DEFAULT_WATER_GOAL_ML,
+            glassMl = prefs[GLASS_ML] ?: DEFAULT_GLASS_ML,
             profile = Profile(
+                name = prefs[PROFILE_NAME].orEmpty(),
                 sex = prefs[SEX]?.let { name -> Sex.entries.find { it.name == name } },
                 birthYear = prefs[BIRTH_YEAR],
                 heightCm = prefs[HEIGHT_CM],
@@ -96,6 +101,7 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun saveProfile(profile: Profile) {
         context.dataStore.edit { prefs ->
+            prefs.setOrRemove(PROFILE_NAME, profile.name.trim().takeIf { it.isNotEmpty() })
             prefs.setOrRemove(SEX, profile.sex?.name)
             prefs.setOrRemove(BIRTH_YEAR, profile.birthYear)
             prefs.setOrRemove(HEIGHT_CM, profile.heightCm)
@@ -110,6 +116,8 @@ class SettingsRepository(private val context: Context) {
             prefs.setOrRemove(PROTEIN_GOAL, goals.proteinG)
             prefs.setOrRemove(CARBS_GOAL, goals.carbsG)
             prefs.setOrRemove(FAT_GOAL, goals.fatG)
+            prefs[WATER_GOAL] = goals.waterMl
+            prefs[GLASS_ML] = goals.glassMl
         }
     }
 
@@ -140,6 +148,12 @@ class SettingsRepository(private val context: Context) {
     companion object {
         const val DEFAULT_KCAL_GOAL = 2000
 
+        /** 8 glasses of 200 ml, the common advice for adults. */
+        const val DEFAULT_WATER_GOAL_ML = 1600
+
+        /** Same as the "glass" unit of the manual entry. */
+        const val DEFAULT_GLASS_ML = 200
+
         /** Latest stable Flash model with a free tier (checked on ai.google.dev, September 2026). */
         const val DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
 
@@ -150,6 +164,9 @@ class SettingsRepository(private val context: Context) {
         private val PROTEIN_GOAL = intPreferencesKey("protein_goal_g")
         private val CARBS_GOAL = intPreferencesKey("carbs_goal_g")
         private val FAT_GOAL = intPreferencesKey("fat_goal_g")
+        private val WATER_GOAL = intPreferencesKey("water_goal_ml")
+        private val GLASS_ML = intPreferencesKey("glass_ml")
+        private val PROFILE_NAME = stringPreferencesKey("profile_name")
         private val SEX = stringPreferencesKey("profile_sex")
         private val BIRTH_YEAR = intPreferencesKey("profile_birth_year")
         private val HEIGHT_CM = intPreferencesKey("profile_height_cm")

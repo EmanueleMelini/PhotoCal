@@ -50,9 +50,11 @@ fun pluralCount(count: Double): Int = if (count == 1.0) 1 else 2
 
 /** Quantity shown in the diary, e.g. "120 g" or "2 calici (300 ml)". */
 @Composable
-fun FoodEntry.quantityLabel(): String? {
-    val unit = servingUnit
-    val count = servings
+fun FoodEntry.quantityLabel(): String? = quantityLabel(grams, servingUnit, servings)
+
+/** Same label from the raw values, e.g. for the entries of a shared day. */
+@Composable
+fun quantityLabel(grams: Double?, unit: ServingUnit?, count: Double?): String? {
     if (unit != null && unit != ServingUnit.GRAMS && count != null) {
         if (unit == ServingUnit.MILLILITERS) return "${count.formatAmount()} ml"
         val name = pluralStringResource(unit.nameRes, pluralCount(count))
@@ -67,3 +69,7 @@ fun Double.formatSignedAmount(): String = when {
     this < 0 -> "\u2212" + (-this).formatAmount()
     else -> formatAmount()
 }
+
+/** Water in liters with one decimal, e.g. "1,6 L". */
+fun formatLiters(ml: Int, locale: Locale = AppLocale.current): String =
+    String.format(locale, "%.1f L", ml / 1000.0)

@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "it.emanuelemelini.photocal",
+      "sha256_cert_fingerprints": [
+        "E6:3D:36:FD:42:5F:0A:49:2F:EC:36:1D:75:D5:C4:DD:7D:DA:C3:93:85:4D:43:BF:DC:A0:AA:AB:7C:9C:9B:BD",
+        "DA:33:08:62:12:EF:54:EA:13:B0:E8:DF:D0:A2:06:B9:E5:98:05:EF:E4:EB:CF:C0:2C:83:0A:B4:1F:23:ED:0F"
+      ]
+    }
+  }
+]

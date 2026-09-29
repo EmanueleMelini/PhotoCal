@@ -28,7 +28,10 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
     }
 }
 
-/** Alarms are lost on reboot and must follow time or time zone changes: schedule them again. */
+/**
+ * Alarms are lost on reboot and must follow time or time zone changes: schedule them again,
+ * together with the widget's midnight refresh (a time zone change may also change the day).
+ */
 class ReminderRescheduleReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -38,6 +41,7 @@ class ReminderRescheduleReceiver : BroadcastReceiver() {
         container.applicationScope.launch {
             try {
                 container.reminderScheduler.rescheduleAll()
+                container.waterWidget.update()
             } finally {
                 pending.finish()
             }

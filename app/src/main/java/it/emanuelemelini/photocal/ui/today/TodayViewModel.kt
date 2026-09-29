@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.emanuelemelini.photocal.data.FoodRepository
+import it.emanuelemelini.photocal.data.WaterRepository
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.Totals
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 data class MealGroup(val mealType: MealType, val entries: List<FoodEntry>) {
@@ -29,7 +31,12 @@ data class TodayUiState(
     val proteinGoalG: Int? = null,
     val carbsGoalG: Int? = null,
     val fatGoalG: Int? = null,
+    val waterMl: Int = 0,
+    val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
+    val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
     val hasApiKey: Boolean = true,
+    /** Sharing needs a name in the profile. */
+    val canShare: Boolean = false,
     val isLoading: Boolean = true,
 )
 
@@ -37,6 +44,7 @@ data class TodayUiState(
 class TodayViewModel(
     private val savedStateHandle: SavedStateHandle,
     foodRepository: FoodRepository,
+    private val waterRepository: WaterRepository,
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
@@ -51,7 +59,8 @@ class TodayViewModel(
                 foodRepository.observeEntries(date),
                 foodRepository.observeTotals(date),
                 settingsRepository.settings,
-            ) { entries, totals, settings ->
+                waterRepository.observeMl(date),
+            ) { entries, totals, settings, waterMl ->
                 TodayUiState(
                     date = date,
                     meals = MealType.entries.mapNotNull { meal ->
@@ -64,12 +73,26 @@ class TodayViewModel(
                     proteinGoalG = settings.proteinGoalG,
                     carbsGoalG = settings.carbsGoalG,
                     fatGoalG = settings.fatGoalG,
+                    waterMl = waterMl,
+                    waterGoalMl = settings.waterGoalMl,
+                    glassMl = settings.glassMl,
                     hasApiKey = settings.geminiApiKey.isNotBlank(),
+                    canShare = settings.profile.name.isNotBlank(),
                     isLoading = false,
                 )
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
+
+    fun addGlass() {
+        val state = uiState.value
+        viewModelScope.launch { waterRepository.addGlass(state.date, state.glassMl) }
+    }
+
+    fun removeGlass() {
+        val state = uiState.value
+        viewModelScope.launch { waterRepository.removeGlass(state.date, state.glassMl) }
+    }
 
     fun previousDay() = shiftDays(-1)
 

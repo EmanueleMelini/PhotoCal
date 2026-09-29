@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget: dark roles of the static green palette -->
+    <color name="widget_surface">#FF1E201C</color>
+    <color name="widget_on_surface">#FFE3E3DC</color>
+    <color name="widget_on_surface_variant">#FFC3C8BB</color>
+    <color name="widget_primary">#FF9CD67D</color>
+    <color name="widget_on_primary">#FF0C3900</color>
+    <color name="widget_secondary_container">#FF3E4A35</color>
+    <color name="widget_on_secondary_container">#FFD9E7CB</color>
+</resources>

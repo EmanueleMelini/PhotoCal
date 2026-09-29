@@ -29,10 +29,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -66,7 +68,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -77,9 +81,11 @@ import coil3.compose.AsyncImage
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
+import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.formatLiters
 import it.emanuelemelini.photocal.ui.longLabel
 import it.emanuelemelini.photocal.ui.quantityLabel
 import it.emanuelemelini.photocal.ui.relativeLabel
@@ -104,11 +110,17 @@ fun TodayScreen(
     onOpenSettings: () -> Unit,
     onPhotoTaken: (photoPath: String, date: LocalDate, meal: MealType?) -> Unit,
     onScanBarcode: (LocalDate) -> Unit,
+    onShare: (LocalDate) -> Unit,
 ) {
     val container = appContainer()
     val photoStorage = container.photoStorage
     val viewModel: TodayViewModel = viewModel {
-        TodayViewModel(createSavedStateHandle(), container.foodRepository, container.settingsRepository)
+        TodayViewModel(
+            createSavedStateHandle(),
+            container.foodRepository,
+            container.waterRepository,
+            container.settingsRepository,
+        )
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -189,6 +201,11 @@ fun TodayScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
+                    if (state.canShare) {
+                        IconButton(onClick = { onShare(state.date) }) {
+                            Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share_day))
+                        }
+                    }
                     IconButton(onClick = onOpenHistory) {
                         Icon(painterResource(R.drawable.ic_bar_chart), contentDescription = stringResource(R.string.today_history))
                     }
@@ -232,6 +249,14 @@ fun TodayScreen(
             }
             item {
                 SummaryCard(state = state, onClick = onOpenGoals)
+            }
+            item {
+                WaterCard(
+                    state = state,
+                    onAdd = viewModel::addGlass,
+                    onRemove = viewModel::removeGlass,
+                    onClick = onOpenGoals,
+                )
             }
             if (!state.isLoading && state.meals.isEmpty()) {
                 item {
@@ -376,6 +401,59 @@ private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
                 MacroItem(stringResource(R.string.macro_protein), totals.proteinG, state.proteinGoalG)
                 MacroItem(stringResource(R.string.macro_carbs), totals.carbsG, state.carbsGoalG)
                 MacroItem(stringResource(R.string.macro_fat), totals.fatG, state.fatGoalG)
+            }
+        }
+    }
+}
+
+/** Glasses of water of the day, with − / + buttons; tapping the card opens the goals. */
+@Composable
+private fun WaterCard(state: TodayUiState, onAdd: () -> Unit, onRemove: () -> Unit, onClick: () -> Unit) {
+    val drunk = WaterCalculator.glasses(state.waterMl, state.glassMl)
+    val goal = WaterCalculator.goalGlasses(state.waterGoalMl, state.glassMl)
+    val glassesLabel = pluralStringResource(R.plurals.water_glasses_of_goal, goal, drunk.formatAmount(), goal)
+
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
+        ) {
+            Icon(
+                painterResource(R.drawable.ic_water_drop),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+            )
+            Column(
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 12.dp)
+                    // One announcement for title and progress
+                    .semantics(mergeDescendants = true) {},
+            ) {
+                Text(stringResource(R.string.water_title), style = MaterialTheme.typography.labelLarge)
+                Text(glassesLabel, style = MaterialTheme.typography.titleMedium)
+                LinearProgressIndicator(
+                    progress = { (state.waterMl.toFloat() / (goal * state.glassMl)).coerceIn(0f, 1f) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp),
+                )
+                Text(
+                    stringResource(R.string.water_liters, formatLiters(state.waterMl), formatLiters(goal * state.glassMl)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            FilledTonalIconButton(onClick = onRemove, enabled = state.waterMl > 0) {
+                Icon(painterResource(R.drawable.ic_remove), contentDescription = stringResource(R.string.water_remove_glass))
+            }
+            FilledTonalIconButton(onClick = onAdd) {
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.water_add_glass))
             }
         }
     }

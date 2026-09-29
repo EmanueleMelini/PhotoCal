@@ -201,6 +201,22 @@
     <!-- Reminders -->
     <string name="reminder_daily_summary">Evening summary</string>
     <string name="reminder_weekly_summary">Weekly summary</string>
+    <string name="reminder_water_half">Water: half the goal</string>
+    <string name="reminder_water_half_hint">If you aren\'t halfway yet</string>
+    <string name="reminder_water_goal">Water: goal</string>
+    <string name="reminder_water_goal_hint">If you haven\'t reached it yet</string>
+    <string name="channel_water_reminders">Water reminders</string>
+    <string name="reminder_water_half_title">Halfway through today\'s water?</string>
+    <string name="reminder_water_goal_title">Today\'s water goal</string>
+    <string name="reminder_water_text">%1$s. %2$s</string>
+    <plurals name="reminder_water_missing_half">
+        <item quantity="one">%1$s more glass to reach half the goal.</item>
+        <item quantity="other">%1$s more glasses to reach half the goal.</item>
+    </plurals>
+    <plurals name="reminder_water_missing_goal">
+        <item quantity="one">%1$s more glass to reach the goal.</item>
+        <item quantity="other">%1$s more glasses to reach the goal.</item>
+    </plurals>
     <string name="reminder_weekly_day">On Sundays</string>
     <string name="channel_meal_reminders">Meal reminders</string>
     <string name="channel_summaries">Summaries</string>
@@ -217,7 +233,7 @@
     <string name="reminder_weekly_empty">No days logged in the last 7 days.</string>
     <string name="reminder_weekly_text">Average %1$s kcal a day · within goal: %2$d/%3$d</string>
     <string name="settings_reminders">Reminders</string>
-    <string name="settings_reminders_hint">Notifications from the phone itself, even offline. Meal reminders are skipped if the meal is already logged.</string>
+    <string name="settings_reminders_hint">Notifications from the phone itself, even offline. Meal reminders are skipped if the meal is already logged, water ones if you have already drunk enough.</string>
     <string name="settings_notifications_off">PhotoCal notifications are turned off.</string>
     <string name="settings_notifications_enable">Turn on</string>
     <string name="settings_reminder_time">Time</string>
@@ -252,7 +268,7 @@
     <string name="profile_under_age">The formula is meant for adults: under 18, ask a pediatrician or a nutritionist.</string>
     <string name="profile_activity">Activity</string>
     <string name="profile_goal">Goal</string>
-    <string name="profile_estimate_title">Estimate (Mifflin-St Jeor formula)</string>
+    <string name="profile_estimate_title">Estimate (Mifflin-St Jeor formula; water: LARN)</string>
     <string name="profile_estimate_missing">Fill in sex, year of birth, height, weight and activity to see the suggested calories.</string>
     <string name="profile_bmr">Basal metabolic rate</string>
     <string name="profile_tdee">Daily energy expenditure</string>
@@ -264,7 +280,7 @@
     <string name="profile_kcal_goal">Kcal per day</string>
     <string name="profile_macros_kcal">The macronutrients add up to %1$d kcal.</string>
     <string name="profile_macros_kcal_far">The macronutrients add up to %1$d kcal, far from the kcal goal.</string>
-    <string name="profile_disclaimer">Suggested calories and macronutrients are estimates based on formulas for the general population: they don\'t replace advice from a doctor or nutritionist.</string>
+    <string name="profile_disclaimer">Suggested calories, macronutrients and water are estimates based on formulas for the general population: they don\'t replace advice from a doctor or nutritionist.</string>
     <string name="weight_range_month">30 days</string>
     <string name="weight_range_quarter">90 days</string>
     <string name="weight_range_year">1 year</string>
@@ -277,5 +293,90 @@
     <plurals name="weight_chart_description">
         <item quantity="one">Weight chart with %1$d weigh-in</item>
         <item quantity="other">Weight chart with %1$d weigh-ins</item>
+    </plurals>
+    <!-- Water counter (Today and widget) -->
+    <string name="water_title">Water</string>
+    <string name="water_add_glass">Add a glass of water</string>
+    <string name="water_remove_glass">Remove a glass of water</string>
+    <string name="water_liters">%1$s of %2$s</string>
+    <plurals name="water_glasses_of_goal">
+        <item quantity="one">%1$s of %2$d glass</item>
+        <item quantity="other">%1$s of %2$d glasses</item>
+    </plurals>
+    <string name="widget_water_name">Glasses of water</string>
+    <string name="widget_water_description">Today\'s glasses of water and shortcuts to add a meal</string>
+    <string name="widget_add_photo">Add a meal from a photo</string>
+    <string name="widget_add_manual">Add a meal manually</string>
+    <string name="shortcut_photo_short">Meal photo</string>
+    <string name="shortcut_manual_short">Manual meal</string>
+    <string name="shortcut_share_short">Share day</string>
+    <string name="shortcut_share_long">Share today</string>
+    <string name="shortcut_water_short">+1 water</string>
+    <string name="shortcut_water_long">+1 glass of water</string>
+    <string name="shortcut_water_added">Glass added: %1$s</string>
+    <string name="profile_water_goal">Water glasses</string>
+    <string name="profile_glass_ml">Glass ml</string>
+    <string name="profile_water_goal_liters">Water goal: %1$s a day.</string>
+    <string name="profile_water_suggested">Water to drink</string>
+    <plurals name="profile_water_glasses">
+        <item quantity="one">%1$d glass</item>
+        <item quantity="other">%1$d glasses</item>
+    </plurals>
+    <string name="profile_water_hint" formatted="false">LARN/EFSA reference: 2.5 L of water a day for men and 2.0 L for women (30 ml per kg if the weight gives more), about 80% of it from drinks, plus 200 ml for each activity level.</string>
+
+    <string name="profile_name">Name</string>
+    <string name="profile_name_hint">Needed to share your days.</string>
+    <string name="profile_photo_choose">Choose photo</string>
+    <string name="profile_photo_take">Take photo</string>
+    <string name="profile_photo_remove">Remove</string>
+    <string name="profile_photo_error">Can\'t read the photo</string>
+
+    <string name="share_day">Share the day</string>
+    <string name="share_needs_name">To share, add your name in the profile.</string>
+    <string name="share_title">Share</string>
+    <string name="share_action">Share the link</string>
+    <string name="share_period_day">Day</string>
+    <string name="share_period_week">Last 7 days</string>
+    <string name="share_what">What to show</string>
+    <string name="share_photo">Profile photo</string>
+    <string name="share_goals">Goals</string>
+    <string name="share_nothing">Choose at least one thing to show.</string>
+    <string name="share_preview">Preview</string>
+    <string name="share_preview_hint">This is what people opening the link with PhotoCal will see.</string>
+    <string name="share_text_day">My day on PhotoCal (%1$s):</string>
+    <string name="share_text_week">My week on PhotoCal (%1$s – %2$s):</string>
+
+    <string name="shared_title_day">Shared day</string>
+    <string name="shared_title_week">Shared week</string>
+    <string name="shared_calories">Calories</string>
+    <string name="shared_macros">Macronutrients</string>
+    <string name="shared_meals">Meals</string>
+    <string name="shared_weight">Weight</string>
+    <string name="shared_weight_value">%1$s kg</string>
+    <string name="shared_weight_change">%1$s → %2$s kg (%3$s)</string>
+    <string name="shared_within_goal">Within the goal</string>
+    <string name="shared_goal_reached">Goal reached</string>
+    <string name="shared_no_meals">No meals logged.</string>
+    <string name="shared_no_days">No days logged.</string>
+    <string name="shared_week_range">%1$s – %2$s</string>
+    <string name="shared_avg_kcal">Average: %1$s kcal a day</string>
+    <string name="shared_avg_macros">Average:</string>
+    <plurals name="shared_days_within">
+        <item quantity="one">Within the goal: %1$d of %2$d logged day</item>
+        <item quantity="other">Within the goal: %1$d of %2$d logged days</item>
+    </plurals>
+    <string name="shared_avg_water">Average: %1$s a day</string>
+    <plurals name="shared_days_water">
+        <item quantity="one">Goal reached: %1$d of %2$d day</item>
+        <item quantity="other">Goal reached: %1$d of %2$d days</item>
+    </plurals>
+    <string name="shared_days">Day by day</string>
+    <string name="shared_selected_day">%1$s: %2$s kcal</string>
+    <string name="shared_footer">Shared with PhotoCal on %1$s · read only, not saved to your diary.</string>
+    <string name="shared_invalid">This link isn\'t valid: it is incomplete or has been edited.</string>
+    <string name="shared_newer_version">This link was made with a newer version of PhotoCal: update the app to open it.</string>
+    <plurals name="shared_water_glasses">
+        <item quantity="one">%1$s glass</item>
+        <item quantity="other">%1$s glasses</item>
     </plurals>
 </resources>

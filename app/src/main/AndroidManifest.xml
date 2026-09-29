@@ -17,12 +17,25 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.PhotoCal">
-        <!-- No launcher entry here: the icon comes from one of the aliases below -->
+        <!-- No launcher entry here: the icon comes from one of the aliases below. Exported also
+             for the share links. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <!-- Share links (App Links): https://<share host>/d#<payload>. The host is verified
+                 by site/.well-known/assetlinks.json, so the link opens the app directly. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="${shareHost}"
+                    android:path="/d"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
 
         <!-- App icon choice (Settings > Appearance): exactly one alias is enabled at a time.
              The alias names are used by AppIcon: don't rename them. -->
@@ -79,6 +92,34 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!-- "+1 glass of water" app shortcut: adds the glass and closes without showing anything.
+             Own empty task affinity, so it never brings the app to the front. -->
+        <activity
+            android:name=".ui.shortcuts.AddWaterShortcutActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- Home screen widget: glasses of water of the day and shortcuts to add a meal -->
+        <receiver
+            android:name=".ui.widget.WaterWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_water_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/water_widget_info" />
+        </receiver>
+
+        <!-- Widget buttons and midnight refresh (explicit intents only) -->
+        <receiver
+            android:name=".ui.widget.WaterWidgetActionReceiver"
+            android:exported="false" />
 
         <!-- Lets AppCompat persist the in-app language choice before Android 13 -->
         <service

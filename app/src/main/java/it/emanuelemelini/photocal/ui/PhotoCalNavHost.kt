@@ -15,6 +15,8 @@ import it.emanuelemelini.photocal.ui.history.HistoryScreen
 import it.emanuelemelini.photocal.ui.photo.PhotoReviewScreen
 import it.emanuelemelini.photocal.ui.profile.ProfileScreen
 import it.emanuelemelini.photocal.ui.settings.SettingsScreen
+import it.emanuelemelini.photocal.ui.share.ShareScreen
+import it.emanuelemelini.photocal.ui.share.SharedViewScreen
 import it.emanuelemelini.photocal.ui.today.PhotoRequest
 import it.emanuelemelini.photocal.ui.today.TodayScreen
 import it.emanuelemelini.photocal.ui.weight.WeightScreen
@@ -56,6 +58,14 @@ object ProfileRoute
 @Serializable
 object WeightRoute
 
+/** Share options of a day (or of the week ending on it). */
+@Serializable
+data class ShareRoute(val dateEpochDay: Long)
+
+/** A day someone shared: [payload] is the part of the link after '#'. */
+@Serializable
+data class SharedViewRoute(val payload: String)
+
 /** Key the History screen uses to ask the Today screen to open a day. */
 private const val KEY_OPEN_DAY = "open_day"
 
@@ -93,6 +103,7 @@ fun PhotoCalNavHost(
                     navController.navigate(PhotoReviewRoute(path, date.toEpochDay(), meal?.name))
                 },
                 onScanBarcode = { date -> navController.navigate(BarcodeRoute(date.toEpochDay())) },
+                onShare = { date -> navController.navigate(ShareRoute(date.toEpochDay())) },
             )
         }
         composable<BarcodeRoute> { backStackEntry ->
@@ -144,6 +155,15 @@ fun PhotoCalNavHost(
         composable<WeightRoute> {
             WeightScreen(onBack = { navController.popBackStack() })
         }
+        composable<ShareRoute> {
+            ShareScreen(
+                onBack = { navController.popBackStack() },
+                onOpenProfile = { navController.navigate(ProfileRoute) },
+            )
+        }
+        composable<SharedViewRoute> {
+            SharedViewScreen(onClose = { navController.popBackStack() })
+        }
     }
 
     // Requests from notifications: always start from Today, on the current day
@@ -158,6 +178,8 @@ fun PhotoCalNavHost(
             LaunchRequest.OpenHistory -> navController.navigate(HistoryRoute)
             is LaunchRequest.AddManual -> navController.navigate(EntryRoute(todayEpochDay, meal = request.meal?.name))
             is LaunchRequest.AddPhoto -> today[KEY_TAKE_PHOTO] = request.meal?.name.orEmpty()
+            is LaunchRequest.OpenShared -> navController.navigate(SharedViewRoute(request.payload))
+            LaunchRequest.ShareToday -> navController.navigate(ShareRoute(todayEpochDay))
         }
         onLaunchRequestHandled()
     }

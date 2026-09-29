@@ -35,19 +35,48 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove
   arrivano i valori e si può passare alla stima dell'AI.
 - **Profilo e obiettivi** (Impostazioni → Obiettivo, oppure toccando il riepilogo in Oggi):
-  sesso, anno di nascita, altezza, peso, attività e obiettivo. L'app stima metabolismo basale
+  sesso, anno di nascita, altezza, peso, attività e obiettivo, più l'obiettivo dell'acqua. L'app stima metabolismo basale
   (formula di Mifflin-St Jeor), fabbisogno giornaliero e calorie suggerite, con un minimo di
   sicurezza durante il dimagrimento (1200/1500 kcal, deficit al massimo del 25%), e propone
   proteine, carboidrati e grassi. I valori suggeriti si applicano con un tocco, ma tutti gli
   obiettivi si possono scrivere a mano (per esempio quelli dati dal medico). Con gli obiettivi
   dei macro, Oggi mostra i progressi anche per proteine, carboidrati e grassi.
+- **Acqua**: in Oggi un contatore dei bicchieri del giorno con − e +; l'obiettivo è nel profilo,
+  in bicchieri, con la capienza del bicchiere (200 ml predefiniti, modificabile). Il predefinito è
+  8 bicchieri (1,6 L). Il suggerimento segue i LARN/EFSA: 2,5 L di acqua totale per gli uomini e
+  2,0 L per le donne (30 ml per kg se il peso dà di più), di cui l'80% da bere, più 200 ml per
+  ogni livello di attività, arrotondati per eccesso a bicchieri interi. I bevuti sono salvati in
+  ml: cambiando la capienza, i giorni passati mantengono i litri (e possono avere bicchieri con
+  decimali).
+- **Widget**: "Bicchieri d'acqua" (3×2) mostra i bicchieri di oggi `X/TOT` tra − e +, e sotto due
+  scorciatoie per il diario di oggi: fotocamera (pasto da foto) e + (inserimento manuale). Toccando
+  il contatore si apre l'app. È un widget RemoteViews (nessuna libreria): si aggiorna a ogni
+  modifica e si azzera entro 10 minuti dopo la mezzanotte (allarme non esatto, senza risvegliare
+  il telefono). I colori sono quelli verdi fissi, chiari o scuri secondo il telefono.
+- **Scorciatoie dell'app**: tenendo premuta l'icona compaiono "Foto pasto", "Pasto a mano" e
+  "+1 bicchiere" (si possono anche trascinare sulla home). "+1 bicchiere" aggiunge un bicchiere
+  a oggi senza aprire l'app e mostra il nuovo conteggio in un messaggio. Sono scorciatoie
+  dinamiche (`AppShortcuts.kt`): seguono la lingua dell'app e vengono spostate sull'alias
+  dell'icona scelta.
+- **Profilo e condivisione**: nel profilo si mettono nome e foto facoltativa (galleria o
+  fotocamera, ritagliata al centro). Con il nome compare "Condividi" in Oggi (e come
+  scorciatoia dell'icona): si condivide il giorno mostrato o i 7 giorni che finiscono lì,
+  scegliendo cosa nascondere (foto, obiettivi, calorie, macro, acqua, pasti, peso; di default
+  si vede tutto) con l'anteprima esatta di ciò che vedrà chi riceve. Il link
+  `https://photocal.emanuelemelini.dev/d#…` apre PhotoCal in una schermata di sola lettura;
+  nulla viene salvato nel diario di chi lo apre. I dati stanno dopo il `#` (il browser non li
+  manda al server), come JSON compresso in base64url con una firma HMAC-SHA256: un link
+  modificato o troncato viene rifiutato. La firma protegge dalle modifiche a mano, non da chi
+  estrae la chiave dall'APK (senza server non si può).
 - **Registro peso**: pesate (una al giorno) con grafico a 30/90/365 giorni; il peso del
   profilo è l'ultima pesata. Si apre dal profilo o dallo Storico.
 - **Promemoria**: notifiche locali (nessun server) per colazione, pranzo, spuntino e cena,
   più un riepilogo serale e uno settimanale (domenica). Si attivano in Impostazioni →
   Promemoria, dove si sceglie anche l'orario; il permesso notifiche viene chiesto solo allora.
   Il promemoria di un pasto non arriva se quel pasto è già nel diario di oggi, e sparisce
-  appena lo registri. Arrivano entro 10 minuti dall'orario scelto (allarmi non esatti,
+  appena lo registri. Per l'acqua ci sono "metà obiettivo" (15:00) e "obiettivo" (22:00): non
+  arrivano se a quell'ora hai già bevuto abbastanza, dicono quanti bicchieri mancano, hanno il
+  pulsante "+1 bicchiere" e spariscono appena la soglia è raggiunta (da notifica, app o widget). Arrivano entro 10 minuti dall'orario scelto (allarmi non esatti,
   nessun permesso speciale) e vengono riprogrammati dopo un riavvio del telefono.
 - **Lingua**: italiano e inglese. Segue la lingua del telefono oppure la scelta in
   Impostazioni → Aspetto → Lingua. I testi sono in `res/values/strings.xml` (italiano,
@@ -95,11 +124,25 @@ secret `PHOTOCAL_KEYSTORE_BASE64`, `PHOTOCAL_KEYSTORE_PASSWORD` e `PHOTOCAL_KEY_
 aggiornare (bisognerebbe disinstallarla, perdendo i dati). Gli APK di debug hanno un'altra
 firma: per passare da debug a release serve disinstallare.
 
+## Link di condivisione
+
+- **Sito**: la cartella `site/` è pubblicata da Cloudflare Pages su `photocal.emanuelemelini.dev`
+  (il dominio è in `gradle.properties`, `photocal.share.host`). Contiene
+  `.well-known/assetlinks.json`, che autorizza l'app ad aprire i link (App Links): ha le impronte
+  SHA-256 della chiave di rilascio e della chiave debug di Android Studio. Se cambia una chiave,
+  aggiorna il file. `d.html` è la pagina per chi apre il link senza l'app.
+- **Chiave HMAC**: `photocal.share.key` in `local.properties` e secret GitHub
+  `PHOTOCAL_SHARE_KEY`, stesso valore, mai nella repo (il codice è pubblico). Le build firmate
+  si fermano se manca. **Conservane una copia**: se cambia, i link già inviati non si aprono più.
+  Le build non firmate usano una chiave di sviluppo, i cui link le release rifiutano.
+- **Verifica**: `adb shell pm get-app-links it.emanuelemelini.photocal` deve dire `verified`
+  per il dominio.
+
 ## Database
 
 Gli schemi di Room sono esportati in `app/schemas/` (versionati). Dalla 1.0.0 l'app è
 installata con dati veri: ogni modifica allo schema richiede una migrazione in
-`AppDatabase.kt` (v1 → v2 aggiunge il registro del peso).
+`AppDatabase.kt` (v1 → v2 aggiunge il registro del peso, v2 → v3 il contatore dell'acqua).
 
 ## Build e installazione
 

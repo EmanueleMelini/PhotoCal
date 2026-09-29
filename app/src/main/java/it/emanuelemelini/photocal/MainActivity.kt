@@ -17,7 +17,9 @@ import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
 import it.emanuelemelini.photocal.ui.LaunchRequest
 import it.emanuelemelini.photocal.ui.PhotoCalNavHost
+import it.emanuelemelini.photocal.ui.shortcuts.AppShortcuts
 import it.emanuelemelini.photocal.ui.theme.PhotoCalTheme
+import kotlinx.coroutines.launch
 
 /** AppCompatActivity (instead of ComponentActivity) so the in-app language works before Android 13. */
 class MainActivity : AppCompatActivity() {
@@ -32,7 +34,14 @@ class MainActivity : AppCompatActivity() {
         AppLocale.current = resources.configuration.locales[0]
         // Not on recreation (e.g. language change): the request was already handled
         if (savedInstanceState == null) launchRequest = LaunchRequest.from(intent)
-        val settingsRepository = (application as PhotoCalApp).container.settingsRepository
+        val container = (application as PhotoCalApp).container
+        val settingsRepository = container.settingsRepository
+        // Also after a language change, which recreates the activity: widget and shortcut
+        // labels follow it
+        container.applicationScope.launch {
+            container.waterWidget.update()
+            AppShortcuts.publish(this@MainActivity.applicationContext)
+        }
         setContent {
             val settings: Settings? by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = null)
             // Until preferences are loaded (a few ms) the window background stays visible:

@@ -2,4 +2,17 @@
 <resources>
     <!-- Accent of the notifications (primary of the static light palette) -->
     <color name="notification_accent">#FF386A20</color>
+
+    <!-- Widget: static green palette (surfaceContainer, primary, secondaryContainer roles) -->
+    <color name="widget_surface">#FFF1F1EA</color>
+    <color name="widget_on_surface">#FF1A1C18</color>
+    <color name="widget_on_surface_variant">#FF43483F</color>
+    <color name="widget_primary">#FF386A20</color>
+    <color name="widget_on_primary">#FFFFFFFF</color>
+    <color name="widget_secondary_container">#FFD9E7CB</color>
+    <color name="widget_on_secondary_container">#FF131F0D</color>
+
+    <!-- App shortcut icons (secondaryContainer and primary of the static green palette) -->
+    <color name="shortcut_background">#FFD9E7CB</color>
+    <color name="shortcut_icon">#FF386A20</color>
 </resources>
