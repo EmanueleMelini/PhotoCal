@@ -5,14 +5,15 @@ import kotlinx.serialization.Serializable
 /**
  * Backup file (JSON): diary, weight, water, saved foods and settings. Not the Gemini API key
  * and not the photos (only their file names). Enums are stored by name, dates as epoch days,
- * instants as epoch milliseconds. Field names are part of the format: change their meaning only
- * with a new [BackupCodec.VERSION]; new optional fields don't need one.
+ * instants as epoch milliseconds except [exportedAt]. Field names are part of the format: change
+ * their meaning only with a new [BackupCodec.VERSION]; new optional fields don't need one.
  */
 @Serializable
 data class Backup(
     val format: String = BackupCodec.FORMAT,
     val version: Int = BackupCodec.VERSION,
     val appVersion: String,
+    /** Epoch seconds, unlike the other instants: 1.4.0 already writes it so and its files must stay readable. */
     val exportedAt: Long,
     val entries: List<BackupEntry> = emptyList(),
     val weights: List<BackupWeight> = emptyList(),

@@ -1,29 +1,243 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" data-lang="it" data-title-it="PhotoCal: come funziona" data-title-en="PhotoCal: how it works">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PhotoCal</title>
-  <style>
-    :root { color-scheme: light dark; --bg: #fdfdf6; --fg: #1a1c18; --muted: #43483f; --accent: #386a20; --card: #f1f1ea; }
-    @media (prefers-color-scheme: dark) { :root { --bg: #1a1c18; --fg: #e3e3dc; --muted: #c3c8bb; --accent: #9cd67d; --card: #282b26; } }
-    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
-    main { max-width: 32rem; margin: 0 auto; padding: 3rem 1rem; }
-    .card { background: var(--card); border-radius: 16px; padding: 1.5rem; }
-    h1 { font-size: 1.4rem; margin: 0 0 .5rem; color: var(--accent); }
-    p { margin: .5rem 0; }
-    .muted { color: var(--muted); font-size: .9rem; }
-    a { color: var(--accent); }
-    hr { border: 0; border-top: 1px solid var(--muted); opacity: .3; margin: 1.5rem 0; }
-  </style>
+  <meta name="description" content="PhotoCal: app Android per contare le calorie con una foto del pasto, il codice a barre o a mano.">
+  <title>PhotoCal: come funziona</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js"></script>
 </head>
 <body>
 <main>
-  <div class="card">
-    <h1>PhotoCal</h1>
-    <p>App Android personale per contare le calorie: diario, foto dei pasti, acqua e obiettivi.</p>
-    <p><a href="https://github.com/EmanueleMelini/PhotoCal">Codice e download su GitHub</a></p>
+  <div class="top">
+    <a class="home" href="/">PhotoCal</a>
+    <div class="lang" role="group" aria-label="Lingua / Language">
+      <button type="button" data-lang="it" aria-pressed="true">IT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
   </div>
+
+  <!-- Shown by site.js only at /d: someone opened a share link without the app -->
+  <div id="shared" class="card notice" hidden>
+    <div class="it">
+      <h2>Ti hanno condiviso una giornata</h2>
+      <p>Il link si apre con PhotoCal, che mostra la giornata in sola lettura. Installa l'app (o
+        aggiornala, se ce l'hai già) e poi riapri il link dalla chat in cui l'hai ricevuto.</p>
+      <p class="muted">I dati della giornata sono nel link stesso: questa pagina non li riceve e non li salva.</p>
+    </div>
+    <div class="en">
+      <h2>Someone shared a day with you</h2>
+      <p>The link opens in PhotoCal, which shows the day read only. Install the app (or update it,
+        if you already have it), then open the link again from the chat where you got it.</p>
+      <p class="muted">The data of the day are in the link itself: this page neither receives nor stores them.</p>
+    </div>
+    <a class="button small" href="/download"><span class="it">Scarica PhotoCal</span><span class="en">Download PhotoCal</span></a>
+  </div>
+
+  <header>
+    <div class="it">
+      <h1>Conta le calorie con una foto</h1>
+      <p>PhotoCal è un'app Android per tenere il diario di quello che mangi: fotografi il piatto,
+        scansioni il codice a barre o scrivi a mano, e vedi calorie e macro della giornata rispetto
+        ai tuoi obiettivi. Gratis, senza account e senza pubblicità.</p>
+    </div>
+    <div class="en">
+      <h1>Count calories with a photo</h1>
+      <p>PhotoCal is an Android app to keep a diary of what you eat: take a picture of the dish,
+        scan the barcode or type it in, and see the calories and macros of the day against your
+        goals. Free, with no account and no ads.</p>
+    </div>
+    <a class="button" href="/download"><span class="it">Scarica per Android</span><span class="en">Download for Android</span></a>
+    <p class="muted"><span class="it">Android 8.0 o successivo.</span><span class="en">Android 8.0 or later.</span></p>
+  </header>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Foto del pasto</h2>
+      <p>Scatti una foto e Gemini, l'intelligenza artificiale di Google, riconosce gli alimenti e
+        ne stima i grammi. Prima di salvare rivedi ogni voce e correggi nomi e quantità. Con le
+        tabelle CREA attive, calorie e macro arrivano dalle tabelle ufficiali italiane di
+        composizione degli alimenti invece che dalla stima dell'AI.</p>
+      <p class="muted">Serve una chiave API di Gemini, che si crea gratis su Google AI Studio e si
+        incolla nelle impostazioni. Resta solo sul tuo telefono.</p>
+    </div>
+    <div class="en">
+      <h2>Meal photo</h2>
+      <p>Take a photo and Gemini, Google's AI, recognises the foods and estimates their grams. You
+        review every item and fix names and amounts before saving. With the CREA tables on,
+        calories and macros come from the official Italian food composition tables instead of the
+        AI estimate.</p>
+      <p class="muted">It needs a Gemini API key, which you create for free on Google AI Studio and
+        paste into the settings. It stays on your phone only.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/photo-it.webp" alt="La revisione di una foto analizzata da Gemini" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/photo-en.webp" alt="The review of a photo analysed by Gemini" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Codice a barre</h2>
+      <p>Scansioni la confezione e i valori nutrizionali arrivano da Open Food Facts. La quantità si
+        dà in grammi, ml o pezzi (3 biscotti invece di 25 g). Un prodotto già scansionato si trova
+        anche senza connessione.</p>
+    </div>
+    <div class="en">
+      <h2>Barcode</h2>
+      <p>Scan the package and the nutrition facts come from Open Food Facts. You give the amount in
+        grams, ml or pieces (3 biscuits instead of 25 g). A product you have already scanned works
+        offline too.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/barcode-it.webp" alt="Un prodotto trovato con il codice a barre, in pezzi" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/barcode-en.webp" alt="A product found by barcode, in pieces" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>A mano, recenti e preferiti</h2>
+      <p>Scrivi nome e quantità, anche in tazzine, tazze o bicchieri per le bevande, e lascia che
+        l'AI stimi calorie e macro, oppure scrivili tu. Gli alimenti già usati si riaggiungono con
+        un tocco da "Recenti" e il cuore li tiene tra i preferiti. Una voce, un pasto o un giorno
+        intero si copiano in un altro giorno.</p>
+    </div>
+    <div class="en">
+      <h2>By hand, recents and favourites</h2>
+      <p>Type the name and the amount, even in espresso cups, cups or glasses for drinks, and let
+        the AI estimate calories and macros, or type them yourself. Foods you have used come back
+        with one tap from "Recents", and the heart keeps them among your favourites. An item, a
+        meal or a whole day can be copied to another day.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/recent-it.webp" alt="Recenti e preferiti" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/recent-en.webp" alt="Recents and favourites" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Oggi e obiettivi</h2>
+      <p>La schermata Oggi mostra le calorie rimaste, proteine, carboidrati e grassi, e il totale di
+        fibre, zuccheri e sale. Dal tuo profilo l'app stima il fabbisogno e propone gli
+        obiettivi, che puoi anche scrivere a mano (per esempio quelli del medico).</p>
+    </div>
+    <div class="en">
+      <h2>Today and goals</h2>
+      <p>The Today screen shows the calories left, protein, carbs and fat, and the total of fibre,
+        sugars and salt. From your profile the app estimates your needs and suggests goals, which
+        you can also type by hand (for example the ones from your doctor).</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/today-it.webp" alt="La schermata Oggi con calorie, macro e acqua" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/today-en.webp" alt="The Today screen with calories, macros and water" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Acqua, peso e storico</h2>
+      <p>Un contatore dei bicchieri d'acqua con un obiettivo suggerito dal profilo, un registro del
+        peso con il grafico a 30, 90 e 365 giorni e lo storico delle calorie a 7 e 30 giorni.</p>
+    </div>
+    <div class="en">
+      <h2>Water, weight and history</h2>
+      <p>A water glass counter with a goal suggested by your profile, a weight log with a 30, 90
+        and 365 day chart, and the calorie history over 7 and 30 days.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/history-it.webp" alt="Lo storico delle calorie a 30 giorni" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/history-en.webp" alt="The 30 day calorie history" width="540" height="1135" loading="lazy">
+      <img class="it" src="/img/weight-it.webp" alt="Il grafico del peso a 90 giorni" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/weight-en.webp" alt="The 90 day weight chart" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Widget, scorciatoie e promemoria</h2>
+      <p>Il widget sulla home mostra i bicchieri di oggi e apre la fotocamera o l'inserimento a
+        mano. Tenendo premuta l'icona aggiungi un bicchiere senza aprire l'app. I promemoria dei
+        pasti e dell'acqua arrivano solo se non hai ancora registrato niente.</p>
+    </div>
+    <div class="en">
+      <h2>Widget, shortcuts and reminders</h2>
+      <p>The home screen widget shows today's glasses and opens the camera or the manual entry.
+        Long-press the icon to add a glass without opening the app. Meal and water reminders only
+        come when you haven't logged anything yet.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/widget-it.webp" alt="Il widget dei bicchieri d'acqua sulla home" width="430" height="370" loading="lazy">
+      <img class="en" src="/img/widget-en.webp" alt="The water glasses widget on the home screen" width="430" height="370" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature">
+    <div class="it">
+      <h2>Salute di Android</h2>
+      <p>Collegando Health Connect vedi passi e calorie bruciate in Oggi, PhotoCal scrive peso e
+        acqua e, se vuoi, aggiunge le calorie bruciate all'obiettivo del giorno.</p>
+    </div>
+    <div class="en">
+      <h2>Android Health</h2>
+      <p>Connect Health Connect to see steps and burned calories in Today; PhotoCal writes weight
+        and water and, if you want, adds the burned calories to the goal of the day.</p>
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Condivisione</h2>
+      <p>Condividi un giorno o una settimana con un link, scegliendo cosa nascondere. Chi lo apre
+        con PhotoCal vede la giornata in sola lettura, senza che finisca nel suo diario.</p>
+    </div>
+    <div class="en">
+      <h2>Sharing</h2>
+      <p>Share a day or a week with a link, choosing what to hide. Whoever opens it with PhotoCal
+        sees the day read only, without it ending up in their diary.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/share-it.webp" alt="L'anteprima di una giornata condivisa" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/share-en.webp" alt="The preview of a shared day" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="it">
+      <h2>I tuoi dati restano sul telefono</h2>
+      <p>Nessun account e nessun server: il diario è salvato solo sul telefono. Dall'app escono
+        solo le foto e i testi che chiedi di analizzare (a Gemini, con la tua chiave), i codici a
+        barre (a Open Food Facts) e il controllo degli aggiornamenti (su GitHub). In Impostazioni →
+        Dati esporti tutto in un file di backup, o il diario in CSV per Excel.</p>
+    </div>
+    <div class="en">
+      <h2>Your data stay on your phone</h2>
+      <p>No account and no server: the diary is stored on the phone only. The only things that
+        leave the app are the photos and texts you ask to analyse (to Gemini, with your key), the
+        barcodes (to Open Food Facts) and the update check (on GitHub). In Settings → Data you
+        export everything to a backup file, or the diary to CSV for Excel.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="it">
+      <h2>Installazione e aggiornamenti</h2>
+      <p>PhotoCal non è sul Play Store: si scarica l'APK da questo sito. Poi l'app controlla da sola
+        le nuove versioni, ti mostra le novità e si aggiorna con un tocco. È in italiano e in
+        inglese, con temi chiaro, scuro e viola.</p>
+    </div>
+    <div class="en">
+      <h2>Install and updates</h2>
+      <p>PhotoCal isn't on the Play Store: you download the APK from this site. Then the app checks
+        for new versions by itself, shows you what's new and updates with one tap. It's in Italian
+        and English, with light, dark and purple themes.</p>
+    </div>
+    <a class="button" href="/download"><span class="it">Scarica PhotoCal</span><span class="en">Download PhotoCal</span></a>
+    <p class="muted"><span class="it">Il codice è pubblico su</span><span class="en">The source code is public on</span>
+      <a href="https://github.com/EmanueleMelini/PhotoCal">GitHub</a>.</p>
+  </section>
 </main>
 </body>
 </html>

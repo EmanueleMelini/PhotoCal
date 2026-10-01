@@ -186,13 +186,38 @@ secret `PHOTOCAL_KEYSTORE_BASE64`, `PHOTOCAL_KEYSTORE_PASSWORD` e `PHOTOCAL_KEY_
 aggiornare (bisognerebbe disinstallarla, perdendo i dati). Gli APK di debug hanno un'altra
 firma: per passare da debug a release serve disinstallare.
 
+## Sito
+
+La cartella `site/` è pubblicata da Cloudflare Pages su `photocal.emanuelemelini.dev` (il dominio è
+in `gradle.properties`, `photocal.share.host`). HTML statico, in italiano e in inglese: la lingua
+segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
+
+- **`/`, come funziona** (`index.html`): le funzioni dell'app con gli screenshot e il pulsante
+  per scaricarla. È anche la pagina di `/d` (regola 200 in `_redirects`): chi apre un link di
+  condivisione senza l'app vede in più il riquadro "Ti hanno condiviso una giornata".
+- **`/download`** (`download.html`, `download.js`): legge le Release dall'API pubblica di GitHub
+  (dal browser, senza token, al massimo 60 richieste l'ora per indirizzo, con 10 minuti di cache
+  nella sessione) e mostra l'ultima versione con data, novità e pulsante per l'APK, poi "Mostra
+  versioni precedenti", ognuna con le sue novità e il suo APK. Le note sono quelle scritte da
+  `release_notes.py` (inglese visibile, italiano nel commento nascosto) e sono lette come in
+  `GitHubReleasesClient.parseNotes`. Una versione compare solo quando la sua Release ha l'APK:
+  dopo una release la pagina si aggiorna da sola, senza ripubblicare il sito.
+- **Screenshot** (`img/`, WebP 540 px, ~370 KB in tutto): presi sull'AVD telefono
+  `PhotoCalPhone_API34` con la build release e i dati di prova di
+  `tools/site/demo_backup.py` (Impostazioni → Dati → Ripristina backup → Sostituisci tutto, solo
+  sull'emulatore); quelli della foto del pasto (`photo-*`) vengono da un telefono vero, perché
+  serve una risposta di Gemini. Senza la barra di stato: `magick in.png -crop 1080x2270+0+130
+  +repage out.png`, poi `cwebp -q 78 -m 6 -resize 540 0 -metadata none out.png -o x.webp`.
+- **Pubblicazione**: il progetto Pages è collegato alla repo (cartella `site/`), quindi ogni push
+  su `master` pubblica il sito; i commit mostrano il controllo "Cloudflare Pages".
+- **Sicurezza**: `_headers` mette la CSP (script e stili solo dal sito, chiamate solo verso
+  `api.github.com`) e `.well-known/assetlinks.json`, che autorizza l'app ad aprire i link (App
+  Links): ha le impronte SHA-256 della chiave di rilascio e della chiave debug di Android Studio.
+  Se cambia una chiave, aggiorna il file.
+
 ## Link di condivisione
 
-- **Sito**: la cartella `site/` è pubblicata da Cloudflare Pages su `photocal.emanuelemelini.dev`
-  (il dominio è in `gradle.properties`, `photocal.share.host`). Contiene
-  `.well-known/assetlinks.json`, che autorizza l'app ad aprire i link (App Links): ha le impronte
-  SHA-256 della chiave di rilascio e della chiave debug di Android Studio. Se cambia una chiave,
-  aggiorna il file. `d.html` è la pagina per chi apre il link senza l'app.
+- **Sito**: vedi sopra; `/d` è il percorso dei link.
 - **Chiave HMAC**: `photocal.share.key` in `local.properties` e secret GitHub
   `PHOTOCAL_SHARE_KEY`, stesso valore, mai nella repo (il codice è pubblico). Le build firmate
   si fermano se manca. **Conservane una copia**: se cambia, i link già inviati non si aprono più.

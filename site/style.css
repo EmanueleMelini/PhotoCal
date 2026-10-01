@@ -1,0 +1,71 @@
+/* Shared by every page of the site. Same greens as the app (ui/theme/Theme.kt). */
+:root {
+  color-scheme: light dark;
+  --bg: #fdfdf6;
+  --fg: #1a1c18;
+  --muted: #43483f;
+  --accent: #386a20;
+  --on-accent: #ffffff;
+  --card: #f1f1ea;
+  --line: #c3c8bb;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1c18;
+    --fg: #e3e3dc;
+    --muted: #c3c8bb;
+    --accent: #9cd67d;
+    --on-accent: #0c3900;
+    --card: #282b26;
+    --line: #43483f;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, sans-serif; }
+main { max-width: 40rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.25; }
+h1 { font-size: 1.8rem; margin: .5rem 0; color: var(--accent); }
+h2 { font-size: 1.25rem; margin: 0 0 .5rem; }
+h3 { font-size: 1.05rem; margin: 0 0 .25rem; }
+p { margin: .5rem 0; }
+ul, ol { margin: .5rem 0; padding-left: 1.4rem; }
+li { margin: .25rem 0; }
+.muted { color: var(--muted); font-size: .9rem; }
+
+/* Only the chosen language is shown; Italian until the script runs (or without it) */
+html[data-lang="it"] .en, html[data-lang="en"] .it { display: none !important; }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.top a.home { font-weight: 600; text-decoration: none; }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.lang button {
+  font: inherit; font-size: .85rem; padding: .25rem .75rem; border: 0; cursor: pointer;
+  background: transparent; color: var(--fg);
+}
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+
+.card { background: var(--card); border-radius: 16px; padding: 1.25rem; margin: 1rem 0; }
+.notice { border: 2px solid var(--accent); }
+
+.button {
+  display: inline-block; margin: .75rem 0 .25rem; padding: .75rem 1.5rem; border-radius: 999px;
+  background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none;
+}
+.button.small { margin: .5rem 0 0; padding: .4rem 1rem; font-size: .9rem; }
+
+/* Text and screenshots side by side on wide screens, stacked on phones */
+.feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: center; }
+.shots { display: flex; gap: .75rem; justify-content: center; }
+.shots img { flex: 1 1 0; width: 0; max-width: 15rem; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+@media (min-width: 40rem) {
+  .feature.shot { grid-template-columns: minmax(0, 1fr) 13rem; }
+  .feature.shot:has(img + img + img) { grid-template-columns: minmax(0, 1fr) 18rem; }
+}
+
+details { border-top: 1px solid var(--line); padding: .5rem 0; }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; font-weight: 600; padding: .25rem 0; }
+details.older > summary { color: var(--accent); }
+.version-date { font-weight: 400; color: var(--muted); font-size: .9rem; }

@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects. /d is the path of the share links (App Links): it reaches the
+# browser only when PhotoCal isn't installed, and shows the home with the "shared day" notice
+# (site.js). 200 = rewrite: the address and the data after '#' stay as they are.
+/d  /  200

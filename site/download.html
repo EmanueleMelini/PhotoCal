@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="it" data-lang="it" data-title-it="Scarica PhotoCal" data-title-en="Download PhotoCal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scarica l'ultima versione di PhotoCal per Android, con le novità di ogni versione.">
+  <title>Scarica PhotoCal</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js"></script>
+  <script src="/download.js" defer></script>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="home" href="/">PhotoCal</a>
+    <div class="lang" role="group" aria-label="Lingua / Language">
+      <button type="button" data-lang="it" aria-pressed="true">IT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <h1><span class="it">Scarica PhotoCal</span><span class="en">Download PhotoCal</span></h1>
+
+  <!-- Filled by download.js from the GitHub Releases; the fallback stays if that fails -->
+  <section id="latest" class="card" aria-live="polite">
+    <p id="loading">
+      <span class="it">Cerco l'ultima versione…</span><span class="en">Looking for the latest version…</span>
+    </p>
+    <div id="fallback" hidden>
+      <p><span class="it">Non riesco a leggere le versioni in questo momento. Le trovi tutte nelle</span><span class="en">I can't read the versions right now. You'll find all of them in the</span>
+        <a href="https://github.com/EmanueleMelini/PhotoCal/releases"><span class="it">release su GitHub</span><span class="en">GitHub releases</span></a>.</p>
+    </div>
+    <noscript>
+      <p>Le versioni si leggono con JavaScript. Le trovi anche nelle
+        <a href="https://github.com/EmanueleMelini/PhotoCal/releases">release su GitHub</a>.</p>
+    </noscript>
+  </section>
+
+  <section class="card">
+    <div class="it">
+      <h2>Come si installa</h2>
+      <ol>
+        <li>Tocca <strong>Scarica</strong> dal telefono Android e apri il file quando è scaricato.</li>
+        <li>Se Android lo chiede, permetti al browser di installare app sconosciute.</li>
+        <li>Tocca <strong>Installa</strong>. Gli aggiornamenti poi arrivano dall'app stessa.</li>
+      </ol>
+      <p class="muted">Serve Android 8.0 o successivo. Per aggiornare scarica la nuova versione e
+        installala sopra: i dati restano.</p>
+    </div>
+    <div class="en">
+      <h2>How to install it</h2>
+      <ol>
+        <li>Tap <strong>Download</strong> on your Android phone and open the file once it's downloaded.</li>
+        <li>If Android asks, allow the browser to install unknown apps.</li>
+        <li>Tap <strong>Install</strong>. Updates then come from the app itself.</li>
+      </ol>
+      <p class="muted">It needs Android 8.0 or later. To update, download the new version and
+        install it over the old one: your data stay.</p>
+    </div>
+  </section>
+
+  <section id="older" class="card" hidden>
+    <details class="older">
+      <summary><span class="it">Mostra versioni precedenti</span><span class="en">Show previous versions</span></summary>
+      <div id="older-list"></div>
+    </details>
+  </section>
+
+  <p class="muted"><a href="/"><span class="it">Come funziona PhotoCal</span><span class="en">How PhotoCal works</span></a></p>
+</main>
+</body>
+</html>
