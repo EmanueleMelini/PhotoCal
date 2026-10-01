@@ -11,9 +11,11 @@ import androidx.navigation.toRoute
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.ui.barcode.BarcodeScreen
 import it.emanuelemelini.photocal.ui.entry.EntryScreen
+import it.emanuelemelini.photocal.ui.health.HealthPrivacyScreen
 import it.emanuelemelini.photocal.ui.history.HistoryScreen
 import it.emanuelemelini.photocal.ui.photo.PhotoReviewScreen
 import it.emanuelemelini.photocal.ui.profile.ProfileScreen
+import it.emanuelemelini.photocal.ui.recent.RecentFoodsScreen
 import it.emanuelemelini.photocal.ui.settings.SettingsScreen
 import it.emanuelemelini.photocal.ui.share.ShareScreen
 import it.emanuelemelini.photocal.ui.share.SharedViewScreen
@@ -28,8 +30,8 @@ object TodayRoute
 
 /**
  * [entryId] = 0 means a new entry for day [dateEpochDay], optionally with a prefilled
- * name ([prefillName], e.g. from a barcode without nutrition facts) and meal ([meal], the
- * [MealType] name, e.g. from a reminder).
+ * name ([prefillName], e.g. from a barcode without nutrition facts), meal ([meal], the
+ * [MealType] name, e.g. from a reminder) or saved food ([savedFoodId], from the recent foods).
  */
 @Serializable
 data class EntryRoute(
@@ -37,7 +39,16 @@ data class EntryRoute(
     val entryId: Long = 0L,
     val prefillName: String? = null,
     val meal: String? = null,
+    val savedFoodId: Long = 0L,
 )
+
+/** What PhotoCal does with Health Connect data (also opened by Health Connect itself). */
+@Serializable
+object HealthPrivacyRoute
+
+/** Recent and favorite foods, to add one to day [dateEpochDay]. */
+@Serializable
+data class RecentFoodsRoute(val dateEpochDay: Long)
 
 @Serializable
 object SettingsRoute
@@ -103,6 +114,7 @@ fun PhotoCalNavHost(
                     navController.navigate(PhotoReviewRoute(path, date.toEpochDay(), meal?.name))
                 },
                 onScanBarcode = { date -> navController.navigate(BarcodeRoute(date.toEpochDay())) },
+                onOpenRecent = { date -> navController.navigate(RecentFoodsRoute(date.toEpochDay())) },
                 onShare = { date -> navController.navigate(ShareRoute(date.toEpochDay())) },
             )
         }
@@ -114,6 +126,18 @@ fun PhotoCalNavHost(
                     // Replaces the barcode screen: Back returns to Today
                     navController.navigate(EntryRoute(route.dateEpochDay, prefillName = name)) {
                         popUpTo<BarcodeRoute> { inclusive = true }
+                    }
+                },
+            )
+        }
+        composable<RecentFoodsRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<RecentFoodsRoute>()
+            RecentFoodsScreen(
+                onBack = { navController.popBackStack() },
+                onPick = { food ->
+                    // Replaces the list: Back from the form returns to Today
+                    navController.navigate(EntryRoute(route.dateEpochDay, savedFoodId = food.id)) {
+                        popUpTo<RecentFoodsRoute> { inclusive = true }
                     }
                 },
             )
@@ -144,7 +168,11 @@ fun PhotoCalNavHost(
             SettingsScreen(
                 onBack = { navController.popBackStack() },
                 onOpenProfile = { navController.navigate(ProfileRoute) },
+                onOpenHealthPrivacy = { navController.navigate(HealthPrivacyRoute) },
             )
+        }
+        composable<HealthPrivacyRoute> {
+            HealthPrivacyScreen(onBack = { navController.popBackStack() })
         }
         composable<ProfileRoute> {
             ProfileScreen(
@@ -180,6 +208,7 @@ fun PhotoCalNavHost(
             is LaunchRequest.AddPhoto -> today[KEY_TAKE_PHOTO] = request.meal?.name.orEmpty()
             is LaunchRequest.OpenShared -> navController.navigate(SharedViewRoute(request.payload))
             LaunchRequest.ShareToday -> navController.navigate(ShareRoute(todayEpochDay))
+            LaunchRequest.HealthPrivacy -> navController.navigate(HealthPrivacyRoute)
         }
         onLaunchRequestHandled()
     }

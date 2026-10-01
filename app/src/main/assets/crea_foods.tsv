@@ -1,834 +1,834 @@
 # Source: CREA - Centro di ricerca Alimenti e Nutrizione, Tabelle di composizione degli alimenti (https://www.alimentinutrizione.it). Values per 100 g of edible portion.
-code	name	category	edible_pct	portion_g	kcal	protein_g	fat_g	carbs_g	fiber_g
-202020	"|Caramelle tipo ""mou""|"	Dolci	100	5	430	2.1	17.2	71.1	0
-120010	Acciuga o alice	Prodotti della pesca	75	150	96	16.8	2.6	1.5	0
-120020	Acciuga o alice, sott'olio	Prodotti della pesca	100	50	206	25.9	11.3	0.2	0
-120030	Acciuga o alice, sotto sale	Prodotti della pesca	50	50	137	25	3.1	2.3	0
-005000	Aglio	Verdure e ortaggi	75	5	53	8.4	0.8	1	4.3
-005004	Aglio Bianco Piacentino	Verdure e ortaggi	94	3	47	7.2	0.6	0.9	4.7
-005001	Aglio Rosso di Castelliri	Verdure e ortaggi	95	5	52	8.9	0.5	1.02	3.8
-005002	Aglio Rosso di Procerno	Verdure e ortaggi	94	4	57	8.9	0.9	1	4.6
-005003	Aglio Rosso di Sulmona	Verdure e ortaggi	96	3	58	8.7	1.3	1	4
-104033	Agnello, coscio, cotto, al forno	Carni fresche	100	75	118	23	2.9	0	0
-104030	Agnello, coscio, crudo	Carni fresche	100	100	102	20	2.5	0	0
-104043	Agnello, costoletta, cotto, al forno	Carni fresche	100	75	118	22.7	3	0	0
-104040	Agnello, costoletta, crudo	Carni fresche	100	100	106	20.4	2.7	0	0
-104029	Agnello, cotto, al forno	Carni fresche	100	75	199	25	11	0	0
-104020	Agnello, crudo	Carni fresche	100	100	159	20	8.8	0	0
-005025	Agretti, cotti, bolliti	Verdure e ortaggi	100	200	25	2.1	0.2	2.6	2.7
-005010	Agretti, crudi	Verdure e ortaggi	97	200	22	1.8	0.2	2.2	2.3
-007010	Albicocche, disidratate	Frutta	100	30	356	5.6	1	80.6	11
-007000	Albicocche, fresche	Frutta	94	150	42	0.4	0.1	9.8	1.5
-007020	Albicocche, sciroppate	Frutta	100	30	65	0.4	0.1	16.1	0.9
-007030	Albicocche, secche	Frutta	100	30	286	5	0.5	66.5	6
-007700	Amarene, fresche	Frutta	85	150	44	0.8	0	10.2	1.1
-008610	Anacardi	Frutta secca a guscio e semi oleaginosi	100	30	604	15	46	33	3
-007460	Ananas, fresco	Frutta	57	150	42	0.5	0	10	1
-007470	Ananas, sciroppato	Frutta	100	30	66	0.5	0	16.6	0.7
-106010	Anatra domestica, crudo	Carni fresche	80	100	159	21.4	8.2	0	0
-120250	Anguilla d'allevamento, filetti	Prodotti della pesca	100	150	237	16.2	18.9	0.5	0
-120230	Anguilla di fiume	Prodotti della pesca	71	150	261	11.8	23.7	0.1	0
-120240	Anguilla di mare	Prodotti della pesca	70	150	237	14.6	19.6	0.7	0
-120210	Anguilla, affumicata	Prodotti della pesca		50	231	17.5	17.8	0.2	0
-120220	Anguilla, marinata	Prodotti della pesca	88	50	259	14.8	21.9	0.6	0
-115010	Animelle di bovini	Frattaglie	100	100	304	11.5	28.6	0.1	0
-115019	Animelle di bovini, cotte	Frattaglie	100	100	434	16.4	40.9	0.2	0
-007480	Anona, fresca	Frutta	72	150	73	1.8	0.2	15.8	2.2
-008500	Arachidi, tostate	Frutta secca a guscio e semi oleaginosi	65	30	620	29	50	8.5	10.9
-128050	Aragosta	Prodotti della pesca	29	150	85	16	1.9	1	0
-128055	Aragosta, bollita	Prodotti della pesca	29	150	86	16.2	1.9	1	0
-008011	Arance bionde succo, fresco	Frutta	100	150	38	0.5	0	9.6	0
-008001	Arance bionde, fresche	Frutta	68	150	45	0.7	0.2	9.9	1.6
-008005	Arance Moro, fresche	Frutta	59	150	42	0.7	0.2	9	1.6
-008012	Arance rosse succo, fresco	Frutta	100	150	39	0.5	0	9.8	0
-008004	Arance rosse, fresche	Frutta	64	150	45	0.7	0.2	9.9	1.6
-008006	Arance Sanguinello, fresche	Frutta	65	150	47	0.7	0.1	10.6	1.6
-008010	Arance succo, fresco	Frutta	100	150	33	0.5	0	8.2	0
-008007	Arance Tarocco, fresche	Frutta	57	150	45	0.7	0.2	10	1.6
-008002	Arance Valencia, fresche	Frutta	69	150	39	0.7	0.3	8	1.6
-008003	Arance Washington Navel, fresche	Frutta	62	150	44	1	0.2	9.4	1.6
-008000	Arance, fresche	Frutta	80	150	37	0.7	0.2	7.8	1.6
-401010	Aranciata	Prodotti vari	100	125	38	0.1	0	10	0
-120300	Aringa	Prodotti della pesca	70	150	216	16.5	16.7	0	0
-120310	Aringa, affumicata	Prodotti della pesca	70	50	194	19.9	12.7	0	0
-120320	Aringa, marinata	Prodotti della pesca	95	50	199	18.3	14	0	0
-120330	Aringa, sotto sale	Prodotti della pesca	73	50	218	19.8	15.4	0	0
-005030	Asparagi di bosco, crudi	Verdure e ortaggi	57	200	40	4.6	0.2	4	2.2
-005045	Asparagi di campo, cotti, bolliti	Verdure e ortaggi	85	200	34	3.8	0.2	3.4	2.1
-005040	Asparagi di campo, crudi	Verdure e ortaggi	87	200	33	3.6	0.2	3.3	2
-005050	Asparagi di serra, crudi	Verdure e ortaggi	52	200	28	3	0.1	3	2.1
-007490	Avocado, fresco	Frutta	76	150	238	4.4	23	1.8	3.3
-207010	Baba' al rhum	Dolci	100	100	288	5.9	5.7	41.2	1.1
-007500	Babaco, fresco	Frutta	89	150	24	0.7	0.2	4.5	1.1
-007510	Banane, fresche	Frutta	65	150	76	1.2	0.3	17.4	1.8
-005065	Barbabietole rosse, cotte, bollite	Verdure e ortaggi	100	200	43	2.1	0	7.8	2.6
-005060	Barbabietole rosse, crude	Verdure e ortaggi	82	200	25	1.1	0	4	2.6
-214000	Barretta al cocco ricoperta di cioccolato, industriale	Dolci	100	30	472	4.8	26.1	58.2	
-006800	Basilico, fresco	Verdure e ortaggi	100	5	42	3.1	0.8	5.2	1.6
-003000	Bastoncini di crusca di frumento	Cereali e derivati	100	30	301	14	3.2	38.4	35.9
-403010	Bevanda alcolica, Aperitivo a base di vino	Bevande alcoliche	100	75	186	0	0	17	0
-404010	Bevanda alcolica, Birra chiara	Bevande alcoliche	100	250	34	0.2	0	3.5	0
-408010	Bevanda alcolica, Brandy	Bevande alcoliche	100	40	230	0	0	0	0
-408100	Bevanda alcolica, Grappa	Bevande alcoliche	100	40	242	0	0	0	0
-407010	Bevanda alcolica, Liquori da dessert	Bevande alcoliche	100	75	314	0	0	31.1	0
-407510	Bevanda alcolica, Marsala all'uovo	Bevande alcoliche	100	75	150	0	0	12.4	0
-406010	Bevanda alcolica, Marsala tipico	Bevande alcoliche	100	75	203	0	0	28	0
-409000	Bevanda alcolica, Spumante	Bevande alcoliche	100	75	87	0	0	0.6	0
-406500	Bevanda alcolica, Vermouth dolce	Bevande alcoliche	100	75	139	0	0	13.9	0
-406510	Bevanda alcolica, Vermouth secco	Bevande alcoliche	100	75	121	0	0	4	0
-405010	Bevanda alcolica, Vino da pasto bianco	Bevande alcoliche	100	125	70	0	0	0	0
-405020	Bevanda alcolica, Vino da pasto rosso	Bevande alcoliche	100	125	75	0	0	0	0
-408900	Bevanda alcolica, Whisky	Bevande alcoliche	100	40	245	0	0	0	0
-401100	Bevanda tipo cola	Prodotti vari	100	125	39	0	0	10.5	0
-005084	Bieta, cotta, al microonde	Verdure e ortaggi	100	200	15	1.3	0.1	1.8	1.2
-005085	Bieta, cotta, bollita	Verdure e ortaggi	100	200	18	1.5	0.1	2.1	1.4
-005080	Bieta, cruda	Verdure e ortaggi	82	200	15	1.3	0.1	1.8	1.2
-000960	Biscotti, alla soia	Cereali e derivati	100	30	375	11.5	6.1	70.8	4.5
-000900	Biscotti, frollini	Cereali e derivati	100	30	426	7.2	13.8	71.7	1.9
-000910	Biscotti, integrali	Cereali e derivati	100	30	419	7.8	12.3	70.8	6
-000970	Biscotti, integrali, con soia	Cereali e derivati	100	30	464	11.5	20.4	60.4	3.8
-000950	Biscotti, secchi	Cereali e derivati	100	30	404	6.6	7.9	80.4	2.6
-000990	Biscotti, wafers	Cereali e derivati	100	30	452	7.1	15	76.2	1.6
-120400	Boga	Prodotti della pesca		150	87	18.3	1.2	0.8	0
-120590	Bottarga, cefalo muggine	Prodotti della pesca	100	50	405	43.5	25.7	0	0
-101230	Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo	Carni fresche	100	100	132	20.3	5.7	0	0
-101150	Bovino adulto o vitellone, costata, crudo	Carni fresche	100	100	140	21.3	6.1	0	0
-101160	Bovino adulto o vitellone, fesa, crudo	Carni fresche	100	100	103	21.8	1.8	0	0
-101170	Bovino adulto o vitellone, filetto, crudo	Carni fresche	100	100	127	20.5	5	0	0
-101240	Bovino adulto o vitellone, geretto anteriore e posteriore, crudo	Carni fresche	100	100	112	20.9	3.2	0	0
-101180	Bovino adulto o vitellone, girello, crudo	Carni fresche	100	100	110	21.3	2.8	0	0
-101190	Bovino adulto o vitellone, lombata, crudo	Carni fresche	100	100	134	21.8	5.2	0	0
-101200	Bovino adulto o vitellone, noce, crudo	Carni fresche	100	100	106	21.3	2.3	0	0
-101250	Bovino adulto o vitellone, pancia, biancostato e punta di petto, crudo	Carni fresche	100	100	171	19.7	10.2	0	0
-101210	Bovino adulto o vitellone, scamone, crudo	Carni fresche	100	100	119	21.4	3.7	0	0
-101220	Bovino adulto o vitellone, sottofesa, crudo	Carni fresche	100	100	111	22	2.6	0	0
-101260	Bovino adulto o vitellone, spalla, muscolo, girello e fesone, crudo	Carni fresche	100	100	108	21.5	2.4	0	0
-101120	Bovino adulto o vitellone, tagli anteriori, crudo	Carni fresche	100	100	145	20.5	7	0	0
-101130	Bovino adulto o vitellone, tagli posteriori, crudo	Carni fresche	100	100	117	21.5	3.4	0	0
-110020	Bresaola della Valtellina IGP	Carni trasformate e conservate	100	50	152	33.1	2	0.4	0
-160410	Brie	Formaggi e latticini	100	50	320	19.3	26.9	0.2	0
-005095	Broccoletti di rapa, cotti, bolliti	Verdure e ortaggi	100	200	29	3.1	0.3	2.1	3.1
-005090	Broccoletti di rapa, crudi	Verdure e ortaggi	60	200	28	2.9	0.3	2	2.9
-005105	Broccolo a testa, cotto, bollito	Verdure e ortaggi	100	200	34	3.1	0.4	3.2	3.2
-005110	Broccolo a testa, crudo	Verdure e ortaggi	51	200	33	3	0.4	3.1	3.1
-102000	Bufalo, solo tessuto muscolare, crudo	Carni fresche	100	100	98	22	1.1	0	0
-160420	Burrini	Formaggi e latticini	100	50	527	22.1	47	4.1	0
-190010	Burro	Oli e grassi	100	10	758	0.8	83.4	1.1	0
-009010	Burro d'arachidi	Oli e grassi	100	10	625	24.9	53.7	8	6
-160430	Butirro calabro	Formaggi e latticini	100	50	449	24.7	38.8	0.3	0
-508010	Cacao amaro, in polvere	Prodotti vari	100	30	355	20.4	25.6	11.5	
-160800	Caciocavallo	Formaggi e latticini	100	50	431	35.7	31.1	2.3	0
-160810	Cacioricotta di capra	Formaggi e latticini	100	100	182	11.9	14.3	1.5	0
-160820	Caciotta mista	Formaggi e latticini	100	50	384	24.5	31	1.8	0
-160830	Caciotta romana di pecora	Formaggi e latticini	100	50	364	27.7	27.3	2.1	0
-160840	Caciotta toscana	Formaggi e latticini	100	50	368	24.6	29.6	0.8	0
-160860	Caciottina fresca	Formaggi e latticini	100	100	263	17.3	21.3	0.5	0
-166010	Caciottina mista	Formaggi e latticini	100	50	370	26.9	28.5	1.5	0
-160850	Caciottina vaccina	Formaggi e latticini	100	50	324	21.1	25.4	3	0
-508200	Caffe' tostato	Prodotti vari	100	6	287	10.4	15.4	28.5	
-127100	Calamaro	Prodotti della pesca	65	150	68	12.6	1.7	0.6	0
-127110	Calamaro surgelato	Prodotti della pesca	59	150	68	13.1	1.5	0.6	0
-160870	Camembert	Formaggi e latticini	100	100	307	20.9	24.7	0.2	0
-204010	Canditi	Dolci	100	30	292	0.5	0	75	4.5
-207020	Cannoli alla crema, industriale	Dolci	100	100	368	6.2	20.7	41.9	
-120290	Capitone	Prodotti della pesca	65	150	247	13	21.5	0.5	0
-110100	Capocollo	Carni trasformate e conservate	100	50	450	20.8	40.2	1.4	0
-110110	Capocollo di Calabria	Carni trasformate e conservate	100	50	344	29.1	24.9	0.9	0
-104250	Capra, solo tessuto muscolare, crudo	Carni fresche	100	100	106	21.2	2.3	0	0
-104300	Capretto, crudo	Carni fresche	75	100	113	19.2	4	0	0
-202010	Caramelle dure	Dolci	100	5	344	0	0	91.6	0
-005124	Carciofi, cotti, al microonde	Verdure e ortaggi	100	200	34	2.8	0.2	2.5	5.6
-005125	Carciofi, cotti, bolliti	Verdure e ortaggi	100	200	44	3.6	0.3	3.3	7.4
-005120	Carciofi, crudi	Verdure e ortaggi	34	200	33	2.7	0.2	2.5	5.5
-005130	Carciofi, surgelati	Verdure e ortaggi	100	200	32	2.7	0.2	2.5	5
-005131	Carciofo Romanesco IGP	Verdure e ortaggi	37	200	48	3	0.2	6.1	5.5
-005136	Carciofo, Spinoso sardo	Verdure e ortaggi	37	200	45	1.9	0.2	8.9	1
-005132	Carciofo, verde, precoce	Verdure e ortaggi	34	200	45	2.9	0.2	5.4	5.5
-005134	Carciofo, violetto, precoce	Verdure e ortaggi	36	200	43	2.8	0.2	5.2	5.5
-005195	Cardi, cotti, bolliti	Verdure e ortaggi	100	200	22	1	0.2	2.9	2.5
-005140	Cardi, crudi	Verdure e ortaggi	70	200	13	0.6	0.1	1.7	1.5
-113010	Carne bovina in gelatina, in scatola	Carni trasformate e conservate	100	50	67	12.6	1.8	0	0
-113020	Carne bovina pressata, in scatola	Carni trasformate e conservate	100	50	141	16.5	8.3	0	0
-005154	Carote, cotte, al microonde	Verdure e ortaggi	100	200	41	1.1	0.2	7.7	3.1
-005155	Carote, cotte, bollite	Verdure e ortaggi	100	200	47	1.3	0.2	8.7	3.6
-005150	Carote, crude	Verdure e ortaggi	95	200	41	1.1	0.2	7.6	3.1
-120500	Carpa	Prodotti della pesca	50	150	139	18.9	7.1	0	0
-008510	Carrube	Frutta secca a guscio e semi oleaginosi	100	50	253	3.3	0.7	49.9	23.1
-008520	Castagne	Frutta secca a guscio e semi oleaginosi	85	30	174	2.9	1.7	36.7	4.7
-008521	Castagne, arrostite	Frutta secca a guscio e semi oleaginosi	82	30	210	3.7	2.4	41.8	8.3
-008525	Castagne, bollite	Frutta secca a guscio e semi oleaginosi	88	30	130	2.5	1.3	26.1	5.4
-008530	Castagne, secche	Frutta secca a guscio e semi oleaginosi	100	30	315	6	3.4	62	13.8
-103020	Cavallo, solo tessuto muscolare, crudo	Carni fresche	100	100	106	23.5	1	0.7	0
-103010	Cavallo, tessuto muscolare e grasso, crudo	Carni fresche	100	100	143	19.8	6.8	0.6	0
-123390	Caviale, storione	Prodotti della pesca	100	50	255	26.9	15	3.3	0
-005164	Cavolfiore, cotto, al microonde	Verdure e ortaggi	100	200	30	3.2	0.2	2.8	2.4
-005165	Cavolfiore, cotto, bollito	Verdure e ortaggi	100	200	31	3.4	0.2	2.9	2.6
-005160	Cavolfiore, crudo	Verdure e ortaggi	66	200	30	3.2	0.2	2.7	2.4
-005175	Cavoli di Bruxelles, cotti, bolliti	Verdure e ortaggi	100	200	53	4.7	0.6	4.6	5.6
-005170	Cavoli di Bruxelles, crudi	Verdure e ortaggi	76	200	47	4.2	0.5	4.2	5
-005185	Cavolo broccolo verde ramoso, cotto, bollito	Verdure e ortaggi	100	200	52	6	0.5	3.5	5.3
-005180	Cavolo broccolo verde ramoso, crudo	Verdure e ortaggi	72	200	30	3.4	0.3	2	3
-005190	Cavolo cappuccio, rosso, crudo	Verdure e ortaggi	94	200	22	1.9	0.2	2.7	1
-005205	Cavolo cappuccio, verde, cotto, bollito	Verdure e ortaggi	100	200	24	2.1	0.1	2.5	2.6
-005200	Cavolo cappuccio, verde, crudo	Verdure e ortaggi	93	200	24	2.1	0.1	2.5	2.6
-005215	Cavolo verza, cotto, bollito	Verdure e ortaggi	100	200	29	2	0.1	3.8	2.9
-005210	Cavolo verza, cruda	Verdure e ortaggi	92	200	29	2	0.1	3.8	2.9
-004010	Ceci, in scatola, scolati	Legumi	100	150	111	6.7	2.3	13.9	5.7
-004000	Ceci, secchi	Legumi	100	50	343	20.9	6.3	46.9	13.6
-004005	Ceci, secchi, cotti, bolliti	Legumi	100	290	132	7	2.4	18.9	5.8
-120510	Cefalo muggine	Prodotti della pesca	55	150	127	15.8	6.8	0.7	0
-120610	Cernia surgelata	Prodotti della pesca	68	150	88	17	2	0.5	0
-115110	Cervello di bovini	Frattaglie	100	100	157	10	12.7	0.8	0
-108010	Cervo, solo tessuto muscolare, crudo	Carni fresche	100	100	91	21	0.8	0	0
-005220	Cetrioli, freschi	Verdure e ortaggi	77	200	16	0.7	0.5	1.8	0.8
-160880	Cheddar	Formaggi e latticini	100	50	388	26.7	31	0.5	0
-119020	Cheese burger, fast food	Fast-food a base di carne	100	130	300	16.3	13.1	30.2	2
-119040	Chicken Nuggets, fast food	Fast-food a base di carne	100	109	242	17.7	12.4	15.4	0.9
-110130	Ciccioli	Carni trasformate e conservate	100	50	636	45.2	50.6	0	0
-005230	Cicoria, da taglio, coltivata, cruda	Verdure e ortaggi	89	200	14	1.2	0.1	1.7	1.2
-005245	Cicoria, di campo, cotta, bollita	Verdure e ortaggi	100	200	17	1.4	0.2	0.7	3.6
-005240	Cicoria, di campo, cruda	Verdure e ortaggi	80	200	17	1.4	0.2	0.7	3.6
-005250	Cicoria, witloof o indivia belga, cruda	Verdure e ortaggi	100	200	20	0.7	0.3	3.2	1.1
-007720	Ciliege, candite	Frutta	100	30	252	0.4	0	66.4	0.9
-007710	Ciliege, fresche	Frutta	86	150	48	0.8	0.1	11	1.3
-203010	Cioccolato, al latte	Dolci	100	30	552	7.3	36.3	50.5	3.2
-203030	Cioccolato, al latte con nocciole	Dolci	100	30	553	7.2	36.9	48.6	4.8
-203020	Cioccolato, fondente	Dolci	100	30	531	6.6	33.6	49.7	8
-005305	Cipolle, cotte, bollite	Verdure e ortaggi	100	200	39	1.4	0.1	7.8	1.4
-005300	Cipolle, crude	Verdure e ortaggi	83	200	28	1	0.1	5.7	1
-005315	Cipolline, cotte, bollite	Verdure e ortaggi	100	200	53	1.7	0.1	10.9	2.4
-005310	Cipolline, crude	Verdure e ortaggi	93	200	42	1.3	0.1	8.5	1.9
-008020	Clementine, fresche	Frutta	75	150	40	0.9	0.1	8.7	1.2
-007530	Cocco, essiccato	Frutta secca a guscio e semi oleaginosi	100	30	669	5.6	62	16.4	13.7
-007520	Cocco, fresco	Frutta secca a guscio e semi oleaginosi	52	50	358	3.5	35	4.4	6.1
-008940	Cocktail di frutta sciroppata	Frutta	100	150	59	0.4	0	14.8	1
-007040	Cocomero, fresco	Frutta	52	150	16	0.4	0	3.7	0.2
-107010	Coniglio intero, crudo	Carni fresche	71	100	118	19.9	4.3	0	0
-107030	Coniglio, coscio, crudo	Carni fresche	83	100	137	21	5.9	0	0
-107020	Coniglio, intero surgelato, crudo	Carni fresche	69	100	116	20.3	3.9	0	0
-107019	Coniglio, intero, cotto	Carni fresche	71	88	166	27.9	6	0	0
-110150	Coppa	Carni trasformate e conservate	100	50	400	28.9	31.6	0	0
-115120	Coratella di agnello	Frattaglie	100	100	109	15.7	4.7	1	0
-115130	Coratella di vitello	Frattaglie	100	100	100	17.1	3.2	0.8	0
-120710	Coregone	Prodotti della pesca	69	150	135	19	6.5	0.1	0
-003020	Corn flakes	Cereali e derivati	100	30	367	6.6	0.8	87.4	2.8
-002500	Cornetti	Cereali e derivati	100	50	403	7.2	18.3	54.7	2.1
-120810	Corvina	Prodotti della pesca	65	150	88	20	0.8	0.2	0
-110195	Cotechino Modena IGP, cotto	Carni trasformate e conservate	100	50	253	23.6	16.3	3.2	0
-110190	Cotechino, confezionato precotto	Carni trasformate e conservate	100	50	449	17.2	42.3	0	0
-000046	Couscous, cotto	Cereali e derivati	100	185	179	3.6	1.1	39.7	2.7
-000045	Couscous, crudo	Cereali e derivati	100	80	361	13.7	1.1	76.5	4.5
-127120	Cozza o mitilo	Prodotti della pesca	32	150	84	11.7	2.7	3.4	0
-001000	Crackers, al formaggio	Cereali e derivati	100	30	498	10.1	25.5	59.2	2.8
-001010	Crackers, alla soia	Cereali e derivati	100	30	421	13.1	11.7	67.7	4.9
-001030	Crackers, integrali	Cereali e derivati	100	30	402	12	11.4	61.7	10
-001020	Crackers, salati	Cereali e derivati	100	30	386	9.4	10	67.5	2.8
-140100	Crema di latte, 12% di lipidi	Latte e yogurt	100	10	140	2.8	12.5	4.4	0
-203500	Crema di nocciole e cacao	Dolci	100	30	537	6.9	32.4	58.1	
-160890	Crescenza	Formaggi e latticini	100	100	281	16.1	23.3	1.9	0
-002510	Croissants	Cereali e derivati	100	50	362	8.3	20.3	38	1.6
-208500	Crostata, con crema al cacao, industriale	Dolci	100	100	492	4.6	24.7	67	
-208520	Crostata, con marmellata di albicocche, industriale	Dolci	100	100	421	0.9	16.5	71.7	
-208510	Crostata, con marmellata, industriale	Dolci	100	100	339	4.9	8.2	65.5	
-000150	Crusca di frumento	Cereali e derivati	100	30	290	14.1	5.5	26.6	42.4
-115210	Cuore di bovini	Frattaglie	100	100	123	16.8	6	0.5	0
-115219	Cuore di bovini, cotto	Frattaglie	100	100	189	25.8	9.2	0.8	0
-115220	Cuore di equini	Frattaglie	100	100	146	18.7	7.7	0.6	0
-115230	Cuore di ovini	Frattaglie	100	100	134	16.9	7.2	0.4	0
-115240	Cuore di pollo	Frattaglie	100	100	103	14.1	5.1	0.2	0
-115249	Cuore di pollo, cotto	Frattaglie	100	100	147	20.1	7.3	0.3	0
-115250	Cuore di suino	Frattaglie	100	100	159	18.3	9.4	0.4	0
-115260	Cuore di tacchino	Frattaglie	100	100	103	14.1	5.1	0.2	0
-115269	Cuore di tacchino, cotto	Frattaglie	100	100	147	20.1	7.3	0.3	0
-503010	Dadi da brodo	Prodotti vari	100	10	250	15.7	18.7	5	
-108100	Daino, solo tessuto muscolare, crudo	Carni fresche	100	100	95	21	1.2	0	0
-007630	Datteri, secchi	Frutta	90	30	270	2.7	0.6	63.1	8.7
-120910	Dentice	Prodotti della pesca	65	150	101	16.7	3.5	0.7	0
-120920	Dentice, surgelato	Prodotti della pesca	65	150	103	17.2	3.5	0.7	0
-161200	Dolce verde	Formaggi e latticini	100	100	276	19.1	21.1	2.5	0
-161600	Edam	Formaggi e latticini	100	50	326	25.5	24.3	1.4	0
-161610	Emmenthal	Formaggi e latticini	100	50	403	28.5	30.6	3.6	0
-108510	Fagiano, crudo	Carni fresche	85	100	144	24.3	5.2	0	0
-004100	Fagioli	Legumi	100	50	326	23.6	2	47.5	17.5
-004220	Fagioli dall'occhio, secchi	Legumi	100	50	318	22.4	1.4	50.9	12.7
-004110	Fagioli, Borlotti, freschi	Legumi	52	150	143	10.2	0.8	22.7	4.8
-004115	Fagioli, Borlotti, freschi, cotti, bolliti	Legumi	100	150	78	5.7	0.5	11.2	4.2
-004130	Fagioli, Borlotti, in scatola, scolati	Legumi	100	150	102	6.7	0.5	15.9	5.5
-004120	Fagioli, Borlotti, secchi	Legumi	100	50	312	20.2	2	47.7	17.3
-004125	Fagioli, Borlotti, secchi, cotti, bolliti	Legumi	100	150	106	6.9	0.4	16.4	6.9
-004210	Fagioli, Cannellini in scatola, scolati	Legumi	100	150	86	6	0.6	12.5	4.8
-004200	Fagioli, Cannellini, secchi	Legumi	100	50	314	23.4	1.6	45.5	17.6
-004205	Fagioli, Cannellini, secchi, cotti, bolliti	Legumi	100	150	107	8	0.4	14.9	7.8
-004105	Fagioli, cotti, bolliti	Legumi	100	120	117	7.9	0.7	17	7.8
-004305	Fagiolini a corallo, cotti, bolliti	Legumi	100	150	31	1.7	0.1	4.6	2.9
-004310	Fagiolini, freschi	Legumi	95	200	24	2.1	0.1	2.4	2.9
-004325	Fagiolini, surgelati, cotti, bolliti	Legumi	100	200	31	1.7	0.1	4.6	2.9
-106020	Faraona, coscio, con pelle, crudo	Carni fresche	85	100	133	24.3	3.8	0.3	0
-106032	Faraona, coscio, senza pelle, cotto, allo spiedo	Carni fresche	77	85	194	34.4	6.1	0.3	0
-106030	Faraona, coscio, senza pelle, crudo	Carni fresche	78	100	127	24	3.3	0.3	0
-106052	Faraona, petto, senza pelle, cotto, allo spiedo	Carni fresche	100	85	146	30.7	2.5	0.2	0
-106050	Faraona, petto, senza pelle, crudo	Carni fresche	100	100	121	25.8	1.9	0.2	0
-000200	Farina d'avena	Cereali e derivati	100	100	378	12.6	7.1	66.3	7.6
-000210	Farina d'orzo	Cereali e derivati	100	100	333	10.6	1.9	68.4	8.5
-504010	Farina di castagne	Frutta secca a guscio e semi oleaginosi	100	100	318	6.1	3.7	62	13.8
-000250	Farina di frumento, duro	Cereali e derivati	100	100	330	12.9	2.8	63.2	8
-000240	Farina di frumento, integrale	Cereali e derivati	100	100	313	11.9	1.9	61.8	8.4
-000230	Farina di frumento, tipo 0	Cereali e derivati	100	100	321	11.5	1	69.5	2.9
-000220	Farina di frumento, tipo 00	Cereali e derivati	100	100	323	11	0.7	71.6	2.2
-000260	Farina di mais	Cereali e derivati	100	100	341	8.7	2.7	73.5	3.1
-000320	Farina di manioca	Cereali e derivati	100	100	332	0.6	0.2	87.2	0.4
-000270	Farina di riso	Cereali e derivati	100	100	332	7.3	0.5	79.1	1
-000280	Farina di segale	Cereali e derivati	100	100	342	11.7	2	67.8	11.3
-000290	Farina di soia	Legumi	100	100	469	36.8	23.5	23.4	11.2
-000025	Farro perlato, cotto, bollito	Cereali e derivati	100	185	178	6.2	1	37.3	2.1
-000020	Farro perlato, crudo	Cereali e derivati	100	80	353	14.6	2.4	69.3	6.5
-004400	Fave, fresche	Legumi	26	150	51	5.2	0.4	4.5	5
-004406	Fave, fresche, cotte, in padella	Legumi	100	150	61	6.1	0.5	5.3	5.9
-004410	Fave, secche	Legumi	100	50	331	21.3	2.1	52.8	14.7
-004425	Fave, secche, sgusciate, cotte, bollite	Legumi	100	150	146	11	1.3	22.4	3
-004420	Fave, secche, sgusciate, crude	Legumi	100	50	343	25.2	3	53.6	7
-504100	Fecola di patate	Prodotti vari	100	100	346	1.4	0	90.7	
-115320	Fegato di bovini	Frattaglie	100	100	142	20	4.4	5.9	0
-115329	Fegato di bovini, cotto	Frattaglie	100	100	190	26.7	5.9	7.9	0
-115340	Fegato di equini	Frattaglie	100	100	145	22.4	4	5.3	0
-115350	Fegato di ovini	Frattaglie	100	100	135	19.5	5.5	2	0
-115360	Fegato di pollo	Frattaglie	100	100	154	22.8	6.3	1.5	0
-115369	Fegato di pollo, cotto	Frattaglie	100	100	192	29.4	7.4	2	0
-115370	Fegato di suini	Frattaglie	100	100	140	22.8	4.8	1.5	0
-115379	Fegato di suini, cotto	Frattaglie	100	100	183	29.4	6.4	2	0
-115380	Fegato di tacchino	Frattaglie	100	100	127	17.8	6	0.5	0
-115389	Fegato di tacchino, cotto	Frattaglie	100	100	195	27.4	9.2	0.8	0
-007550	Feijoa, fresca	Frutta	67	150	59	0.7	0.8	9.6	6.5
-162000	Feta	Formaggi e latticini	100	100	250	15.6	20.2	1.5	0
-001500	Fette biscottate	Cereali e derivati	100	30	387	11.3	6	75	3.5
-001510	Fette biscottate, integrali	Cereali e derivati	100	30	394	14.2	10	63	5.4
-007080	Fichi d'india, freschi	Frutta	64	150	63	0.8	0.1	13	5
-007060	Fichi, canditi	Frutta	100	30	294	3.5	0.2	73.7	1.1
-007050	Fichi, freschi	Frutta	75	150	63	0.9	0.2	14.2	2
-007053	Fichi, seccati al forno e mandorlati	Frutta	100	30	305	5.2	4.2	58.2	14
-007070	Fichi, secchi	Frutta	100	30	282	3.5	2.7	58	13
-005324	Finocchi, cotti, al microonde	Verdure e ortaggi	100	200	15	1.2	0	1.5	2.2
-005325	Finocchi, cotti, bolliti	Verdure e ortaggi	100	200	17	1.4	0	1.7	2.6
-005320	Finocchi, crudi	Verdure e ortaggi	59	200	15	1.2	0	1.5	2.2
-003030	Fiocchi d'avena	Cereali e derivati	100	30	367	8	7.5	66.8	8.3
-170010	Fiocchi di formaggio magro	Formaggi e latticini	100	50	115	9.7	7.1	3.2	0
-162010	Fior di latte	Formaggi e latticini	100	100	268	20.6	20.3	0.7	0
-005330	Fiori di zucca, freschi	Verdure e ortaggi	79	80	18	1.7	0.4	0.5	2.8
-005340	Foglie di rapa, crude	Verdure e ortaggi	63	200	27	2.6	0.1	2.8	2.5
-162020	Fontina	Formaggi e latticini	100	50	361	24.5	28.9	0.8	0
-162030	Formaggino	Formaggi e latticini	100	50	309	11.2	26.9	6	0
-162040	Formaggino con ridotto contenuto di grasso	Formaggi e latticini	100	100	239	14.7	17.3	6.5	0
-162050	Formaggio cremoso spalmabile	Formaggi e latticini	100	50	313	8.6	31	0	0
-170510	Formaggio cremoso spalmabile, light	Formaggi e latticini	100	100	179	9.2	14.5	3.1	0
-160400	Formaggio molle da tavola	Formaggi e latticini	100	100	377	25.4	30.2	1	0
-007730	Fragole, fresche	Frutta	94	150	30	0.9	0.4	5.3	1.6
-000030	Frumento duro	Cereali e derivati	100	80	332	13	2.9	62.5	9.8
-000040	Frumento tenero	Cereali e derivati	100	80	336	12.3	2.6	65.2	9.7
-006016	Funghi coltivati, pleurotes, cotti, in padella	Verdure e ortaggi	100	200	35	2.6	0.4	5.3	0.8
-006010	Funghi coltivati, pleurotes, crudi	Verdure e ortaggi	98	200	37	2.2	0.3	5.6	2.4
-006006	Funghi coltivati, prataioli, cotti, in padella	Verdure e ortaggi	100	200	46	7	0.4	1.5	4.3
-006000	Funghi coltivati, prataioli, crudi	Verdure e ortaggi	95	200	24	3.7	0.2	0.8	2.3
-006020	Funghi ovuli, crudi	Verdure e ortaggi	87	200	23	2	0.3	1.6	3
-006030	Funghi porcini, crudi	Verdure e ortaggi	92	200	31	3.9	0.7	1	2.5
-106100	Gallina, crudo	Carni fresche	70	100	194	20.9	12.3	0	0
-128100	Gamberi	Prodotti della pesca	45	150	71	13.6	0.6	2.9	0
-128110	Gamberi sgusciati, surgelati	Prodotti della pesca	100	150	85	16.5	0.9	2.9	0
-206260	Gelato confezionato, biscotto con crema, zabaione e cioccolato	Dolci	100	100	271	5.3	7.3	49.1	
-206010	Gelato confezionato, cacao, in vaschetta	Dolci	100	100	173	3.6	7.1	25.3	0
-206020	Gelato confezionato, caffè, in vaschetta	Dolci	100	100	245	5.1	15	23.9	0
-206270	Gelato confezionato, cono con panna e cioccolato	Dolci	100	100	291	5.1	15.5	34.9	
-206280	Gelato confezionato, cono con panna, scaglie di cioccolato e noccioline	Dolci	100	100	326	4.2	20.5	33.3	
-206040	Gelato confezionato, fior di latte, in vaschetta	Dolci	100	100	218	4.2	13.7	20.7	0
-206050	Gelato confezionato, fior di latte, ricoperto di sorbetto alla fragola	Dolci	100	100	101	1.4	1.7	21.3	0
-206710	Gelato confezionato, ghiacciolo all'arancio	Dolci	100	100	137	0	0	36.5	0
-206060	Gelato confezionato, nocciola, in vaschetta	Dolci	100	100	183	3.3	8.4	25.2	0
-206080	Gelato confezionato, panna ricoperta di cioccolato fondente	Dolci	100	100	316	4.5	21.4	28.2	0
-206070	Gelato confezionato, panna, in vaschetta	Dolci	100	100	189	3.2	8.2	27.2	0
-206800	Gelato confezionato, sorbetto al limone, in vaschetta	Dolci	100	100	132	0.9	0	34.2	0
-206090	Gelato confezionato, stracciatella, in vaschetta	Dolci	100	100	193	2.9	7	31.5	0
-206100	Gelato confezionato, vaniglia, in vaschetta	Dolci	100	100	167	2.7	6.7	25.7	0
-000330	Germe di frumento	Cereali e derivati	100	30	378	26	10	43.5	10.5
-005350	Germogli di soia	Verdure e ortaggi	98	80	54	6.2	1.4	3	2.8
-006591	Gnocchi di patate, cotti	Cereali e derivati	100	130	147	3.5	0.2	34	1.8
-006590	Gnocchi di patate, crudi	Cereali e derivati	100	120	164	3.9	0.3	37.9	1.9
-202500	Gomme da masticare, lastrine e confetti	Dolci	100	100	262	0	0	70	0
-162400	Gorgonzola	Formaggi e latticini	100	50	324	19.1	27.1	1	0
-162410	Grana Padano, DOP	Formaggi e latticini	100	50	392	33.9	28.5	0	0
-128200	Granchio, in scatola	Prodotti della pesca	100	50	81	18.1	0.9	0	0
-000050	Grano saraceno	Cereali e derivati	100	80	329	12.4	3.3	61.2	10
-002000	Grissini	Cereali e derivati	100	30	421	11.3	13.9	65.1	3.5
-162420	Groviera	Formaggi e latticini	100	50	417	30.6	32.1	1.5	0
-007560	Guava, fresca	Frutta	98	150	31	0.7	0.5	3.5	5.4
-121010	Halibut	Prodotti della pesca	80	150	114	20.6	3.5	0	0
-119050	Hamburger piccolo, solo carne, fast food	Fast-food a base di carne	100	30	264	24.5	18.4	0	0
-119030	Hamburger, fast food	Fast-food a base di carne	100	110	251	13.1	9.1	30.1	2
-005400	Indivia, fresca	Verdure e ortaggi	69	80	20	0.9	0.3	2.7	1.6
-163200	Italico	Formaggi e latticini	100	50	316	21.2	25.2	1.2	0
-502260	Ketchup, salsa	Prodotti vari	100	30	100	2.1	0	24	0.9
-007570	Kiwi, freschi	Frutta	87	150	48	1.2	0.6	9	2.2
-007740	Lamponi, freschi	Frutta	100	150	49	1	0.6	6.5	7.4
-191010	Lardo	Oli e grassi	100	10	891	0	99	0	0
-121100	Lattarini	Prodotti della pesca	100	150	145	14.6	9.6	0	0
-132010	Latte di bufala	Latte e yogurt	100	125	114	4.5	8.5	5.1	0
-130010	Latte di capra	Latte e yogurt	100	125	76	3.9	4.8	4.7	0
-131010	Latte di pecora	Latte e yogurt	100	125	103	5.3	6.9	5.2	0
-135510	Latte di vacca, condensato, zuccherato	Latte e yogurt	100	125	328	8.7	9	56.5	0
-135520	Latte di vacca, evaporato, non zuccherato	Latte e yogurt	100	125	134	7	8.2	8.6	0
-135610	Latte di vacca, in polvere, intero	Latte e yogurt	100	125	484	25.7	24.9	42	0
-135620	Latte di vacca, in polvere, parzialmente scremato	Latte e yogurt	100	125	418	28.8	12.7	50.2	0
-135630	Latte di vacca, in polvere, scremato	Latte e yogurt	100	125	351	33.1	0.9	56.2	0
-135010	Latte di vacca, pastorizzato, intero	Latte e yogurt	100	125	64	3.3	3.6	4.9	0
-135020	Latte di vacca, pastorizzato, parzialmente scremato	Latte e yogurt	100	125	46	3.5	1.5	5	0
-135030	Latte di vacca, pastorizzato, scremato	Latte e yogurt	100	125	36	3.6	0.2	5.3	0
-135810	Latte di vacca, UHT, intero	Latte e yogurt	100	125	63	3.3	3.6	4.7	0
-135820	Latte di vacca, UHT, parzialmente scremato	Latte e yogurt	100	125	46	3.2	1.6	5.1	0
-164400	Latteria	Formaggi e latticini	100	50	456	30.7	36.4	1.4	0
-005420	Lattuga, a cappuccio, fresca	Verdure e ortaggi	92	80	22	1.5	0.2	3	1.3
-005430	Lattuga, da taglio, fresca	Verdure e ortaggi	83	80	17	1.1	0.1	2.2	1.5
-005410	Lattuga, fresca	Verdure e ortaggi	80	80	22	1.8	0.4	2.2	1.5
-005436	Lattughino IV gamma, fresco	Verdure e ortaggi	100	80	16	1.4	0.2	1.4	1.6
-005435	Lattughino, fresco	Verdure e ortaggi	80	80	16	1.5	0.2	1.4	1.6
-202030	Lenti colorate ripiene di cioccolato	Dolci	100	30	456	5.4	17.5	73.9	0
-004510	Lenticchie, in scatola, scolate	Legumi	100	150	91	5	0.5	15.4	4.2
-004500	Lenticchie, secche	Legumi	100	50	319	22.7	1	51.1	13.8
-004505	Lenticchie, secche, cotte, bollite	Legumi	100	150	109	6.9	0.4	16.3	8.3
-503100	Lievito di birra, compresso	Prodotti vari	100	25	70	12.1	0.4	1.1	6.9
-008030	Limoni, freschi	Frutta	64	150	16	0.6	0	2.5	1.9
-008040	Limoni, succo	Frutta	100	100	10	0.2	0	2.5	0
-115400	Lingua di bovini	Frattaglie	100	100	232	17.1	18	0.4	0
-115409	Lingua di bovini, cotta, fritta	Frattaglie	100	100	309	22.8	24	0.5	0
-007580	Litchi, freschi	Frutta	72	150	72	1.1	0.1	17.2	1.3
-007090	Loti o kaki, freschi	Frutta	97	150	70	0.6	0.3	16	2.5
-121200	Luccio	Prodotti della pesca	56	150	81	18.7	0.6	0.1	0
-109010	Lumaca, cruda	Carni fresche	24	100	67	12.9	1.7	0	0
-004600	Lupini, ammollati	Legumi	76	150	119	16.4	2.4	7.1	2.8
-008620	Macadamia	Frutta secca a guscio e semi oleaginosi		30	751	8	76	5.1	8
-105236	Maiale, bistecca, cotto, in padella	Carni fresche	75	80	187	25.4	9.5	0	0
-105230	Maiale, bistecca, crudo	Carni fresche	74	100	157	21.3	8	0	0
-105200	Maiale, coscio, crudo	Carni fresche	87	100	110	20.2	3.2	0	0
-105210	Maiale, lombo, crudo	Carni fresche	79	100	146	20.7	7	0	0
-105600	Maiale, pesante, coscio, crudo	Carni fresche	90	100	127	20.4	5.1	0	0
-105700	Maiale, pesante, lombo, crudo	Carni fresche	78	100	172	20.8	9.9	0	0
-105800	Maiale, pesante, spalla, crudo	Carni fresche	94	100	156	19	8.9	0	0
-105220	Maiale, spalla, crudo	Carni fresche	79	100	133	19	6.3	0	0
-502760	Maionese, industriale	Prodotti vari	100	10	655	4.3	70	2.1	0
-000060	Mais	Cereali e derivati	100	80	357	9.2	3.8	75.1	2
-000300	Mais, amido	Cereali e derivati	100	100	328	0.3	0	87	0
-000070	Mais, dolce, in scatola, sgocciolato	Cereali e derivati	100	30	105	3.4	1.3	20.5	1.4
-008050	Mandaranci, freschi	Frutta	87	150	57	0.8	0.2	12.8	2.2
-008060	Mandarini, freschi	Frutta	80	150	76	0.9	0.3	17.6	1.7
-008540	Mandorle dolci, secche	Frutta secca a guscio e semi oleaginosi	24	30	628	22	55.3	4.6	12.7
-007590	Mango, fresco	Frutta	73	150	56	1	0.2	12.6	1.6
-009100	Margarina, 100% vegetale	Oli e grassi	100	10	760	0.6	84	0.4	0
-009110	Margarina, 2/3 di grassi animali, 1/3 di grassi vegetali	Oli e grassi	100		760	0.7	84	0.4	0
-204500	Marmellata	Dolci	100	20	227	0.5	0	58.7	2.2
-164800	Mascarpone	Formaggi e latticini	100	50	455	7.6	47	0.3	0
-007100	Melagrane, fresche	Frutta	59	150	68	0.5	0.2	15.9	2.2
-005507	Melanzane, cotte, al microonde	Verdure e ortaggi	100	200	23	0.8	0.4	3	2.4
-005506	Melanzane, cotte, in padella	Verdure e ortaggi	100	200	39	1.3	0.7	5.4	3.7
-005500	Melanzane, crude	Verdure e ortaggi	92	200	23	1	0.4	2.6	2.6
-007220	Mele cotogne, fresche	Frutta	79	150	38	0.3	0.1	6.3	5.9
-007190	Mele, disidratate	Frutta	100	30	356	1.3	2	82.2	12.5
-007130	Mele, fresche, annurche	Frutta	84	150	45	0.3	0.1	10.2	2.2
-007120	Mele, fresche, con buccia	Frutta	85	150	44	0.2	0	10	2.6
-007140	Mele, fresche, deliziose	Frutta	79	150	46	0.2	0.1	11.1	1.5
-007150	Mele, fresche, golden	Frutta	73	150	46	0.4	0.1	10.7	1.7
-007160	Mele, fresche, granny smith	Frutta	81	150	42	0.5	0.1	9.4	1.9
-007170	Mele, fresche, imperatore	Frutta	75	150	48	0.2	0.1	11.3	1.9
-007180	Mele, fresche, renette	Frutta	71	150	43	0.3	0.1	10	1.7
-007110	Mele, fresche, senza buccia	Frutta	79	150	57	0.3	0.1	13.7	2
-007230	Melone, d'estate, fresco	Frutta	47	150	34	0.8	0.2	7.4	0.7
-007240	Melone, d'inverno, fresco	Frutta	51	150	24	0.5	0.2	4.9	0.7
-121310	Melù o pesce molo	Prodotti della pesca	65	150	72	17.4	0.3	0	0
-121330	Melù o pesce molo, stoccafisso, ammollato	Prodotti della pesca	85	150	92	20.7	0.9	0.3	0
-121320	Melù o pesce molo, stoccafisso, secco	Prodotti della pesca	78	50	356	80.1	3.5	1.1	0
-006810	Menta, fresca	Verdure e ortaggi	100	5	49	3.8	0.7	5.3	3.8
-210030	Merendine, con marmellata, industriale	Dolci	100	30	364	5.5	9.5	67.9	1.1
-210040	Merendine, farcite con cacao, industriale	Dolci	100	30	410	6.2	15.1	65.5	1.9
-210060	Merendine, tipo brioche, industriale	Dolci	100	30	440	8.2	17.6	65.7	1
-210050	Merendine, tipo pan di Spagna, industriale	Dolci	100	30	386	7.4	13.1	62.7	1.5
-210070	Merendine, tipo pasta frolla, industriale	Dolci	100	30	447	5.3	17.1	71.7	1.7
-121410	Merluzzo o nasello	Prodotti della pesca	76	150	71	17	0.3	0	0
-121450	Merluzzo o nasello, baccalà, ammollato	Prodotti della pesca	82	150	95	21.6	1	0	0
-121440	Merluzzo o nasello, baccalà, secco	Prodotti della pesca	75	50	131	29	1.7	0	0
-121490	Merluzzo o nasello, bastoncini di pesce, surgelati	Prodotti della pesca	100	150	191	11	10.1	15	0
-121420	Merluzzo o nasello, surgelato	Prodotti della pesca	75	150	75	17.3	0.6	0	0
-121424	Merluzzo o nasello, surgelato, cotto, al microonde	Prodotti della pesca	75	150	107	24.8	0.9	0	0
-121423	Merluzzo o nasello, surgelato, cotto, in forno	Prodotti della pesca	75	150	78	17.5	0.9	0	0
-121430	Merluzzo o nasello, surgelato, filetti	Prodotti della pesca	100	150	68	15.6	0.6	0	0
-210010	Miele	Dolci	100	20	304	0.6	0	80.3	0
-000080	Miglio	Cereali e derivati	100	80	343	11.8	3.9	64.9	8.5
-000081	Miglio, decorticato	Cereali e derivati	100	80	342	11	4.2	67.8	3.1
-115500	Milza di bovini	Frattaglie	100	100	107	18.5	3.7	0	0
-900010	Minestre in scatola, crema di asparagi	Prodotti vari	100	200	26	1	0.7	4.2	
-900110	Minestre in scatola, crema di cipolle	Prodotti vari	100	200	26	2.2	1	2.2	
-900210	Minestre in scatola, crema di funghi	Prodotti vari	100	200	56	1	4	4.2	
-900310	Minestre in scatola, crema di pollo	Prodotti vari	100	200	58	1.7	3.8	4.5	
-900410	Minestre in scatola, crema di pomodori	Prodotti vari	100	200	36	0.8	1	6.4	
-905100	Minestrone liofilizzato	Prodotti vari	100	30	298	10.1	8.8	47.6	
-905010	Minestrone, cotto	Verdure e ortaggi	100	200	45	2	0.4	7.8	2.1
-007760	Mirtilli, freschi	Frutta	100	150	49	0.9	0.2	10.1	3.1
-007750	Mora di rovo	Frutta	100	150	42	1.3	0	8.1	3.2
-121500	Mormora	Prodotti della pesca		150	97	18	1.9	2	0
-110200	Mortadella Bologna IGP	Carni trasformate e conservate	100	50	288	15.7	25	0	0
-110210	Mortadella di bovini e suini	Carni trasformate e conservate	100	50	388	13.3	37	0.5	0
-164810	Mozzarella di bufala	Formaggi e latticini	100	100	288	16.7	24.4	0.4	0
-164811	Mozzarella di bufala campana DOP	Formaggi e latticini	100	100	257	14.1	21.7	1.4	0
-164820	Mozzarella di vacca	Formaggi e latticini	100	100	253	18.7	19.5	0.7	0
-003040	Muesli	Cereali e derivati	100	30	374	9.7	6	71.7	6.4
-007250	Nespole, fresche	Frutta	66	150	32	0.4	0.4	6.1	2.1
-008550	Nocciole, secche	Frutta secca a guscio e semi oleaginosi	42	30	671	13.8	64.1	6.1	8.1
-008560	Noci	Frutta secca a guscio e semi oleaginosi	58	30	589	10.5	57.7	5.5	3.5
-008580	Noci pecan	Frutta secca a guscio e semi oleaginosi	49	30	723	7.2	71.8	7.9	9.4
-008570	Noci, secche	Frutta secca a guscio e semi oleaginosi	39	30	702	14.3	68.1	5.1	6.2
-106150	Oca, crudo	Carni fresche	70	100	373	15.8	34.4	0	0
-121600	Occhiata	Prodotti della pesca		150	117	19	3.7	2	0
-009799	Oli vegetali	Oli e grassi	100	10	899	0	99.9	0	0
-009610	Olio di arachide	Oli e grassi	100	10	899	0	99.9	0	0
-009620	Olio di cocco	Oli e grassi	100	10	899	0	99.9	0	0
-009630	Olio di colza	Oli e grassi	100	10	899	0	99.9	0	0
-194000	Olio di fegato di merluzzo	Oli e grassi	100	10	899	0	99.9	0	0
-009640	Olio di germe di grano	Oli e grassi	100	10	899	0	99.9	0	0
-009650	Olio di girasole	Oli e grassi	100	10	899	0	99.9	0	0
-009660	Olio di mais	Oli e grassi	100	10	899	0	99.9	0	0
-009670	Olio di mandorle dolci	Oli e grassi	100	10	899	0	99.9	0	0
-009200	Olio di oliva	Oli e grassi	100	10	899	0	99.9	0	0
-009210	Olio di oliva extra vergine	Oli e grassi	100	10	899	0	99.9	0	0
-009680	Olio di palma	Oli e grassi	100	10	899	0	99.9	0	0
-009690	Olio di sesamo	Oli e grassi	100	10	899	0	99.9	0	0
-009700	Olio di soia	Oli e grassi	100	10	899	0	99.9	0	0
-009710	Olio di vinacciolo	Oli e grassi	100	10	899	0	99.9	0	0
-008850	Oliva Giarraffa	Frutta	83	30	192	1.4	20	0.19	2.6
-008840	Oliva Nocellara del Belice	Frutta	83	30	211	1.4	22.1	0.06	3.3
-008800	Olive da tavola conservate	Frutta	83	30	277	1.5	27	5	4.4
-008810	Olive, nere	Frutta	74	30	243	1.6	25.1	0.8	3.9
-008820	Olive, verdi	Frutta	84	30	148	0.8	15	1	3
-008830	Olive, verdi, in salamoia	Frutta	78	30	113	1.2	11	1	2.8
-121730	Orata d'allevamento, filetti	Prodotti della pesca	100	150	159	19.7	8.4	1.2	0
-121720	Orata, filetti	Prodotti della pesca	100	150	121	20.7	3.8	1	0
-121710	Orata, surgelata	Prodotti della pesca	69	150	94	19.8	1.2	1	0
-000090	Orzo perlato	Cereali e derivati	100	80	346	9.4	1.5	73.7	9.2
-000095	Orzo perlato, cotto, bollito	Cereali e derivati	100	215	118	2.6	0.6	26.4	1.8
-127130	Ostrica	Prodotti della pesca	12	150	69	10.2	0.9	5.4	0
-121800	Pagello	Prodotti della pesca		150	101	21	1.9	0	0
-121900	Pagello bocca d'oro	Prodotti della pesca		150	118	20	3	3	0
-122000	Palombo	Prodotti della pesca	65	150	80	16	1.2	1.3	0
-110320	Pancetta arrotolata	Carni trasformate e conservate	100	50	530	15.1	52.2	0	0
-110300	Pancetta magretta	Carni trasformate e conservate	100	50	314	21.7	25.3	0	0
-110310	Pancetta tesa	Carni trasformate e conservate	100	50	337	20.9	28.1	0	0
-000500	Pane al malto	Cereali e derivati	100	50	278	8.3	2.4	56.6	5.5
-000600	Pane azzimo	Cereali e derivati	100	50	365	10.7	1	81.7	3.5
-000530	Pane bianco	Cereali e derivati	100	50	268	8.1	0.5	59.5	3.8
-000510	Pane di segale	Cereali e derivati	100	50	228	8.3	1.7	45.4	4.6
-000550	Pane di tipo integrale	Cereali e derivati	100	50	224	8.5	1.3	44.1	6.5
-000540	Pane di tipo semintegrale	Cereali e derivati	100	50	239	8.3	0.3	52	4.2
-000560	Pane formato rosetta	Cereali e derivati	100	50	275	9	1.9	57.6	3.1
-216000	Panettone	Dolci	100	100	337	6.4	10.7	56.2	2.1
-000570	Pangrattato	Cereali e derivati	100	100	357	10.1	2.1	77.8	3.2
-000580	Panini al latte	Cereali e derivati	100	50	298	9	8.7	48.1	1.9
-000590	Panini all'olio	Cereali e derivati	100	50	288	7.7	5.8	52.6	3.7
-119070	Panino con hamburger piccolo, fast food	Fast-food a base di carne	100	80	254	15.6	8.9	29	1.2
-119060	Panino, fast food	Fast-food a base di carne	100	50	248	10.1	3	47	2
-140400	Panna da cucina, sterilizzata, 23% di lipidi	Latte e yogurt	100	30	233	2.7	23	4	0
-140300	Panna da montare, 35% di lipidi	Latte e yogurt	100	30	337	2.3	35	3.4	0
-007600	Papaia, fresca	Frutta	70	150	33	0.4	0.1	6.9	2.3
-507100	Pappa reale	Prodotti vari	100	5	146	10	6	14	0
-166000	Parmigiano Reggiano DOP	Formaggi e latticini	100	50	397	32.4	29.7	0	0
-007610	Passiflora, fresca	Frutta	42	150	64	3	0.3	5.7	13.9
-000870	Pasta all'uovo, secca	Cereali e derivati	100	70	346	13	2.4	71	3.2
-000871	Pasta all'uovo, secca, cotta, bollita	Cereali e derivati	100	210	123	4.6	0.8	25.5	1.1
-217000	Pasta di mandorle	Frutta secca a guscio e semi oleaginosi	100	30	455	9.9	23.4	54.6	
-000800	Pasta di semola	Cereali e derivati	100	80	341	13.5	1.2	72.7	1.7
-000805	Pasta di semola, cotta, bollita	Cereali e derivati	100	200	175	6.9	0.6	37.3	0.9
-000850	Pasta di semola, integrale	Cereali e derivati	100	80	330	13.3	2.2	64.8	7.1
-000855	Pasta di semola, integrale, cotta, bollita	Cereali e derivati	100	180	182	7.4	1.2	36	3.5
-006584	Patate novelle, cotte, al microonde	Verdure e ortaggi	100	200	72	2	0.3	15.7	1.4
-006585	Patate novelle, cotte, bollite	Verdure e ortaggi	100	200	68	1.9	0.2	14.9	1.4
-006580	Patate novelle, crude	Verdure e ortaggi	96	200	72	2	0.3	15.7	1.4
-006505	Patate, con buccia, cotte, bollite	Verdure e ortaggi	83	200	88	2.1	1	17.9	1.6
-006514	Patate, cotte, al microonde	Verdure e ortaggi	100	200	88	2.1	1	17.9	1.6
-006511	Patate, cotte, arrosto	Verdure e ortaggi	100	200	152	2.9	4.5	25.7	1.8
-006500	Patate, crude	Verdure e ortaggi	83	200	72	2	0.1	16	1.8
-006517	Patate, fritte	Verdure e ortaggi	100	200	192	3.9	6.7	29.9	2.2
-006515	Patate, senza buccia, cotte, bollite	Verdure e ortaggi	100	200	74	1.8	0.1	16.9	1.3
-006570	Patatine, fritte, confezionate in busta	Verdure e ortaggi	100	25	512	5.4	29.6	58	3.2
-119080	Patatine, fritte, fast food	Fast-food a base di carne	100	88	283	3.3	13.7	37.6	2.7
-114010	Patè di coniglio	Carni trasformate e conservate	100	50	346	13	32.2	1.1	0
-114020	Patè di fegato	Carni trasformate e conservate	100	50	341	12.7	31.7	1.3	0
-114030	Patè di pollo	Carni trasformate e conservate	100	50	289	11.1	26.2	2.3	0
-114040	Patè di prosciutto	Carni trasformate e conservate	100	50	358	11.3	34.3	1.1	0
-104610	Pecora, solo tessuto muscolare, crudo	Carni fresche	100	100	121	21	4.1	0	0
-166050	Pecorino	Formaggi e latticini	100	50	404	28.8	32	0.2	0
-166060	Pecorino romano	Formaggi e latticini	100	50	409	26	33.1	1.8	0
-166070	Pecorino siciliano	Formaggi e latticini	100	50	427	28.9	33.6	2.4	0
-006820	Pepe nero	Verdure e ortaggi	100	1	311	11.4	3.3	49	25.9
-006830	Peperoncini piccanti, freschi	Verdure e ortaggi	89	5	30	1.8	0.5	3.8	2
-005606	Peperoni, cotti, in padella	Verdure e ortaggi	100	200	143	5.2	1.5	24.3	8.7
-005600	Peperoni, crudi	Verdure e ortaggi	82	200	26	0.9	0.3	4.2	1.9
-005624	Peperoni, gialli, cotti, al microonde	Verdure e ortaggi	100	200	41	1.1	0.2	8.1	2.3
-005620	Peperoni, gialli, crudi	Verdure e ortaggi	83	200	35	0.9	0.2	6.8	1.9
-005610	Peperoni, rossi e gialli, crudi	Verdure e ortaggi	81	200	35	0.9	0.3	6.7	1.9
-005634	Peperoni, rossi, cotti, al microonde	Verdure e ortaggi	100	200	42	1.1	0.4	7.9	2.3
-005630	Peperoni, rossi, crudi	Verdure e ortaggi	82	200	34	0.9	0.3	6.5	1.9
-005640	Peperoni, verdi, crudi	Verdure e ortaggi	81	200	31	0.7	0.2	6	1.9
-007270	Pere, candite	Frutta	100	150	294	1	0.4	73.9	4.5
-007261	Pere, fresche, Abate Fetel	Frutta	89	150	59	0.2	0.3	12.7	3.8
-007262	Pere, fresche, Coscia	Frutta	93	150	42	0.3	0.1	8.6	3.8
-007263	Pere, fresche, Kaiser	Frutta	91	150	48	0.3	0.5	9.2	3.8
-007264	Pere, fresche, Max-Red Barlett	Frutta	90	150	50	0.3	0.4	10	3.8
-007260	Pere, fresche, senza buccia	Frutta	84	150	43	0.3	0.1	8.8	3.8
-007265	Pere, fresche, William	Frutta	90	150	52	0.3	0.5	10.2	3.8
-122100	Pesce gatto	Prodotti della pesca	60	150	92	15.5	3.3	0.2	0
-007300	Pesche, disidratate	Frutta	100	30	364	4.8	0.9	88	3.5
-007290	Pesche, fresche, con buccia	Frutta	95	150	28	0.7	0	5.8	1.9
-007280	Pesche, fresche, senza buccia	Frutta	91	150	30	0.8	0.1	6.1	1.6
-007310	Pesche, sciroppate	Frutta	100	30	56	0.5	0	14	0.9
-007320	Pesche, secche	Frutta	100	30	280	3.1	0.7	68.3	2.8
-007330	Peschenoci, fresche	Frutta	90	150	36	1.4	0.1	7	1.5
-108520	Piccione giovane, crudo	Carni fresche	90	100	138	22.1	5.5	0	0
-008590	Pinoli	Frutta secca a guscio e semi oleaginosi	29	30	604	31.9	50.3	4	4.5
-004700	Piselli, freschi	Legumi	31	150	64	5.5	0.6	6.5	6.3
-004706	Piselli, freschi, cotti, in padella	Legumi	100	150	104	9.7	1	11.5	6.4
-004720	Piselli, in scatola, scolati	Legumi	100	150	78	5.3	0.6	11.1	5.1
-004710	Piselli, secchi	Legumi	100	50	317	21.7	2	48.2	15.7
-004730	Piselli, surgelati	Legumi	100	150	61	5.4	0.3	6.5	6.3
-008600	Pistacchi	Frutta secca a guscio e semi oleaginosi	50	30	629	18.1	56.1	8.1	10.6
-008605	Pistacchio di Bronte DOP	Frutta secca a guscio e semi oleaginosi	50	30	595	24.3	48.9	7.3	15.3
-000700	Pizza bianca	Cereali e derivati	100	50	306	7.9	5.9	57.9	2.3
-000710	Pizza con pomodoro	Cereali e derivati	100	50	248	7.6	6.6	40.7	2.7
-000720	Pizza con pomodoro e mozzarella	Cereali e derivati	100	50	255	12.1	7.6	35.5	2.5
-000076	Polenta, cotta	Cereali e derivati	100	340	73	0.9	0.04	17.8	0.9
-000075	Polenta, cruda	Cereali e derivati	100	70	323	8	0.7	72.7	6.2
-106273	Pollo, ala, con pelle, cotta, al forno	Carni fresche	60	85	283	31.7	17.4	0	0
-106270	Pollo, ala, con pelle, crudo	Carni fresche	63	100	196	16.7	14.3	0	0
-106403	Pollo, fuso, con pelle, cotto, al forno	Carni fresche	62	84	201	31.2	8.5	0	0
-106400	Pollo, fuso, con pelle, crudo	Carni fresche	67	100	125	18.4	5.7	0	0
-106413	Pollo, fuso, senza pelle, cotto, al forno	Carni fresche	64	85	175	29.9	6.2	0	0
-106410	Pollo, fuso, senza pelle, crudo	Carni fresche	66	100	107	18.5	3.7	0	0
-106203	Pollo, intero, con pelle, cotto, al forno	Carni fresche	73	90	200	27.1	10.2	0	0
-106251	Pollo, intero, con pelle, cotto, arrosto	Carni fresche	74	85	245	28.3	14.7	0	0
-106200	Pollo, intero, con pelle, crudo	Carni fresche	77	100	171	19	10.6	0	0
-106213	Pollo, intero, senza pelle, cotto, al forno	Carni fresche	63	90	160	27.9	5.4	0	0
-106261	Pollo, intero, senza pelle, cotto, arrosto	Carni fresche	59	83	206	28.9	10	0	0
-106210	Pollo, intero, senza pelle, crudo	Carni fresche	62	100	110	19.4	3.6	0	0
-106506	Pollo, petto, cotto, in padella	Carni fresche	98	75	129	30.2	0.9	0	0
-106500	Pollo, petto, crudo	Carni fresche	98	100	100	23.3	0.8	0	0
-106603	Pollo, sovracoscia, con pelle, cotto, al forno	Carni fresche	83	90	219	26.7	12.5	0	0
-106600	Pollo, sovracoscia, con pelle, crudo	Carni fresche	86	100	196	17.4	14	0	0
-106613	Pollo, sovracoscia, senza pelle, cotto, al forno	Carni fresche	81	85	188	28.3	8.3	0	0
-106610	Pollo, sovracoscia, senza pelle, crudo	Carni fresche	83	100	132	18.7	6.3	0	0
-115600	Polmone di bovini	Frattaglie	100	100	75	14	2.1	0	0
-127150	Polpo	Prodotti della pesca	90	150	57	10.6	1	1.4	0
-006660	Pomodori, conserva	Verdure e ortaggi	100	100	100	3.9	0.4	20.4	2
-006600	Pomodori, da insalata, freschi	Verdure e ortaggi	100	200	19	1.2	0.2	2.8	1
-006610	Pomodori, maturi, freschi	Verdure e ortaggi	100	200	23	1	0.2	3.5	2
-006640	Pomodori, Nerina, rossi, freschi	Verdure e ortaggi	100	200	21	1.1	0.4	2.8	1.4
-006630	Pomodori, Nerina, verdi, freschi	Verdure e ortaggi	100	200	21	0.9	0.4	2.8	1.5
-006670	Pomodori, passata	Verdure e ortaggi	100	100	21	1.3	0.2	3	1.5
-006680	Pomodori, pelati in scatola	Verdure e ortaggi	100	100	22	1.2	0.5	3	0.9
-006620	Pomodori, San Marzano, freschi	Verdure e ortaggi	100	200	21	1.1	0.2	3	2
-006690	Pomodori, succo	Verdure e ortaggi	100	125	16	0.8	0	3	0.6
-006650	Pomodorini ciliegino, freschi	Verdure e ortaggi	100	250	37	1.1	0.4	7.2	1
-008070	Pompelmo, fresco	Frutta	70	150	29	0.6	0	6.2	1.6
-501200	Pop corn	Prodotti vari	100	30	408	12	4.2	77.9	15.1
-005655	Porri, cotti, bolliti	Verdure e ortaggi	100	200	35	2.1	0.1	5.3	3
-005650	Porri, crudi	Verdure e ortaggi	77	200	35	2.1	0.1	5.2	2.9
-006840	Prezzemolo, fresco	Verdure e ortaggi	80	5	30	3.7	0.6	0	5
-110400	Prosciutto cotto	Carni trasformate e conservate	100	50	138	15.7	7.6	1.7	0
-110410	Prosciutto cotto, alta qualità	Carni trasformate e conservate	100	50	182	18	11.9	0.8	0
-110411	Prosciutto cotto, alta qualità, sgrassato	Carni trasformate e conservate	100	50	126	19.5	5	0.9	0
-110420	Prosciutto cotto, scelto	Carni trasformate e conservate	100	50	155	17.5	9.2	0.6	0
-110421	Prosciutto cotto, scelto, sgrassato	Carni trasformate e conservate	100	50	115	19.4	4	0.5	0
-110401	Prosciutto cotto, sgrassato	Carni trasformate e conservate	100	50	107	17	3.5	1.9	0
-110500	Prosciutto crudo di Modena DOP	Carni trasformate e conservate	100	50	309	25.6	22.9	0.1	0
-110501	Prosciutto crudo di Modena DOP, sgrassato	Carni trasformate e conservate	100	50	201	30.2	8.9	0.1	0
-110505	Prosciutto crudo di montagna	Carni trasformate e conservate	100	50	303	26.2	22	0	0
-110511	Prosciutto crudo di Parma DOP, sgrassato	Carni trasformate e conservate	100	50	176	29.1	6.4	0.4	0
-110515	Prosciutto crudo di Pietraroja	Carni trasformate e conservate	100	50	358	26.2	28.1	0	0
-110520	Prosciutto crudo di San Daniele DOP	Carni trasformate e conservate	100	50	271	25.7	18.6	0.2	0
-110521	Prosciutto crudo di San Daniele DOP, sgrassato	Carni trasformate e conservate	100	50	176	29	6.5	0.4	0
-110510	Prosciutto crudo DOP, di Parma	Carni trasformate e conservate	100	50	269	25.9	18.3	0.3	0
-110525	Prosciutto crudo, disossato	Carni trasformate e conservate	100	50	224	26.9	12.9	0	0
-110526	Prosciutto crudo, disossato, sgrassato	Carni trasformate e conservate	100	50	159	29.3	4.6	0	0
-110530	Prosciutto crudo, gambuccio	Carni trasformate e conservate	100	50	306	26.2	22.4	0	0
-110535	Prosciutto crudo, Nazionale	Carni trasformate e conservate	100	50	235	27.8	13.7	0.1	0
-110536	Prosciutto crudo, Nazionale, sgrassato	Carni trasformate e conservate	100	50	169	30.5	5.1	0.3	0
-166100	Provolone	Formaggi e latticini	100	50	374	28.1	28.2	2	0
-007340	Prugne, fresche	Frutta	90	150	45	0.5	0.1	10.5	1.5
-007350	Prugne, gialle	Frutta	96	150	30	0.5	0.1	6.6	1.4
-007360	Prugne, rosse	Frutta	87	150	45	0.5	0.1	10.5	1.6
-007370	Prugne, secche	Frutta	88	30	236	2.2	0.5	55	8.4
-108530	Quaglia, crudo	Carni fresche	67	100	161	25	6.8	0	0
-000097	Quinoa, cotta, bollita	Cereali e derivati	100	250	140	4.8	2.5	24.3	3.6
-000096	Quinoa, cruda	Cereali e derivati	100	80	376	15.4	8.1	57.8	12.2
-005441	Radicchio rosso di Treviso IGP, precoce	Verdure e ortaggi	95	80	16	1.6	0.1	1	2.5
-005442	Radicchio rosso di Treviso IGP, tardivo	Verdure e ortaggi	75	80	16	1.5	0.1	1.4	2.1
-005443	Radicchio variegato di Castelfranco IGP	Verdure e ortaggi	95	80	16	1.3	0.1	1.4	2.1
-005440	Radicchio, rosso, fresco	Verdure e ortaggi	72	80	19	1.4	0.1	1.6	3
-005450	Radicchio, verde, fresco	Verdure e ortaggi	95	80	14	1.9	0.5	0.5	0
-109510	Rana, crudo	Carni fresche		100	64	15.5	0.2	0	0
-005665	Rape, cotte, bollite	Verdure e ortaggi	100	200	26	1.1	0	4.3	2.8
-005660	Rape, crude	Verdure e ortaggi	69	200	24	1	0	4	2.6
-005670	Ravanelli, freschi	Verdure e ortaggi	99	200	13	0.8	0.1	1.8	1.3
-000876	Ravioli, cotti	Cereali e derivati	100	175	177	7.2	4.6	27.5	1.6
-000875	Ravioli, crudi, freschi	Cereali e derivati	100	125	265	10.6	7.3	40.7	2.2
-122200	Razza	Prodotti della pesca	32	150	68	14.2	0.9	0.7	0
-115710	Rene di bovini	Frattaglie	100	100	118	18.4	4.6	0.8	0
-007770	Ribes, freschi	Frutta	98	150	52	0.9	0	9.7	5.8
-166800	Ricotta di bufala	Formaggi e latticini	100	100	212	10.5	17.3	3.7	0
-166810	Ricotta di pecora	Formaggi e latticini	100	100	157	9.5	11.5	4.2	0
-166820	Ricotta di vacca	Formaggi e latticini	100	100	146	8.8	10.9	3.5	0
-000135	Riso Basmati, cotto, bollito	Cereali e derivati	100	240	113	3	0.6	25.2	0.7
-000130	Riso Basmati, crudo	Cereali e derivati	100	80	367	9	1.9	82.9	1.3
-000145	Riso Venere, cotto, bollito	Cereali e derivati	100	170	160	3.5	0.3	36.9	2.4
-000140	Riso Venere, crudo	Cereali e derivati	100	80	355	7.8	1.3	80.4	5.1
-000100	Riso, brillato	Cereali e derivati	100	80	334	6.7	0.4	80.4	1
-000105	Riso, brillato, cotto, bollito	Cereali e derivati	100	260	100	2	0.1	24.2	0.2
-000110	Riso, integrale	Cereali e derivati	100	80	341	7.5	1.9	77.4	1.9
-000115	Riso, integrale, cotto, bollito	Cereali e derivati	100	250	113	2.5	0.6	25.5	0.8
-000120	Riso, parboiled	Cereali e derivati	100	80	338	7.4	0.3	81.3	0.5
-000125	Riso, parboiled, cotto, bollito	Cereali e derivati	100	236	97	2.1	0.1	23.3	0.3
-003050	Riso, soffiato, da prima colazione	Cereali e derivati	100	30	354	6	1	85.1	1
-166850	Robiola	Formaggi e latticini	100	50	338	20	27.7	2.3	0
-122300	Rombo	Prodotti della pesca	55	150	81	16.3	1.3	1.2	0
-006850	Rosmarino, fresco	Verdure e ortaggi	100	5	110	1.4	4.4	13.5	7
-005460	Rucola o Ruchetta, fresca	Verdure e ortaggi	100	80	30	2.6	0.3	3.9	0.9
-110600	Salame Brianza	Carni trasformate e conservate	100	50	384	26.5	30.5	1	0
-110620	Salame Fabriano	Carni trasformate e conservate	100	50	420	26.5	34.3	1.5	0
-110630	Salame Felino	Carni trasformate e conservate	100	50	375	30.5	27.9	0.5	0
-110640	Salame Milano	Carni trasformate e conservate	100	50	385	25.4	31	1.1	0
-110650	Salame Napoli	Carni trasformate e conservate	100	50	378	27.4	29.7	0.2	0
-110660	Salame nostrano	Carni trasformate e conservate	100	50	370	27.3	28.5	1.1	0
-110670	Salame ungherese	Carni trasformate e conservate	100	50	420	23.6	35.7	1.1	0
-110610	Salami italiani alla cacciatora DOP	Carni trasformate e conservate	100	50	411	28.4	32.7	0.7	0
-122400	Salmone	Prodotti della pesca	65	150	185	18.4	12	1	0
-122410	Salmone, affumicato	Prodotti della pesca	100	50	147	25.4	4.5	1.2	0
-122430	Salmone, in salamoia	Prodotti della pesca	98	50	192	21.1	11.5	1	0
-122500	Salpa	Prodotti della pesca		150	104	18	2.7	2	0
-110730	Salsiccia di Calabria	Carni trasformate e conservate	100	50	366	33.6	25.2	1.3	0
-110700	Salsiccia di fegato	Carni trasformate e conservate	100	50	424	12.4	41.2	0.9	0
-110710	Salsiccia di suino, fresca	Carni trasformate e conservate	100	50	304	15.4	26.7	0.6	0
-110716	Salsiccia di suino, fresca, cotta, in padella	Carni trasformate e conservate	100	50	324	22.2	26.1	0	0
-110720	Salsiccia di suino, secca	Carni trasformate e conservate	100	50	514	22	47.3	0	0
-006860	Salvia, fresco	Verdure e ortaggi	100	5	132	3.9	4.6	15.6	8.2
-122600	Sarago	Prodotti della pesca		150	97	20.7	1.2	1	0
-122700	Sarda	Prodotti della pesca	70	150	129	20.8	4.5	1.5	0
-122800	Sardine	Prodotti della pesca	75	150	225	20.3	15.4	1.5	0
-122806	Sardine, fritte	Prodotti della pesca	75	150	324	32.3	21.2	1	0
-215000	Savoiardi, industriali	Dolci	100	100	395	11.9	9.2	69.6	1.6
-167200	Scamorza	Formaggi e latticini	100	50	334	25	25.6	1	0
-005465	Scarola	Verdure e ortaggi	80	80	19	1.1	0.3	2.3	1.8
-005466	Scarola IV gamma, fresca	Verdure e ortaggi	100	80	17	0.9	0.2	2.2	1.6
-122900	Scorfano	Prodotti della pesca		150	82	19	0.4	0.6	0
-005690	Sedano rapa, crudo	Verdure e ortaggi	72	200	29	1.9	0.1	3.8	3.1
-005684	Sedano, cotto, al microonde	Verdure e ortaggi	100	200	24	2.4	0.2	2.4	1.7
-005680	Sedano, crudo	Verdure e ortaggi	80	200	23	2.3	0.2	2.4	1.6
-192010	Sego di bue	Oli e grassi	100	10	872	0.8	96.5	0	0
-000310	Semola	Cereali e derivati	100	100	346	11.5	0.5	76.9	3.6
-127160	Seppia	Prodotti della pesca	50	150	72	14	1.5	0.7	0
-123000	Sgombro o maccarello	Prodotti della pesca	80	150	170	17	11.1	0.5	0
-123010	Sgombro o maccarello, in salamoia	Prodotti della pesca	100	50	177	19.3	11.1	0	0
-123100	Sogliola	Prodotti della pesca	48	150	83	16.9	1.4	0.8	0
-123110	Sogliola, surgelata	Prodotti della pesca	48	150	81	17.3	1.3	0.1	0
-509010	Soia, bevanda	Prodotti vari	100	125	32	2.9	1.9	0.8	0
-004910	Soia, isolato proteico	Legumi	100	10	369	86.5	0.7	4.5	0
-509020	Soia, salsa	Prodotti vari	100	30	66	8.7	0	8.3	0
-004900	Soia, secca	Legumi	100	50	430	36.9	19.1	23.2	11.9
-509030	Soia, yogurt	Prodotti vari	100	125	72	5	4.2	3.9	
-110740	Soppressata di Calabria	Carni trasformate e conservate	100	50	377	34.2	26.3	0.9	0
-110800	Speck dell'Alto Adige IGP	Carni trasformate e conservate	100	50	299	30.7	19.1	1.2	0
-123200	Spigola	Prodotti della pesca	54	150	82	16.5	1.5	0.6	0
-123220	Spigola d'allevamento, filetti	Prodotti della pesca	100	150	149	21.3	6.8	0.8	0
-005704	Spinaci, cotti, al microonde	Verdure e ortaggi	100	200	35	3.4	0.7	3	1.9
-005705	Spinaci, cotti, bolliti	Verdure e ortaggi	100	200	41	4	0.8	3.5	2.3
-005700	Spinaci, crudi	Verdure e ortaggi	83	200	35	3.4	0.7	2.9	1.9
-005710	Spinaci, surgelati	Verdure e ortaggi	100	200	15	2.8	0	0	1.8
-123300	Storione	Prodotti della pesca		150	145	19.2	7.6	0	0
-167250	Stracchino	Formaggi e latticini	100	50	300	18.5	25.1	0	0
-193010	Strutto o sugna	Oli e grassi	100	10	892	0.3	99	0	0
-108901	Struzzo, solo tessuto muscolare, cotto, al forno	Carni fresche	100	100	101	22.2	1.4	0	0
-108900	Struzzo, solo tessuto muscolare, crudo	Carni fresche	100	100	92	20.9	0.9	0	0
-008930	Succo di frutta	Frutta	100	125	56	0.3	0.1	14.5	0
-124100	Suro o sugarello	Prodotti della pesca	55	150	104	18.3	3	1	0
-106700	Tacchino intero, con pelle, crudo	Carni fresche	70	100	135	18.2	6.9	0	0
-106719	Tacchino intero, senza pelle, cotto, al forno	Carni fresche	59	88	117	23.3	2.6	0	0
-106710	Tacchino intero, senza pelle, crudo	Carni fresche	58	100	109	21.9	2.4	0	0
-106800	Tacchino, coscio, con pelle, crudo	Carni fresche	74	100	131	18.1	6.5	0	0
-106856	Tacchino, fesa, cotta, al forno	Carni fresche	100	80	131	29.6	1.4	0	0
-106850	Tacchino, fesa, crudo	Carni fresche	100	100	107	24	1.2	0	0
-106903	Tacchino, fuso, con pelle, cotto, al forno	Carni fresche	71	88	191	26.7	9.3	0	0
-106900	Tacchino, fuso, con pelle, crudo	Carni fresche	74	100	126	17.9	6	0	0
-106913	Tacchino, fuso, senza pelle, cotto, al forno	Carni fresche	72	85	190	28	8.7	0	0
-106910	Tacchino, fuso, senza pelle, crudo	Carni fresche	73	100	113	18	4.6	0	0
-106963	Tacchino, sovracoscia, senza pelle, cotto, al forno	Carni fresche	84	85	182	30.2	6.8	0	0
-106960	Tacchino, sovracoscia, senza pelle, crudo	Carni fresche	86	100	120	18.5	5.1	0	0
-167600	Taleggio	Formaggi e latticini	100	50	315	19	26.2	0.9	0
-005470	Tarassaco o dente di leone, fresco	Verdure e ortaggi	100	200	37	3.1	1.1	3.7	0.4
-006200	Tartufo, nero	Verdure e ortaggi	79	5	48	6	0.5	0.7	8.4
-123400	Tinca	Prodotti della pesca	55	150	79	17.9	0.5	0.9	0
-123500	Tonno	Prodotti della pesca	90	150	159	21.5	8.1	0.1	0
-123550	Tonno in salamoia, sgocciolato	Prodotti della pesca	100	50	103	25.1	0.3	0	0
-123610	Tonno sott'olio, sgocciolato	Prodotti della pesca	100	50	192	25.2	10.1	0	0
-006596	Topinambur, cotto, bollito	Verdure e ortaggi	100	200	52	1.6	0.1	10.6	2.7
-202800	Torrone alla mandorla	Dolci	100	30	483	10.8	26.8	52	1.9
-209010	Torta margherita	Dolci	100	100	370	8.9	10.4	63.4	1.4
-000880	Tortellini, freschi	Cereali e derivati	100	125	302	12.2	7.1	49.9	1.2
-000885	Tortellini, freschi, cotti	Cereali e derivati	100	150	158	6.4	3.7	26	0.6
-000890	Tortellini, secchi	Cereali e derivati	100	100	379	15.7	10.8	57.6	1.6
-123900	Triglia	Prodotti della pesca	60	150	123	15.8	6.2	1.1	0
-115800	Trippa di bovini	Frattaglie	100	100	108	15.8	5	0	0
-124000	Trota	Prodotti della pesca	55	150	86	14.7	3	0	0
-124050	Trota iridea d'allevamento, filetti	Prodotti della pesca	100	150	118	20.3	4.1	0	0
-124010	Trota surgelata	Prodotti della pesca	55	150	92	17.8	2.3	0	0
-124013	Trota surgelata, cotta, al microonde	Prodotti della pesca	55	150	105	20.4	2.6	0	0
-124014	Trota surgelata, cotta, in forno	Prodotti della pesca	55	110	136	26.7	3.2	0	0
-508100	Tè, foglie	Prodotti vari	100	2	108	19.6	2	3	
-180010	Uova di anatra, intero	Uova	88	50	190	12.2	15.4	0.7	0
-182010	Uova di gallina, albume	Uova	100	35	43	10.7	0	0	0
-181100	Uova di gallina, intero	Uova	91	50	128	12.4	8.7	0	0
-181500	Uova di gallina, intero, congelato	Uova	100	50	128	12.4	8.7	0	0
-181117	Uova di gallina, intero, cotto, a frittata o strapazzato	Uova	100	50	150	14.6	10.2	0	0
-181105	Uova di gallina, intero, cotto, alla coque o sodo	Uova	100	50	128	12.4	8.7	0	0
-181600	Uova di gallina, intero, in polvere	Uova	100	100	537	51.9	36.4	0.4	0
-183010	Uova di gallina, tuorlo	Uova	100	15	325	15.8	29.1	0	0
-183800	Uova di gallina, tuorlo, congelato	Uova	100	15	325	15.8	29.1	0	0
-183015	Uova di gallina, tuorlo, cotto, in camicia	Uova	100	15	325	15.8	29.1	0	0
-183900	Uova di gallina, tuorlo, in polvere	Uova	100	100	642	31.2	57.5	0.02	0
-185010	Uova di oca, intero	Uova	87	50	189	13.8	14.4	1	0
-189010	Uova di tacchina, intero	Uova	87	50	147	12.8	10.2	1	0
-007390	Uva, bianca, fresca	Frutta	95	150	86	0.4	0.1	21.5	1.4
-007380	Uva, fresca	Frutta	94	150	64	0.5	0.1	15.6	1.5
-007400	Uva, nera, fresca	Frutta	95	150	53	0.5	0.1	12.6	1.6
-007410	Uva, secca	Frutta	100	30	293	1.9	0.6	72	5.2
-007420	Uva, succo, in cartone	Frutta	100	125	66	0.3	0	17.3	0
-006990	Vegetali misti, surgelati	Verdure e ortaggi	100	200	67	3.3	0.3	13.7	
-101521	Vitello, filetto, cotto in padella	Carni fresche	100	83	126	24.4	3.2	0	0
-101520	Vitello, filetto, crudo	Carni fresche	100	100	107	20.7	2.7	0	0
-127170	Vongola	Prodotti della pesca	25	150	65	9.8	1.2	3.9	0
-214500	Wafer ricoperto di cioccolato	Dolci	100	30	498	8.2	26.6	60.3	
-110906	Wurstel di puro suino, cotto	Carni trasformate e conservate	100	50	259	14.6	22.2	0.3	0
-110900	Wurstel di puro suino, crudo	Carni trasformate e conservate	100	50	250	13.2	21.1	1.9	0
-158000	Yogurt caprino	Latte e yogurt	100	125	60	3.6	2.9	5.1	0
-150500	Yogurt da latte intero, alla frutta	Latte e yogurt	100	125	80	3.4	2.8	10.5	1
-151000	Yogurt da latte, parzialmente scremato	Latte e yogurt	100	125	43	3.4	1.7	3.8	0
-152000	Yogurt da latte, scremato	Latte e yogurt	100	125	36	3.3	0.9	4	0
-150030	Yogurt greco, 0% lipidi	Latte e yogurt	100	125	51	9	0	4	0
-150035	Yogurt greco, 0% lipidi, aromatizzato	Latte e yogurt	100	125	86	7.5	0	15	0
-150020	Yogurt greco, da latte intero	Latte e yogurt	100	125	115	6.4	9.1	2	0
-150025	Yogurt greco, da latte magro, alla frutta	Latte e yogurt	100	125	74	6	0.9	11	0.5
-150015	Yogurt, 0% lipidi	Latte e yogurt	100	125	42	4.7	0.1	6	0
-150010	Yogurt, da latte intero	Latte e yogurt	100	125	66	3.8	3.9	4.3	0
-110950	Zampone confezionato, precotto	Carni trasformate e conservate	100	50	361	19.1	31.6	0	0
-110955	Zampone Modena IGP, cotto	Carni trasformate e conservate	100	50	262	23.7	17.5	2.6	0
-005720	Zucca gialla, fresca	Verdure e ortaggi	81	200	29	1.1	0.1	3.5	5.5
-201500	Zucchero, saccarosio	Dolci	100	5	392	0	0	104.5	0
-005741	Zucchine chiare, cotte, al vapore	Verdure e ortaggi	100	200	20	2	0	2.5	1.3
-005742	Zucchine chiare, cotte, in padella grigliate	Verdure e ortaggi	100	200	29	0	0.2	5.7	2.8
-005740	Zucchine, chiare	Verdure e ortaggi	86	200	17	1.9	0.1	1.7	1.2
-005744	Zucchine, chiare, cotte, al microonde	Verdure e ortaggi	100	200	23	2	0.1	3	1.6
-005735	Zucchine, cotte, bollite	Verdure e ortaggi	100	200	30	3.2	0.2	3.4	1.3
-005730	Zucchine, crude	Verdure e ortaggi	88	200	16	1.5	0.1	1.7	1.2
-005754	Zucchine, scure, cotte, al microonde	Verdure e ortaggi	100	200	23	1.8	0	3.5	1.5
-005751	Zucchine, scure, cotte, al vapore	Verdure e ortaggi	100	200	20	1.6	0.1	2.7	1.5
-005752	Zucchine, scure, cotte, in padella grigliate	Verdure e ortaggi	100	200	37	2.7	0.1	5.6	2
-005750	Zucchine, scure, crude	Verdure e ortaggi	89	200	17	1.4	0.1	2.1	1.2
+code	name	category	edible_pct	portion_g	kcal	protein_g	fat_g	carbs_g	fiber_g	sugars_g	salt_g
+202020	"|Caramelle tipo ""mou""|"	Dolci	100	5	430	2.1	17.2	71.1	0	70	0.8
+120010	Acciuga o alice	Prodotti della pesca	75	150	96	16.8	2.6	1.5	0	1.5	0.28
+120020	Acciuga o alice, sott'olio	Prodotti della pesca	100	50	206	25.9	11.3	0.2	0	0.2	1.2
+120030	Acciuga o alice, sotto sale	Prodotti della pesca	50	50	137	25	3.1	2.3	0	2.3	
+005000	Aglio	Verdure e ortaggi	75	5	53	8.4	0.8	1	4.3	1	0.01
+005004	Aglio Bianco Piacentino	Verdure e ortaggi	94	3	47	7.2	0.6	0.9	4.7	0.94	0.01
+005001	Aglio Rosso di Castelliri	Verdure e ortaggi	95	5	52	8.9	0.5	1.02	3.8	1.02	0.01
+005002	Aglio Rosso di Procerno	Verdure e ortaggi	94	4	57	8.9	0.9	1	4.6	1.02	0.01
+005003	Aglio Rosso di Sulmona	Verdure e ortaggi	96	3	58	8.7	1.3	1	4	0.97	0.01
+104033	Agnello, coscio, cotto, al forno	Carni fresche	100	75	118	23	2.9	0	0	0	0.16
+104030	Agnello, coscio, crudo	Carni fresche	100	100	102	20	2.5	0	0	0	0.17
+104043	Agnello, costoletta, cotto, al forno	Carni fresche	100	75	118	22.7	3	0	0	0	0.18
+104040	Agnello, costoletta, crudo	Carni fresche	100	100	106	20.4	2.7	0	0	0	0.17
+104029	Agnello, cotto, al forno	Carni fresche	100	75	199	25	11	0	0	0	0.27
+104020	Agnello, crudo	Carni fresche	100	100	159	20	8.8	0	0	0	0.22
+005025	Agretti, cotti, bolliti	Verdure e ortaggi	100	200	25	2.1	0.2	2.6	2.7	2.6	
+005010	Agretti, crudi	Verdure e ortaggi	97	200	22	1.8	0.2	2.2	2.3	2.2	
+007010	Albicocche, disidratate	Frutta	100	30	356	5.6	1	80.6	11	80.6	0.08
+007000	Albicocche, fresche	Frutta	94	150	42	0.4	0.1	9.8	1.5	9.8	0
+007020	Albicocche, sciroppate	Frutta	100	30	65	0.4	0.1	16.1	0.9	16.1	0.03
+007030	Albicocche, secche	Frutta	100	30	286	5	0.5	66.5	6	66.5	0.07
+007700	Amarene, fresche	Frutta	85	150	44	0.8	0	10.2	1.1	10.2	0.01
+008610	Anacardi	Frutta secca a guscio e semi oleaginosi	100	30	604	15	46	33	3	5.6	0.04
+007460	Ananas, fresco	Frutta	57	150	42	0.5	0	10	1	10	0.01
+007470	Ananas, sciroppato	Frutta	100	30	66	0.5	0	16.6	0.7	16.6	0.01
+106010	Anatra domestica, crudo	Carni fresche	80	100	159	21.4	8.2	0	0	0	0.28
+120250	Anguilla d'allevamento, filetti	Prodotti della pesca	100	150	237	16.2	18.9	0.5	0	0.5	
+120230	Anguilla di fiume	Prodotti della pesca	71	150	261	11.8	23.7	0.1	0	0.1	0.16
+120240	Anguilla di mare	Prodotti della pesca	70	150	237	14.6	19.6	0.7	0	0.7	0.22
+120210	Anguilla, affumicata	Prodotti della pesca		50	231	17.5	17.8	0.2	0	0.2	
+120220	Anguilla, marinata	Prodotti della pesca	88	50	259	14.8	21.9	0.6	0	0.6	
+115010	Animelle di bovini	Frattaglie	100	100	304	11.5	28.6	0.1	0	0.1	
+115019	Animelle di bovini, cotte	Frattaglie	100	100	434	16.4	40.9	0.2	0	0.2	
+007480	Anona, fresca	Frutta	72	150	73	1.8	0.2	15.8	2.2		0.01
+008500	Arachidi, tostate	Frutta secca a guscio e semi oleaginosi	65	30	620	29	50	8.5	10.9	3.1	0.01
+128050	Aragosta	Prodotti della pesca	29	150	85	16	1.9	1	0	1	0.44
+128055	Aragosta, bollita	Prodotti della pesca	29	150	86	16.2	1.9	1	0	1	0.45
+008011	Arance bionde succo, fresco	Frutta	100	150	38	0.5	0	9.6	0	9.6	
+008001	Arance bionde, fresche	Frutta	68	150	45	0.7	0.2	9.9	1.6	9.9	
+008005	Arance Moro, fresche	Frutta	59	150	42	0.7	0.2	9	1.6	9	
+008012	Arance rosse succo, fresco	Frutta	100	150	39	0.5	0	9.8	0	9.8	
+008004	Arance rosse, fresche	Frutta	64	150	45	0.7	0.2	9.9	1.6	9.9	
+008006	Arance Sanguinello, fresche	Frutta	65	150	47	0.7	0.1	10.6	1.6	10.6	
+008010	Arance succo, fresco	Frutta	100	150	33	0.5	0	8.2	0	8.2	0.01
+008007	Arance Tarocco, fresche	Frutta	57	150	45	0.7	0.2	10	1.6	10	
+008002	Arance Valencia, fresche	Frutta	69	150	39	0.7	0.3	8	1.6	8	
+008003	Arance Washington Navel, fresche	Frutta	62	150	44	1	0.2	9.4	1.6	9.4	
+008000	Arance, fresche	Frutta	80	150	37	0.7	0.2	7.8	1.6	7.8	0.01
+401010	Aranciata	Prodotti vari	100	125	38	0.1	0	10	0	10	0
+120300	Aringa	Prodotti della pesca	70	150	216	16.5	16.7	0	0	0	0.24
+120310	Aringa, affumicata	Prodotti della pesca	70	50	194	19.9	12.7	0	0	0	3.09
+120320	Aringa, marinata	Prodotti della pesca	95	50	199	18.3	14	0	0	0	2.58
+120330	Aringa, sotto sale	Prodotti della pesca	73	50	218	19.8	15.4	0	0	0	12.65
+005030	Asparagi di bosco, crudi	Verdure e ortaggi	57	200	40	4.6	0.2	4	2.2	4	0.01
+005045	Asparagi di campo, cotti, bolliti	Verdure e ortaggi	85	200	34	3.8	0.2	3.4	2.1	3.4	0
+005040	Asparagi di campo, crudi	Verdure e ortaggi	87	200	33	3.6	0.2	3.3	2	3.3	0
+005050	Asparagi di serra, crudi	Verdure e ortaggi	52	200	28	3	0.1	3	2.1	3	0
+007490	Avocado, fresco	Frutta	76	150	238	4.4	23	1.8	3.3	1.8	0.01
+207010	Baba' al rhum	Dolci	100	100	288	5.9	5.7	41.2	1.1	18.5	
+007500	Babaco, fresco	Frutta	89	150	24	0.7	0.2	4.5	1.1	4.5	0
+007510	Banane, fresche	Frutta	65	150	76	1.2	0.3	17.4	1.8	14.8	0
+005065	Barbabietole rosse, cotte, bollite	Verdure e ortaggi	100	200	43	2.1	0	7.8	2.6	7.8	
+005060	Barbabietole rosse, crude	Verdure e ortaggi	82	200	25	1.1	0	4	2.6	4	0.21
+214000	Barretta al cocco ricoperta di cioccolato, industriale	Dolci	100	30	472	4.8	26.1	58.2		53.7	0.45
+006800	Basilico, fresco	Verdure e ortaggi	100	5	42	3.1	0.8	5.2	1.6	5.1	0.02
+003000	Bastoncini di crusca di frumento	Cereali e derivati	100	30	301	14	3.2	38.4	35.9	10.8	1.53
+403010	Bevanda alcolica, Aperitivo a base di vino	Bevande alcoliche	100	75	186	0	0	17	0	17	0
+404010	Bevanda alcolica, Birra chiara	Bevande alcoliche	100	250	34	0.2	0	3.5	0	3.5	0.03
+408010	Bevanda alcolica, Brandy	Bevande alcoliche	100	40	230	0	0	0	0	0	0
+408100	Bevanda alcolica, Grappa	Bevande alcoliche	100	40	242	0	0	0	0	0	0
+407010	Bevanda alcolica, Liquori da dessert	Bevande alcoliche	100	75	314	0	0	31.1	0	31.1	0
+407510	Bevanda alcolica, Marsala all'uovo	Bevande alcoliche	100	75	150	0	0	12.4	0	12.4	0
+406010	Bevanda alcolica, Marsala tipico	Bevande alcoliche	100	75	203	0	0	28	0	28	0
+409000	Bevanda alcolica, Spumante	Bevande alcoliche	100	75	87	0	0	0.6	0	0.6	0.01
+406500	Bevanda alcolica, Vermouth dolce	Bevande alcoliche	100	75	139	0	0	13.9	0	13.9	0.07
+406510	Bevanda alcolica, Vermouth secco	Bevande alcoliche	100	75	121	0	0	4	0	4	0.04
+405010	Bevanda alcolica, Vino da pasto bianco	Bevande alcoliche	100	125	70	0	0	0	0	0	0.01
+405020	Bevanda alcolica, Vino da pasto rosso	Bevande alcoliche	100	125	75	0	0	0	0	0	0.01
+408900	Bevanda alcolica, Whisky	Bevande alcoliche	100	40	245	0	0	0	0	0	0
+401100	Bevanda tipo cola	Prodotti vari	100	125	39	0	0	10.5	0	10.5	0.02
+005084	Bieta, cotta, al microonde	Verdure e ortaggi	100	200	15	1.3	0.1	1.8	1.2	1.8	
+005085	Bieta, cotta, bollita	Verdure e ortaggi	100	200	18	1.5	0.1	2.1	1.4	2.1	0.02
+005080	Bieta, cruda	Verdure e ortaggi	82	200	15	1.3	0.1	1.8	1.2	1.8	0.03
+000960	Biscotti, alla soia	Cereali e derivati	100	30	375	11.5	6.1	70.8	4.5	6.2	0.45
+000900	Biscotti, frollini	Cereali e derivati	100	30	426	7.2	13.8	71.7	1.9	22	0.56
+000910	Biscotti, integrali	Cereali e derivati	100	30	419	7.8	12.3	70.8	6	28.8	0.56
+000970	Biscotti, integrali, con soia	Cereali e derivati	100	30	464	11.5	20.4	60.4	3.8	1.1	0.45
+000950	Biscotti, secchi	Cereali e derivati	100	30	404	6.6	7.9	80.4	2.6	18.5	1.02
+000990	Biscotti, wafers	Cereali e derivati	100	30	452	7.1	15	76.2	1.6	26.7	0.17
+120400	Boga	Prodotti della pesca		150	87	18.3	1.2	0.8	0	0.8	
+120590	Bottarga, cefalo muggine	Prodotti della pesca	100	50	405	43.5	25.7	0	0	0	
+101230	Bovino adulto o vitellone, copertina di sotto, copertina di spalla, sottospalla e collo, crudo	Carni fresche	100	100	132	20.3	5.7	0	0	0	0.13
+101150	Bovino adulto o vitellone, costata, crudo	Carni fresche	100	100	140	21.3	6.1	0	0	0	0.1
+101160	Bovino adulto o vitellone, fesa, crudo	Carni fresche	100	100	103	21.8	1.8	0	0	0	0.1
+101170	Bovino adulto o vitellone, filetto, crudo	Carni fresche	100	100	127	20.5	5	0	0	0	0.1
+101240	Bovino adulto o vitellone, geretto anteriore e posteriore, crudo	Carni fresche	100	100	112	20.9	3.2	0	0	0	0.14
+101180	Bovino adulto o vitellone, girello, crudo	Carni fresche	100	100	110	21.3	2.8	0	0	0	0.1
+101190	Bovino adulto o vitellone, lombata, crudo	Carni fresche	100	100	134	21.8	5.2	0	0	0	0.11
+101200	Bovino adulto o vitellone, noce, crudo	Carni fresche	100	100	106	21.3	2.3	0	0	0	0.1
+101250	Bovino adulto o vitellone, pancia, biancostato e punta di petto, crudo	Carni fresche	100	100	171	19.7	10.2	0	0	0	0.14
+101210	Bovino adulto o vitellone, scamone, crudo	Carni fresche	100	100	119	21.4	3.7	0	0	0	0.1
+101220	Bovino adulto o vitellone, sottofesa, crudo	Carni fresche	100	100	111	22	2.6	0	0	0	0.1
+101260	Bovino adulto o vitellone, spalla, muscolo, girello e fesone, crudo	Carni fresche	100	100	108	21.5	2.4	0	0	0	0.13
+101120	Bovino adulto o vitellone, tagli anteriori, crudo	Carni fresche	100	100	145	20.5	7	0	0	0	0.11
+101130	Bovino adulto o vitellone, tagli posteriori, crudo	Carni fresche	100	100	117	21.5	3.4	0	0	0	0.14
+110020	Bresaola della Valtellina IGP	Carni trasformate e conservate	100	50	152	33.1	2	0.4	0		4
+160410	Brie	Formaggi e latticini	100	50	320	19.3	26.9	0.2	0	0.2	1.75
+005095	Broccoletti di rapa, cotti, bolliti	Verdure e ortaggi	100	200	29	3.1	0.3	2.1	3.1	2.1	0.01
+005090	Broccoletti di rapa, crudi	Verdure e ortaggi	60	200	28	2.9	0.3	2	2.9	2	0.02
+005105	Broccolo a testa, cotto, bollito	Verdure e ortaggi	100	200	34	3.1	0.4	3.2	3.2	3.2	0.02
+005110	Broccolo a testa, crudo	Verdure e ortaggi	51	200	33	3	0.4	3.1	3.1	3.1	0.03
+102000	Bufalo, solo tessuto muscolare, crudo	Carni fresche	100	100	98	22	1.1	0	0	0	
+160420	Burrini	Formaggi e latticini	100	50	527	22.1	47	4.1	0	4.1	
+190010	Burro	Oli e grassi	100	10	758	0.8	83.4	1.1	0	1.1	0.02
+009010	Burro d'arachidi	Oli e grassi	100	10	625	24.9	53.7	8	6	4.4	0.93
+160430	Butirro calabro	Formaggi e latticini	100	50	449	24.7	38.8	0.3	0	0.3	
+508010	Cacao amaro, in polvere	Prodotti vari	100	30	355	20.4	25.6	11.5		0	
+160800	Caciocavallo	Formaggi e latticini	100	50	431	35.7	31.1	2.3	0	2.3	2.4
+160810	Cacioricotta di capra	Formaggi e latticini	100	100	182	11.9	14.3	1.5	0	1.5	
+160820	Caciotta mista	Formaggi e latticini	100	50	384	24.5	31	1.8	0	1.8	
+160830	Caciotta romana di pecora	Formaggi e latticini	100	50	364	27.7	27.3	2.1	0	2.1	
+160840	Caciotta toscana	Formaggi e latticini	100	50	368	24.6	29.6	0.8	0	0.8	1.28
+160860	Caciottina fresca	Formaggi e latticini	100	100	263	17.3	21.3	0.5	0	0.5	
+166010	Caciottina mista	Formaggi e latticini	100	50	370	26.9	28.5	1.5	0	1.5	
+160850	Caciottina vaccina	Formaggi e latticini	100	50	324	21.1	25.4	3	0	3	
+508200	Caffe' tostato	Prodotti vari	100	6	287	10.4	15.4	28.5			0.18
+127100	Calamaro	Prodotti della pesca	65	150	68	12.6	1.7	0.6	0	0.6	0.46
+127110	Calamaro surgelato	Prodotti della pesca	59	150	68	13.1	1.5	0.6	0	0.6	0.46
+160870	Camembert	Formaggi e latticini	100	100	307	20.9	24.7	0.2	0	0.2	1.62
+204010	Canditi	Dolci	100	30	292	0.5	0	75	4.5	75	
+207020	Cannoli alla crema, industriale	Dolci	100	100	368	6.2	20.7	41.9		10.9	
+120290	Capitone	Prodotti della pesca	65	150	247	13	21.5	0.5	0	0.5	
+110100	Capocollo	Carni trasformate e conservate	100	50	450	20.8	40.2	1.4	0	1.4	
+110110	Capocollo di Calabria	Carni trasformate e conservate	100	50	344	29.1	24.9	0.9	0	0.9	
+104250	Capra, solo tessuto muscolare, crudo	Carni fresche	100	100	106	21.2	2.3	0	0	0	
+104300	Capretto, crudo	Carni fresche	75	100	113	19.2	4	0	0	0	
+202010	Caramelle dure	Dolci	100	5	344	0	0	91.6	0	91.6	
+005124	Carciofi, cotti, al microonde	Verdure e ortaggi	100	200	34	2.8	0.2	2.5	5.6	1.9	
+005125	Carciofi, cotti, bolliti	Verdure e ortaggi	100	200	44	3.6	0.3	3.3	7.4	2.6	0.25
+005120	Carciofi, crudi	Verdure e ortaggi	34	200	33	2.7	0.2	2.5	5.5	1.9	0.33
+005130	Carciofi, surgelati	Verdure e ortaggi	100	200	32	2.7	0.2	2.5	5	1.9	
+005131	Carciofo Romanesco IGP	Verdure e ortaggi	37	200	48	3	0.2	6.1	5.5		
+005136	Carciofo, Spinoso sardo	Verdure e ortaggi	37	200	45	1.9	0.2	8.9	1	1.7	0.26
+005132	Carciofo, verde, precoce	Verdure e ortaggi	34	200	45	2.9	0.2	5.4	5.5		
+005134	Carciofo, violetto, precoce	Verdure e ortaggi	36	200	43	2.8	0.2	5.2	5.5		
+005195	Cardi, cotti, bolliti	Verdure e ortaggi	100	200	22	1	0.2	2.9	2.5	2.5	0.04
+005140	Cardi, crudi	Verdure e ortaggi	70	200	13	0.6	0.1	1.7	1.5	1.5	0.06
+113010	Carne bovina in gelatina, in scatola	Carni trasformate e conservate	100	50	67	12.6	1.8	0	0	0	1.64
+113020	Carne bovina pressata, in scatola	Carni trasformate e conservate	100	50	141	16.5	8.3	0	0	0	1.74
+005154	Carote, cotte, al microonde	Verdure e ortaggi	100	200	41	1.1	0.2	7.7	3.1	7.7	
+005155	Carote, cotte, bollite	Verdure e ortaggi	100	200	47	1.3	0.2	8.7	3.6	8.7	0.18
+005150	Carote, crude	Verdure e ortaggi	95	200	41	1.1	0.2	7.6	3.1	7.6	0.24
+120500	Carpa	Prodotti della pesca	50	150	139	18.9	7.1	0	0	0	0.12
+008510	Carrube	Frutta secca a guscio e semi oleaginosi	100	50	253	3.3	0.7	49.9	23.1	48.9	
+008520	Castagne	Frutta secca a guscio e semi oleaginosi	85	30	174	2.9	1.7	36.7	4.7	8.9	0.02
+008521	Castagne, arrostite	Frutta secca a guscio e semi oleaginosi	82	30	210	3.7	2.4	41.8	8.3	10.7	0.03
+008525	Castagne, bollite	Frutta secca a guscio e semi oleaginosi	88	30	130	2.5	1.3	26.1	5.4	7.5	
+008530	Castagne, secche	Frutta secca a guscio e semi oleaginosi	100	30	315	6	3.4	62	13.8	16.1	0.04
+103020	Cavallo, solo tessuto muscolare, crudo	Carni fresche	100	100	106	23.5	1	0.7	0	0	
+103010	Cavallo, tessuto muscolare e grasso, crudo	Carni fresche	100	100	143	19.8	6.8	0.6	0	0	0.18
+123390	Caviale, storione	Prodotti della pesca	100	50	255	26.9	15	3.3	0	3.3	5.5
+005164	Cavolfiore, cotto, al microonde	Verdure e ortaggi	100	200	30	3.2	0.2	2.8	2.4	2.4	
+005165	Cavolfiore, cotto, bollito	Verdure e ortaggi	100	200	31	3.4	0.2	2.9	2.6	2.6	0.01
+005160	Cavolfiore, crudo	Verdure e ortaggi	66	200	30	3.2	0.2	2.7	2.4	2.4	0.02
+005175	Cavoli di Bruxelles, cotti, bolliti	Verdure e ortaggi	100	200	53	4.7	0.6	4.6	5.6	3.7	0.01
+005170	Cavoli di Bruxelles, crudi	Verdure e ortaggi	76	200	47	4.2	0.5	4.2	5	3.3	0.01
+005185	Cavolo broccolo verde ramoso, cotto, bollito	Verdure e ortaggi	100	200	52	6	0.5	3.5	5.3	3.5	0.01
+005180	Cavolo broccolo verde ramoso, crudo	Verdure e ortaggi	72	200	30	3.4	0.3	2	3	2	0.02
+005190	Cavolo cappuccio, rosso, crudo	Verdure e ortaggi	94	200	22	1.9	0.2	2.7	1	2.7	0.02
+005205	Cavolo cappuccio, verde, cotto, bollito	Verdure e ortaggi	100	200	24	2.1	0.1	2.5	2.6	2.5	0.04
+005200	Cavolo cappuccio, verde, crudo	Verdure e ortaggi	93	200	24	2.1	0.1	2.5	2.6	2.5	0.06
+005215	Cavolo verza, cotto, bollito	Verdure e ortaggi	100	200	29	2	0.1	3.8	2.9	3.8	
+005210	Cavolo verza, cruda	Verdure e ortaggi	92	200	29	2	0.1	3.8	2.9	3.8	
+004010	Ceci, in scatola, scolati	Legumi	100	150	111	6.7	2.3	13.9	5.7	1	0.78
+004000	Ceci, secchi	Legumi	100	50	343	20.9	6.3	46.9	13.6	3.7	0.01
+004005	Ceci, secchi, cotti, bolliti	Legumi	100	290	132	7	2.4	18.9	5.8	1.3	0.01
+120510	Cefalo muggine	Prodotti della pesca	55	150	127	15.8	6.8	0.7	0	0.7	0.17
+120610	Cernia surgelata	Prodotti della pesca	68	150	88	17	2	0.5	0	0.5	0.3
+115110	Cervello di bovini	Frattaglie	100	100	157	10	12.7	0.8	0	0.8	0.35
+108010	Cervo, solo tessuto muscolare, crudo	Carni fresche	100	100	91	21	0.8	0	0	0	
+005220	Cetrioli, freschi	Verdure e ortaggi	77	200	16	0.7	0.5	1.8	0.8	1.8	0.03
+160880	Cheddar	Formaggi e latticini	100	50	388	26.7	31	0.5	0	0.5	1.52
+119020	Cheese burger, fast food	Fast-food a base di carne	100	130	300	16.3	13.1	30.2	2		
+119040	Chicken Nuggets, fast food	Fast-food a base di carne	100	109	242	17.7	12.4	15.4	0.9	1.5	
+110130	Ciccioli	Carni trasformate e conservate	100	50	636	45.2	50.6	0	0		1.6
+005230	Cicoria, da taglio, coltivata, cruda	Verdure e ortaggi	89	200	14	1.2	0.1	1.7	1.2	1.7	0.02
+005245	Cicoria, di campo, cotta, bollita	Verdure e ortaggi	100	200	17	1.4	0.2	0.7	3.6	0.7	0
+005240	Cicoria, di campo, cruda	Verdure e ortaggi	80	200	17	1.4	0.2	0.7	3.6	0.7	0
+005250	Cicoria, witloof o indivia belga, cruda	Verdure e ortaggi	100	200	20	0.7	0.3	3.2	1.1	3.2	
+007720	Ciliege, candite	Frutta	100	30	252	0.4	0	66.4	0.9	66.4	0.07
+007710	Ciliege, fresche	Frutta	86	150	48	0.8	0.1	11	1.3	11	0.01
+203010	Cioccolato, al latte	Dolci	100	30	552	7.3	36.3	50.5	3.2	50.5	0.3
+203030	Cioccolato, al latte con nocciole	Dolci	100	30	553	7.2	36.9	48.6	4.8	48.6	
+203020	Cioccolato, fondente	Dolci	100	30	531	6.6	33.6	49.7	8	49.7	0.03
+005305	Cipolle, cotte, bollite	Verdure e ortaggi	100	200	39	1.4	0.1	7.8	1.4	7.8	0.02
+005300	Cipolle, crude	Verdure e ortaggi	83	200	28	1	0.1	5.7	1	5.7	0.03
+005315	Cipolline, cotte, bollite	Verdure e ortaggi	100	200	53	1.7	0.1	10.9	2.4	10.9	
+005310	Cipolline, crude	Verdure e ortaggi	93	200	42	1.3	0.1	8.5	1.9	8.5	
+008020	Clementine, fresche	Frutta	75	150	40	0.9	0.1	8.7	1.2	8.7	0.01
+007530	Cocco, essiccato	Frutta secca a guscio e semi oleaginosi	100	30	669	5.6	62	16.4	13.7	16.4	0.07
+007520	Cocco, fresco	Frutta secca a guscio e semi oleaginosi	52	50	358	3.5	35	4.4	6.1	4.4	0.06
+008940	Cocktail di frutta sciroppata	Frutta	100	150	59	0.4	0	14.8	1	14.8	0.01
+007040	Cocomero, fresco	Frutta	52	150	16	0.4	0	3.7	0.2	3.7	0.01
+107010	Coniglio intero, crudo	Carni fresche	71	100	118	19.9	4.3	0	0	0	0.17
+107030	Coniglio, coscio, crudo	Carni fresche	83	100	137	21	5.9	0	0	0	
+107020	Coniglio, intero surgelato, crudo	Carni fresche	69	100	116	20.3	3.9	0	0	0	0.17
+107019	Coniglio, intero, cotto	Carni fresche	71	88	166	27.9	6	0	0	0	
+110150	Coppa	Carni trasformate e conservate	100	50	400	28.9	31.6	0	0		4.9
+115120	Coratella di agnello	Frattaglie	100	100	109	15.7	4.7	1	0	1	
+115130	Coratella di vitello	Frattaglie	100	100	100	17.1	3.2	0.8	0	0.8	
+120710	Coregone	Prodotti della pesca	69	150	135	19	6.5	0.1	0	0.1	
+003020	Corn flakes	Cereali e derivati	100	30	367	6.6	0.8	87.4	2.8	10.4	1.25
+002500	Cornetti	Cereali e derivati	100	50	403	7.2	18.3	54.7	2.1	10.6	0.88
+120810	Corvina	Prodotti della pesca	65	150	88	20	0.8	0.2	0	0.2	0.32
+110195	Cotechino Modena IGP, cotto	Carni trasformate e conservate	100	50	253	23.6	16.3	3.2	0		2.2
+110190	Cotechino, confezionato precotto	Carni trasformate e conservate	100	50	449	17.2	42.3	0	0	0	2.85
+000046	Couscous, cotto	Cereali e derivati	100	185	179	3.6	1.1	39.7	2.7	1.3	0.24
+000045	Couscous, crudo	Cereali e derivati	100	80	361	13.7	1.1	76.5	4.5	2.7	0.03
+127120	Cozza o mitilo	Prodotti della pesca	32	150	84	11.7	2.7	3.4	0	0.3	0.72
+001000	Crackers, al formaggio	Cereali e derivati	100	30	498	10.1	25.5	59.2	2.8	5.5	1.72
+001010	Crackers, alla soia	Cereali e derivati	100	30	421	13.1	11.7	67.7	4.9	6.3	
+001030	Crackers, integrali	Cereali e derivati	100	30	402	12	11.4	61.7	10	2.1	1.76
+001020	Crackers, salati	Cereali e derivati	100	30	386	9.4	10	67.5	2.8	0	
+140100	Crema di latte, 12% di lipidi	Latte e yogurt	100	10	140	2.8	12.5	4.4	0	4.4	
+203500	Crema di nocciole e cacao	Dolci	100	30	537	6.9	32.4	58.1		58.1	0.12
+160890	Crescenza	Formaggi e latticini	100	100	281	16.1	23.3	1.9	0	1.9	0.88
+002510	Croissants	Cereali e derivati	100	50	362	8.3	20.3	38	1.6	1.1	0.97
+208500	Crostata, con crema al cacao, industriale	Dolci	100	100	492	4.6	24.7	67		36.1	0.52
+208520	Crostata, con marmellata di albicocche, industriale	Dolci	100	100	421	0.9	16.5	71.7		28.4	0.59
+208510	Crostata, con marmellata, industriale	Dolci	100	100	339	4.9	8.2	65.5			
+000150	Crusca di frumento	Cereali e derivati	100	30	290	14.1	5.5	26.6	42.4	3.8	0.07
+115210	Cuore di bovini	Frattaglie	100	100	123	16.8	6	0.5	0	0.5	0.24
+115219	Cuore di bovini, cotto	Frattaglie	100	100	189	25.8	9.2	0.8	0	0.8	
+115220	Cuore di equini	Frattaglie	100	100	146	18.7	7.7	0.6	0	0.6	
+115230	Cuore di ovini	Frattaglie	100	100	134	16.9	7.2	0.4	0	0.4	
+115240	Cuore di pollo	Frattaglie	100	100	103	14.1	5.1	0.2	0	0.2	
+115249	Cuore di pollo, cotto	Frattaglie	100	100	147	20.1	7.3	0.3	0	0.3	
+115250	Cuore di suino	Frattaglie	100	100	159	18.3	9.4	0.4	0	0.4	0.2
+115260	Cuore di tacchino	Frattaglie	100	100	103	14.1	5.1	0.2	0	0.2	
+115269	Cuore di tacchino, cotto	Frattaglie	100	100	147	20.1	7.3	0.3	0	0.3	
+503010	Dadi da brodo	Prodotti vari	100	10	250	15.7	18.7	5			
+108100	Daino, solo tessuto muscolare, crudo	Carni fresche	100	100	95	21	1.2	0	0	0	0.2
+007630	Datteri, secchi	Frutta	90	30	270	2.7	0.6	63.1	8.7	63.1	0.01
+120910	Dentice	Prodotti della pesca	65	150	101	16.7	3.5	0.7	0	0.7	0.32
+120920	Dentice, surgelato	Prodotti della pesca	65	150	103	17.2	3.5	0.7	0	0.7	
+161200	Dolce verde	Formaggi e latticini	100	100	276	19.1	21.1	2.5	0	2.5	
+161600	Edam	Formaggi e latticini	100	50	326	25.5	24.3	1.4	0	1.4	
+161610	Emmenthal	Formaggi e latticini	100	50	403	28.5	30.6	3.6	0	3.6	1.12
+108510	Fagiano, crudo	Carni fresche	85	100	144	24.3	5.2	0	0	0	0.17
+004100	Fagioli	Legumi	100	50	326	23.6	2	47.5	17.5	3.5	0.01
+004220	Fagioli dall'occhio, secchi	Legumi	100	50	318	22.4	1.4	50.9	12.7	4	0.04
+004110	Fagioli, Borlotti, freschi	Legumi	52	150	143	10.2	0.8	22.7	4.8	1.2	0.01
+004115	Fagioli, Borlotti, freschi, cotti, bolliti	Legumi	100	150	78	5.7	0.5	11.2	4.2	0.5	
+004130	Fagioli, Borlotti, in scatola, scolati	Legumi	100	150	102	6.7	0.5	15.9	5.5	1	0.73
+004120	Fagioli, Borlotti, secchi	Legumi	100	50	312	20.2	2	47.7	17.3	3.5	0.01
+004125	Fagioli, Borlotti, secchi, cotti, bolliti	Legumi	100	150	106	6.9	0.4	16.4	6.9	1	0.01
+004210	Fagioli, Cannellini in scatola, scolati	Legumi	100	150	86	6	0.6	12.5	4.8	0.3	1.08
+004200	Fagioli, Cannellini, secchi	Legumi	100	50	314	23.4	1.6	45.5	17.6	2.9	0.01
+004205	Fagioli, Cannellini, secchi, cotti, bolliti	Legumi	100	150	107	8	0.4	14.9	7.8	0.6	0.01
+004105	Fagioli, cotti, bolliti	Legumi	100	120	117	7.9	0.7	17	7.8	1.2	
+004305	Fagiolini a corallo, cotti, bolliti	Legumi	100	150	31	1.7	0.1	4.6	2.9	2.1	
+004310	Fagiolini, freschi	Legumi	95	200	24	2.1	0.1	2.4	2.9	2.4	0.01
+004325	Fagiolini, surgelati, cotti, bolliti	Legumi	100	200	31	1.7	0.1	4.6	2.9	2.1	0.02
+106020	Faraona, coscio, con pelle, crudo	Carni fresche	85	100	133	24.3	3.8	0.3	0	0	0.24
+106032	Faraona, coscio, senza pelle, cotto, allo spiedo	Carni fresche	77	85	194	34.4	6.1	0.3	0	0	0.45
+106030	Faraona, coscio, senza pelle, crudo	Carni fresche	78	100	127	24	3.3	0.3	0	0	0.25
+106052	Faraona, petto, senza pelle, cotto, allo spiedo	Carni fresche	100	85	146	30.7	2.5	0.2	0	0	0.17
+106050	Faraona, petto, senza pelle, crudo	Carni fresche	100	100	121	25.8	1.9	0.2	0	0	0.12
+000200	Farina d'avena	Cereali e derivati	100	100	378	12.6	7.1	66.3	7.6	1.2	0.08
+000210	Farina d'orzo	Cereali e derivati	100	100	333	10.6	1.9	68.4	8.5	0.8	0.01
+504010	Farina di castagne	Frutta secca a guscio e semi oleaginosi	100	100	318	6.1	3.7	62	13.8	16.1	0.03
+000250	Farina di frumento, duro	Cereali e derivati	100	100	330	12.9	2.8	63.2	8	3.2	
+000240	Farina di frumento, integrale	Cereali e derivati	100	100	313	11.9	1.9	61.8	8.4	2.1	0.01
+000230	Farina di frumento, tipo 0	Cereali e derivati	100	100	321	11.5	1	69.5	2.9	1.8	0.01
+000220	Farina di frumento, tipo 00	Cereali e derivati	100	100	323	11	0.7	71.6	2.2	1.7	0.01
+000260	Farina di mais	Cereali e derivati	100	100	341	8.7	2.7	73.5	3.1	1.5	0
+000320	Farina di manioca	Cereali e derivati	100	100	332	0.6	0.2	87.2	0.4	0	0.01
+000270	Farina di riso	Cereali e derivati	100	100	332	7.3	0.5	79.1	1	0	0.01
+000280	Farina di segale	Cereali e derivati	100	100	342	11.7	2	67.8	11.3	0.1	
+000290	Farina di soia	Legumi	100	100	469	36.8	23.5	23.4	11.2	11.2	0.02
+000025	Farro perlato, cotto, bollito	Cereali e derivati	100	185	178	6.2	1	37.3	2.1	0.9	0
+000020	Farro perlato, crudo	Cereali e derivati	100	80	353	14.6	2.4	69.3	6.5	2.4	0.03
+004400	Fave, fresche	Legumi	26	150	51	5.2	0.4	4.5	5	2.2	0.04
+004406	Fave, fresche, cotte, in padella	Legumi	100	150	61	6.1	0.5	5.3	5.9	2.6	0.05
+004410	Fave, secche	Legumi	100	50	331	21.3	2.1	52.8	14.7	4.5	
+004425	Fave, secche, sgusciate, cotte, bollite	Legumi	100	150	146	11	1.3	22.4	3	2.1	
+004420	Fave, secche, sgusciate, crude	Legumi	100	50	343	25.2	3	53.6	7	4.9	
+504100	Fecola di patate	Prodotti vari	100	100	346	1.4	0	90.7		9.1	
+115320	Fegato di bovini	Frattaglie	100	100	142	20	4.4	5.9	0	5.9	0.2
+115329	Fegato di bovini, cotto	Frattaglie	100	100	190	26.7	5.9	7.9	0	7.9	
+115340	Fegato di equini	Frattaglie	100	100	145	22.4	4	5.3	0	5.3	
+115350	Fegato di ovini	Frattaglie	100	100	135	19.5	5.5	2	0	2	0.17
+115360	Fegato di pollo	Frattaglie	100	100	154	22.8	6.3	1.5	0	1.5	
+115369	Fegato di pollo, cotto	Frattaglie	100	100	192	29.4	7.4	2	0	2	
+115370	Fegato di suini	Frattaglie	100	100	140	22.8	4.8	1.5	0	1.5	0.27
+115379	Fegato di suini, cotto	Frattaglie	100	100	183	29.4	6.4	2	0	2	
+115380	Fegato di tacchino	Frattaglie	100	100	127	17.8	6	0.5	0	0.5	
+115389	Fegato di tacchino, cotto	Frattaglie	100	100	195	27.4	9.2	0.8	0	0.8	
+007550	Feijoa, fresca	Frutta	67	150	59	0.7	0.8	9.6	6.5	9.6	0.04
+162000	Feta	Formaggi e latticini	100	100	250	15.6	20.2	1.5	0	1.5	3.6
+001500	Fette biscottate	Cereali e derivati	100	30	387	11.3	6	75	3.5	2.2	
+001510	Fette biscottate, integrali	Cereali e derivati	100	30	394	14.2	10	63	5.4	1.1	
+007080	Fichi d'india, freschi	Frutta	64	150	63	0.8	0.1	13	5	13	0
+007060	Fichi, canditi	Frutta	100	30	294	3.5	0.2	73.7	1.1	73.7	
+007050	Fichi, freschi	Frutta	75	150	63	0.9	0.2	14.2	2	14.2	0.01
+007053	Fichi, seccati al forno e mandorlati	Frutta	100	30	305	5.2	4.2	58.2	14	58.2	
+007070	Fichi, secchi	Frutta	100	30	282	3.5	2.7	58	13	58	0.22
+005324	Finocchi, cotti, al microonde	Verdure e ortaggi	100	200	15	1.2	0	1.5	2.2	1.5	
+005325	Finocchi, cotti, bolliti	Verdure e ortaggi	100	200	17	1.4	0	1.7	2.6	1.7	0.01
+005320	Finocchi, crudi	Verdure e ortaggi	59	200	15	1.2	0	1.5	2.2	1.5	0.01
+003030	Fiocchi d'avena	Cereali e derivati	100	30	367	8	7.5	66.8	8.3	0.6	
+170010	Fiocchi di formaggio magro	Formaggi e latticini	100	50	115	9.7	7.1	3.2	0	3.2	0.72
+162010	Fior di latte	Formaggi e latticini	100	100	268	20.6	20.3	0.7	0	0.7	0.5
+005330	Fiori di zucca, freschi	Verdure e ortaggi	79	80	18	1.7	0.4	0.5	2.8	0.5	
+005340	Foglie di rapa, crude	Verdure e ortaggi	63	200	27	2.6	0.1	2.8	2.5	2.8	
+162020	Fontina	Formaggi e latticini	100	50	361	24.5	28.9	0.8	0	0.8	1.72
+162030	Formaggino	Formaggi e latticini	100	50	309	11.2	26.9	6	0	6	2.5
+162040	Formaggino con ridotto contenuto di grasso	Formaggi e latticini	100	100	239	14.7	17.3	6.5	0	6.5	2.5
+162050	Formaggio cremoso spalmabile	Formaggi e latticini	100	50	313	8.6	31	0	0	0	0.82
+170510	Formaggio cremoso spalmabile, light	Formaggi e latticini	100	100	179	9.2	14.5	3.1	0	3.1	
+160400	Formaggio molle da tavola	Formaggi e latticini	100	100	377	25.4	30.2	1	0	1	
+007730	Fragole, fresche	Frutta	94	150	30	0.9	0.4	5.3	1.6	5.3	0.01
+000030	Frumento duro	Cereali e derivati	100	80	332	13	2.9	62.5	9.8	3.2	
+000040	Frumento tenero	Cereali e derivati	100	80	336	12.3	2.6	65.2	9.7	3.3	
+006016	Funghi coltivati, pleurotes, cotti, in padella	Verdure e ortaggi	100	200	35	2.6	0.4	5.3	0.8	5.3	
+006010	Funghi coltivati, pleurotes, crudi	Verdure e ortaggi	98	200	37	2.2	0.3	5.6	2.4	5.6	0.02
+006006	Funghi coltivati, prataioli, cotti, in padella	Verdure e ortaggi	100	200	46	7	0.4	1.5	4.3	1.5	0.01
+006000	Funghi coltivati, prataioli, crudi	Verdure e ortaggi	95	200	24	3.7	0.2	0.8	2.3	0.8	0.01
+006020	Funghi ovuli, crudi	Verdure e ortaggi	87	200	23	2	0.3	1.6	3	1.6	
+006030	Funghi porcini, crudi	Verdure e ortaggi	92	200	31	3.9	0.7	1	2.5	1	0.13
+106100	Gallina, crudo	Carni fresche	70	100	194	20.9	12.3	0	0	0	
+128100	Gamberi	Prodotti della pesca	45	150	71	13.6	0.6	2.9	0	2.9	0.36
+128110	Gamberi sgusciati, surgelati	Prodotti della pesca	100	150	85	16.5	0.9	2.9	0	2.9	0.94
+206260	Gelato confezionato, biscotto con crema, zabaione e cioccolato	Dolci	100	100	271	5.3	7.3	49.1			
+206010	Gelato confezionato, cacao, in vaschetta	Dolci	100	100	173	3.6	7.1	25.3	0	25.3	
+206020	Gelato confezionato, caffè, in vaschetta	Dolci	100	100	245	5.1	15	23.9	0	23.9	
+206270	Gelato confezionato, cono con panna e cioccolato	Dolci	100	100	291	5.1	15.5	34.9			
+206280	Gelato confezionato, cono con panna, scaglie di cioccolato e noccioline	Dolci	100	100	326	4.2	20.5	33.3			
+206040	Gelato confezionato, fior di latte, in vaschetta	Dolci	100	100	218	4.2	13.7	20.7	0	20.7	
+206050	Gelato confezionato, fior di latte, ricoperto di sorbetto alla fragola	Dolci	100	100	101	1.4	1.7	21.3	0	21.3	
+206710	Gelato confezionato, ghiacciolo all'arancio	Dolci	100	100	137	0	0	36.5	0	36.5	
+206060	Gelato confezionato, nocciola, in vaschetta	Dolci	100	100	183	3.3	8.4	25.2	0	25.2	
+206080	Gelato confezionato, panna ricoperta di cioccolato fondente	Dolci	100	100	316	4.5	21.4	28.2	0	28.2	
+206070	Gelato confezionato, panna, in vaschetta	Dolci	100	100	189	3.2	8.2	27.2	0	27.2	
+206800	Gelato confezionato, sorbetto al limone, in vaschetta	Dolci	100	100	132	0.9	0	34.2	0	34.2	0.04
+206090	Gelato confezionato, stracciatella, in vaschetta	Dolci	100	100	193	2.9	7	31.5	0	31.5	
+206100	Gelato confezionato, vaniglia, in vaschetta	Dolci	100	100	167	2.7	6.7	25.7	0	25.7	
+000330	Germe di frumento	Cereali e derivati	100	30	378	26	10	43.5	10.5		0.01
+005350	Germogli di soia	Verdure e ortaggi	98	80	54	6.2	1.4	3	2.8	3	0.07
+006591	Gnocchi di patate, cotti	Cereali e derivati	100	130	147	3.5	0.2	34	1.8	1	0.45
+006590	Gnocchi di patate, crudi	Cereali e derivati	100	120	164	3.9	0.3	37.9	1.9	1.4	0.02
+202500	Gomme da masticare, lastrine e confetti	Dolci	100	100	262	0	0	70	0	70	
+162400	Gorgonzola	Formaggi e latticini	100	50	324	19.1	27.1	1	0	1	1.5
+162410	Grana Padano, DOP	Formaggi e latticini	100	50	392	33.9	28.5	0	0	0	1.75
+128200	Granchio, in scatola	Prodotti della pesca	100	50	81	18.1	0.9	0	0	0	1.38
+000050	Grano saraceno	Cereali e derivati	100	80	329	12.4	3.3	61.2	10		0
+002000	Grissini	Cereali e derivati	100	30	421	11.3	13.9	65.1	3.5	2.2	
+162420	Groviera	Formaggi e latticini	100	50	417	30.6	32.1	1.5	0	1.5	0.83
+007560	Guava, fresca	Frutta	98	150	31	0.7	0.5	3.5	5.4	3.5	0.01
+121010	Halibut	Prodotti della pesca	80	150	114	20.6	3.5	0	0	0	
+119050	Hamburger piccolo, solo carne, fast food	Fast-food a base di carne	100	30	264	24.5	18.4	0	0	0	
+119030	Hamburger, fast food	Fast-food a base di carne	100	110	251	13.1	9.1	30.1	2		
+005400	Indivia, fresca	Verdure e ortaggi	69	80	20	0.9	0.3	2.7	1.6	2.7	0.03
+163200	Italico	Formaggi e latticini	100	50	316	21.2	25.2	1.2	0	1.2	
+502260	Ketchup, salsa	Prodotti vari	100	30	100	2.1	0	24	0.9	22.9	2.8
+007570	Kiwi, freschi	Frutta	87	150	48	1.2	0.6	9	2.2	9	0.01
+007740	Lamponi, freschi	Frutta	100	150	49	1	0.6	6.5	7.4	6.5	0.01
+191010	Lardo	Oli e grassi	100	10	891	0	99	0	0	0	0.01
+121100	Lattarini	Prodotti della pesca	100	150	145	14.6	9.6	0	0	0	
+132010	Latte di bufala	Latte e yogurt	100	125	114	4.5	8.5	5.1	0	5.1	
+130010	Latte di capra	Latte e yogurt	100	125	76	3.9	4.8	4.7	0	4.7	0.1
+131010	Latte di pecora	Latte e yogurt	100	125	103	5.3	6.9	5.2	0	5.2	0.07
+135510	Latte di vacca, condensato, zuccherato	Latte e yogurt	100	125	328	8.7	9	56.5	0	56.5	0.33
+135520	Latte di vacca, evaporato, non zuccherato	Latte e yogurt	100	125	134	7	8.2	8.6	0	8.6	0.38
+135610	Latte di vacca, in polvere, intero	Latte e yogurt	100	125	484	25.7	24.9	42	0	42	1.1
+135620	Latte di vacca, in polvere, parzialmente scremato	Latte e yogurt	100	125	418	28.8	12.7	50.2	0	50.2	
+135630	Latte di vacca, in polvere, scremato	Latte e yogurt	100	125	351	33.1	0.9	56.2	0	56.2	1.38
+135010	Latte di vacca, pastorizzato, intero	Latte e yogurt	100	125	64	3.3	3.6	4.9	0	4.9	0.12
+135020	Latte di vacca, pastorizzato, parzialmente scremato	Latte e yogurt	100	125	46	3.5	1.5	5	0	5	
+135030	Latte di vacca, pastorizzato, scremato	Latte e yogurt	100	125	36	3.6	0.2	5.3	0	5.3	0.13
+135810	Latte di vacca, UHT, intero	Latte e yogurt	100	125	63	3.3	3.6	4.7	0	4.7	
+135820	Latte di vacca, UHT, parzialmente scremato	Latte e yogurt	100	125	46	3.2	1.6	5.1	0	5.1	
+164400	Latteria	Formaggi e latticini	100	50	456	30.7	36.4	1.4	0	1.4	
+005420	Lattuga, a cappuccio, fresca	Verdure e ortaggi	92	80	22	1.5	0.2	3	1.3	3	
+005430	Lattuga, da taglio, fresca	Verdure e ortaggi	83	80	17	1.1	0.1	2.2	1.5	2.2	
+005410	Lattuga, fresca	Verdure e ortaggi	80	80	22	1.8	0.4	2.2	1.5	2.2	0.02
+005436	Lattughino IV gamma, fresco	Verdure e ortaggi	100	80	16	1.4	0.2	1.4	1.6	1.4	0.04
+005435	Lattughino, fresco	Verdure e ortaggi	80	80	16	1.5	0.2	1.4	1.6	1.4	0.04
+202030	Lenti colorate ripiene di cioccolato	Dolci	100	30	456	5.4	17.5	73.9	0	70.8	0.14
+004510	Lenticchie, in scatola, scolate	Legumi	100	150	91	5	0.5	15.4	4.2	0.7	0.89
+004500	Lenticchie, secche	Legumi	100	50	319	22.7	1	51.1	13.8	1.8	0.02
+004505	Lenticchie, secche, cotte, bollite	Legumi	100	150	109	6.9	0.4	16.3	8.3	0.7	0.01
+503100	Lievito di birra, compresso	Prodotti vari	100	25	70	12.1	0.4	1.1	6.9	1.1	0.04
+008030	Limoni, freschi	Frutta	64	150	16	0.6	0	2.5	1.9	2.5	0.01
+008040	Limoni, succo	Frutta	100	100	10	0.2	0	2.5	0	2.5	0.01
+115400	Lingua di bovini	Frattaglie	100	100	232	17.1	18	0.4	0	0.4	0.18
+115409	Lingua di bovini, cotta, fritta	Frattaglie	100	100	309	22.8	24	0.5	0	0.5	
+007580	Litchi, freschi	Frutta	72	150	72	1.1	0.1	17.2	1.3	17.2	0
+007090	Loti o kaki, freschi	Frutta	97	150	70	0.6	0.3	16	2.5	16	0.01
+121200	Luccio	Prodotti della pesca	56	150	81	18.7	0.6	0.1	0	0.1	0.16
+109010	Lumaca, cruda	Carni fresche	24	100	67	12.9	1.7	0	0	0	
+004600	Lupini, ammollati	Legumi	76	150	119	16.4	2.4	7.1	2.8	0.5	
+008620	Macadamia	Frutta secca a guscio e semi oleaginosi		30	751	8	76	5.1	8	4	0.01
+105236	Maiale, bistecca, cotto, in padella	Carni fresche	75	80	187	25.4	9.5	0	0	0	0.21
+105230	Maiale, bistecca, crudo	Carni fresche	74	100	157	21.3	8	0	0	0	0.14
+105200	Maiale, coscio, crudo	Carni fresche	87	100	110	20.2	3.2	0	0	0	0.19
+105210	Maiale, lombo, crudo	Carni fresche	79	100	146	20.7	7	0	0	0	0.18
+105600	Maiale, pesante, coscio, crudo	Carni fresche	90	100	127	20.4	5.1	0	0	0	0.19
+105700	Maiale, pesante, lombo, crudo	Carni fresche	78	100	172	20.8	9.9	0	0	0	0.15
+105800	Maiale, pesante, spalla, crudo	Carni fresche	94	100	156	19	8.9	0	0	0	0.18
+105220	Maiale, spalla, crudo	Carni fresche	79	100	133	19	6.3	0	0	0	0.18
+502760	Maionese, industriale	Prodotti vari	100	10	655	4.3	70	2.1	0	2.1	
+000060	Mais	Cereali e derivati	100	80	357	9.2	3.8	75.1	2	2.5	0.09
+000300	Mais, amido	Cereali e derivati	100	100	328	0.3	0	87	0	1.5	0
+000070	Mais, dolce, in scatola, sgocciolato	Cereali e derivati	100	30	105	3.4	1.3	20.5	1.4	5.3	0.68
+008050	Mandaranci, freschi	Frutta	87	150	57	0.8	0.2	12.8	2.2	12.8	0.01
+008060	Mandarini, freschi	Frutta	80	150	76	0.9	0.3	17.6	1.7	17.6	0
+008540	Mandorle dolci, secche	Frutta secca a guscio e semi oleaginosi	24	30	628	22	55.3	4.6	12.7	3.7	0.04
+007590	Mango, fresco	Frutta	73	150	56	1	0.2	12.6	1.6	12.6	0
+009100	Margarina, 100% vegetale	Oli e grassi	100	10	760	0.6	84	0.4	0	0.4	2
+009110	Margarina, 2/3 di grassi animali, 1/3 di grassi vegetali	Oli e grassi	100		760	0.7	84	0.4	0	0.4	
+204500	Marmellata	Dolci	100	20	227	0.5	0	58.7	2.2	58.7	0.03
+164800	Mascarpone	Formaggi e latticini	100	50	455	7.6	47	0.3	0	0.3	0.21
+007100	Melagrane, fresche	Frutta	59	150	68	0.5	0.2	15.9	2.2	15.9	0.02
+005507	Melanzane, cotte, al microonde	Verdure e ortaggi	100	200	23	0.8	0.4	3	2.4	3	0.01
+005506	Melanzane, cotte, in padella	Verdure e ortaggi	100	200	39	1.3	0.7	5.4	3.7	5.4	0.01
+005500	Melanzane, crude	Verdure e ortaggi	92	200	23	1	0.4	2.6	2.6	2.6	0.01
+007220	Mele cotogne, fresche	Frutta	79	150	38	0.3	0.1	6.3	5.9	6.3	0.01
+007190	Mele, disidratate	Frutta	100	30	356	1.3	2	82.2	12.5	82.2	0.02
+007130	Mele, fresche, annurche	Frutta	84	150	45	0.3	0.1	10.2	2.2	10.2	
+007120	Mele, fresche, con buccia	Frutta	85	150	44	0.2	0	10	2.6	10	0.01
+007140	Mele, fresche, deliziose	Frutta	79	150	46	0.2	0.1	11.1	1.5	11.1	
+007150	Mele, fresche, golden	Frutta	73	150	46	0.4	0.1	10.7	1.7	10.7	0
+007160	Mele, fresche, granny smith	Frutta	81	150	42	0.5	0.1	9.4	1.9	9.4	
+007170	Mele, fresche, imperatore	Frutta	75	150	48	0.2	0.1	11.3	1.9	11.3	
+007180	Mele, fresche, renette	Frutta	71	150	43	0.3	0.1	10	1.7	10	0
+007110	Mele, fresche, senza buccia	Frutta	79	150	57	0.3	0.1	13.7	2	13.7	0.01
+007230	Melone, d'estate, fresco	Frutta	47	150	34	0.8	0.2	7.4	0.7	7.4	0.02
+007240	Melone, d'inverno, fresco	Frutta	51	150	24	0.5	0.2	4.9	0.7	4.9	0.02
+121310	Melù o pesce molo	Prodotti della pesca	65	150	72	17.4	0.3	0	0	0	0.18
+121330	Melù o pesce molo, stoccafisso, ammollato	Prodotti della pesca	85	150	92	20.7	0.9	0.3	0	0.3	0.13
+121320	Melù o pesce molo, stoccafisso, secco	Prodotti della pesca	78	50	356	80.1	3.5	1.1	0	1.1	1.25
+006810	Menta, fresca	Verdure e ortaggi	100	5	49	3.8	0.7	5.3	3.8	5.3	0.04
+210030	Merendine, con marmellata, industriale	Dolci	100	30	364	5.5	9.5	67.9	1.1	44.8	
+210040	Merendine, farcite con cacao, industriale	Dolci	100	30	410	6.2	15.1	65.5	1.9	43.8	
+210060	Merendine, tipo brioche, industriale	Dolci	100	30	440	8.2	17.6	65.7	1	22.5	
+210050	Merendine, tipo pan di Spagna, industriale	Dolci	100	30	386	7.4	13.1	62.7	1.5	34.9	
+210070	Merendine, tipo pasta frolla, industriale	Dolci	100	30	447	5.3	17.1	71.7	1.7	35.2	
+121410	Merluzzo o nasello	Prodotti della pesca	76	150	71	17	0.3	0	0	0	0.19
+121450	Merluzzo o nasello, baccalà, ammollato	Prodotti della pesca	82	150	95	21.6	1	0	0	0	
+121440	Merluzzo o nasello, baccalà, secco	Prodotti della pesca	75	50	131	29	1.7	0	0	0	
+121490	Merluzzo o nasello, bastoncini di pesce, surgelati	Prodotti della pesca	100	150	191	11	10.1	15	0	0.6	
+121420	Merluzzo o nasello, surgelato	Prodotti della pesca	75	150	75	17.3	0.6	0	0	0	0.19
+121424	Merluzzo o nasello, surgelato, cotto, al microonde	Prodotti della pesca	75	150	107	24.8	0.9	0	0	0	0.2
+121423	Merluzzo o nasello, surgelato, cotto, in forno	Prodotti della pesca	75	150	78	17.5	0.9	0	0	0	0.2
+121430	Merluzzo o nasello, surgelato, filetti	Prodotti della pesca	100	150	68	15.6	0.6	0	0	0	0.17
+210010	Miele	Dolci	100	20	304	0.6	0	80.3	0	80.3	0.03
+000080	Miglio	Cereali e derivati	100	80	343	11.8	3.9	64.9	8.5		0.01
+000081	Miglio, decorticato	Cereali e derivati	100	80	342	11	4.2	67.8	3.1	4.9	0
+115500	Milza di bovini	Frattaglie	100	100	107	18.5	3.7	0	0	0	0.21
+900010	Minestre in scatola, crema di asparagi	Prodotti vari	100	200	26	1	0.7	4.2			1.02
+900110	Minestre in scatola, crema di cipolle	Prodotti vari	100	200	26	2.2	1	2.2			1.09
+900210	Minestre in scatola, crema di funghi	Prodotti vari	100	200	56	1	4	4.2			0.99
+900310	Minestre in scatola, crema di pollo	Prodotti vari	100	200	58	1.7	3.8	4.5		1.1	1.15
+900410	Minestre in scatola, crema di pomodori	Prodotti vari	100	200	36	0.8	1	6.4			0.99
+905100	Minestrone liofilizzato	Prodotti vari	100	30	298	10.1	8.8	47.6		15	14
+905010	Minestrone, cotto	Verdure e ortaggi	100	200	45	2	0.4	7.8	2.1		
+007760	Mirtilli, freschi	Frutta	100	150	49	0.9	0.2	10.1	3.1	10.1	0.01
+007750	Mora di rovo	Frutta	100	150	42	1.3	0	8.1	3.2	8.1	0.01
+121500	Mormora	Prodotti della pesca		150	97	18	1.9	2	0	2	
+110200	Mortadella Bologna IGP	Carni trasformate e conservate	100	50	288	15.7	25	0	0		2.4
+110210	Mortadella di bovini e suini	Carni trasformate e conservate	100	50	388	13.3	37	0.5	0	0.5	
+164810	Mozzarella di bufala	Formaggi e latticini	100	100	288	16.7	24.4	0.4	0	0.4	
+164811	Mozzarella di bufala campana DOP	Formaggi e latticini	100	100	257	14.1	21.7	1.4	0		0.53
+164820	Mozzarella di vacca	Formaggi e latticini	100	100	253	18.7	19.5	0.7	0	0.7	0.5
+003040	Muesli	Cereali e derivati	100	30	374	9.7	6	71.7	6.4	26.2	0.95
+007250	Nespole, fresche	Frutta	66	150	32	0.4	0.4	6.1	2.1	6.1	0.01
+008550	Nocciole, secche	Frutta secca a guscio e semi oleaginosi	42	30	671	13.8	64.1	6.1	8.1	4.1	0.03
+008560	Noci	Frutta secca a guscio e semi oleaginosi	58	30	589	10.5	57.7	5.5	3.5	3.4	0.01
+008580	Noci pecan	Frutta secca a guscio e semi oleaginosi	49	30	723	7.2	71.8	7.9	9.4	4.3	0
+008570	Noci, secche	Frutta secca a guscio e semi oleaginosi	39	30	702	14.3	68.1	5.1	6.2	3.1	0.01
+106150	Oca, crudo	Carni fresche	70	100	373	15.8	34.4	0	0	0	0.3
+121600	Occhiata	Prodotti della pesca		150	117	19	3.7	2	0	2	
+009799	Oli vegetali	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009610	Olio di arachide	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009620	Olio di cocco	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009630	Olio di colza	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+194000	Olio di fegato di merluzzo	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009640	Olio di germe di grano	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009650	Olio di girasole	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009660	Olio di mais	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009670	Olio di mandorle dolci	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009200	Olio di oliva	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009210	Olio di oliva extra vergine	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009680	Olio di palma	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009690	Olio di sesamo	Oli e grassi	100	10	899	0	99.9	0	0	0	
+009700	Olio di soia	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+009710	Olio di vinacciolo	Oli e grassi	100	10	899	0	99.9	0	0	0	0
+008850	Oliva Giarraffa	Frutta	83	30	192	1.4	20	0.19	2.6	0.19	3.94
+008840	Oliva Nocellara del Belice	Frutta	83	30	211	1.4	22.1	0.06	3.3	0.06	3.19
+008800	Olive da tavola conservate	Frutta	83	30	277	1.5	27	5	4.4	5	
+008810	Olive, nere	Frutta	74	30	243	1.6	25.1	0.8	3.9	0.8	0.14
+008820	Olive, verdi	Frutta	84	30	148	0.8	15	1	3	1	
+008830	Olive, verdi, in salamoia	Frutta	78	30	113	1.2	11	1	2.8	1	
+121730	Orata d'allevamento, filetti	Prodotti della pesca	100	150	159	19.7	8.4	1.2	0	1.2	
+121720	Orata, filetti	Prodotti della pesca	100	150	121	20.7	3.8	1	0	1	
+121710	Orata, surgelata	Prodotti della pesca	69	150	94	19.8	1.2	1	0	1	
+000090	Orzo perlato	Cereali e derivati	100	80	346	9.4	1.5	73.7	9.2	1.5	0.01
+000095	Orzo perlato, cotto, bollito	Cereali e derivati	100	215	118	2.6	0.6	26.4	1.8	1.2	0.01
+127130	Ostrica	Prodotti della pesca	12	150	69	10.2	0.9	5.4	0	0.5	1.27
+121800	Pagello	Prodotti della pesca		150	101	21	1.9	0	0	0	0.3
+121900	Pagello bocca d'oro	Prodotti della pesca		150	118	20	3	3	0	3	0.3
+122000	Palombo	Prodotti della pesca	65	150	80	16	1.2	1.3	0	1.3	0.15
+110320	Pancetta arrotolata	Carni trasformate e conservate	100	50	530	15.1	52.2	0	0		3
+110300	Pancetta magretta	Carni trasformate e conservate	100	50	314	21.7	25.3	0	0	0	4.21
+110310	Pancetta tesa	Carni trasformate e conservate	100	50	337	20.9	28.1	0	0	0	2.54
+000500	Pane al malto	Cereali e derivati	100	50	278	8.3	2.4	56.6	5.5	26.1	0.7
+000600	Pane azzimo	Cereali e derivati	100	50	365	10.7	1	81.7	3.5	1.9	
+000530	Pane bianco	Cereali e derivati	100	50	268	8.1	0.5	59.5	3.8	2	0.73
+000510	Pane di segale	Cereali e derivati	100	50	228	8.3	1.7	45.4	4.6	1.8	1.45
+000550	Pane di tipo integrale	Cereali e derivati	100	50	224	8.5	1.3	44.1	6.5	2	1.28
+000540	Pane di tipo semintegrale	Cereali e derivati	100	50	239	8.3	0.3	52	4.2	2.2	
+000560	Pane formato rosetta	Cereali e derivati	100	50	275	9	1.9	57.6	3.1	7.5	0.79
+216000	Panettone	Dolci	100	100	337	6.4	10.7	56.2	2.1	22.9	
+000570	Pangrattato	Cereali e derivati	100	100	357	10.1	2.1	77.8	3.2	5	1
+000580	Panini al latte	Cereali e derivati	100	50	298	9	8.7	48.1	1.9	2.7	1.15
+000590	Panini all'olio	Cereali e derivati	100	50	288	7.7	5.8	52.6	3.7	4	
+119070	Panino con hamburger piccolo, fast food	Fast-food a base di carne	100	80	254	15.6	8.9	29	1.2	4.7	
+119060	Panino, fast food	Fast-food a base di carne	100	50	248	10.1	3	47	2	7.5	
+140400	Panna da cucina, sterilizzata, 23% di lipidi	Latte e yogurt	100	30	233	2.7	23	4	0	4	
+140300	Panna da montare, 35% di lipidi	Latte e yogurt	100	30	337	2.3	35	3.4	0	3.4	0.09
+007600	Papaia, fresca	Frutta	70	150	33	0.4	0.1	6.9	2.3	6.9	0.02
+507100	Pappa reale	Prodotti vari	100	5	146	10	6	14	0	14	
+166000	Parmigiano Reggiano DOP	Formaggi e latticini	100	50	397	32.4	29.7	0	0	0	1.5
+007610	Passiflora, fresca	Frutta	42	150	64	3	0.3	5.7	13.9	5.7	0.05
+000870	Pasta all'uovo, secca	Cereali e derivati	100	70	346	13	2.4	71	3.2	2	0.04
+000871	Pasta all'uovo, secca, cotta, bollita	Cereali e derivati	100	210	123	4.6	0.8	25.5	1.1	0.17	0.04
+217000	Pasta di mandorle	Frutta secca a guscio e semi oleaginosi	100	30	455	9.9	23.4	54.6		54.6	
+000800	Pasta di semola	Cereali e derivati	100	80	341	13.5	1.2	72.7	1.7	2.2	0.01
+000805	Pasta di semola, cotta, bollita	Cereali e derivati	100	200	175	6.9	0.6	37.3	0.9	1.1	0.01
+000850	Pasta di semola, integrale	Cereali e derivati	100	80	330	13.3	2.2	64.8	7.1	3	0.03
+000855	Pasta di semola, integrale, cotta, bollita	Cereali e derivati	100	180	182	7.4	1.2	36	3.5	1.7	0.01
+006584	Patate novelle, cotte, al microonde	Verdure e ortaggi	100	200	72	2	0.3	15.7	1.4	0.2	0.03
+006585	Patate novelle, cotte, bollite	Verdure e ortaggi	100	200	68	1.9	0.2	14.9	1.4	0.2	
+006580	Patate novelle, crude	Verdure e ortaggi	96	200	72	2	0.3	15.7	1.4	0.2	0.03
+006505	Patate, con buccia, cotte, bollite	Verdure e ortaggi	83	200	88	2.1	1	17.9	1.6	0.4	0.02
+006514	Patate, cotte, al microonde	Verdure e ortaggi	100	200	88	2.1	1	17.9	1.6	0.4	0.02
+006511	Patate, cotte, arrosto	Verdure e ortaggi	100	200	152	2.9	4.5	25.7	1.8	0.6	0.02
+006500	Patate, crude	Verdure e ortaggi	83	200	72	2	0.1	16	1.8	1	0.02
+006517	Patate, fritte	Verdure e ortaggi	100	200	192	3.9	6.7	29.9	2.2	0.6	0.03
+006515	Patate, senza buccia, cotte, bollite	Verdure e ortaggi	100	200	74	1.8	0.1	16.9	1.3	0.4	0.02
+006570	Patatine, fritte, confezionate in busta	Verdure e ortaggi	100	25	512	5.4	29.6	58	3.2	1	2.67
+119080	Patatine, fritte, fast food	Fast-food a base di carne	100	88	283	3.3	13.7	37.6	2.7	1.3	
+114010	Patè di coniglio	Carni trasformate e conservate	100	50	346	13	32.2	1.1	0		
+114020	Patè di fegato	Carni trasformate e conservate	100	50	341	12.7	31.7	1.3	0		1.98
+114030	Patè di pollo	Carni trasformate e conservate	100	50	289	11.1	26.2	2.3	0		
+114040	Patè di prosciutto	Carni trasformate e conservate	100	50	358	11.3	34.3	1.1	0		
+104610	Pecora, solo tessuto muscolare, crudo	Carni fresche	100	100	121	21	4.1	0	0	0	
+166050	Pecorino	Formaggi e latticini	100	50	404	28.8	32	0.2	0	0.2	4.5
+166060	Pecorino romano	Formaggi e latticini	100	50	409	26	33.1	1.8	0	1.8	4.5
+166070	Pecorino siciliano	Formaggi e latticini	100	50	427	28.9	33.6	2.4	0	2.4	1.12
+006820	Pepe nero	Verdure e ortaggi	100	1	311	11.4	3.3	49	25.9		0.11
+006830	Peperoncini piccanti, freschi	Verdure e ortaggi	89	5	30	1.8	0.5	3.8	2	1.5	0.02
+005606	Peperoni, cotti, in padella	Verdure e ortaggi	100	200	143	5.2	1.5	24.3	8.7	24.3	
+005600	Peperoni, crudi	Verdure e ortaggi	82	200	26	0.9	0.3	4.2	1.9	4.2	0.01
+005624	Peperoni, gialli, cotti, al microonde	Verdure e ortaggi	100	200	41	1.1	0.2	8.1	2.3	8.1	0.02
+005620	Peperoni, gialli, crudi	Verdure e ortaggi	83	200	35	0.9	0.2	6.8	1.9	6.8	0.04
+005610	Peperoni, rossi e gialli, crudi	Verdure e ortaggi	81	200	35	0.9	0.3	6.7	1.9	6.7	
+005634	Peperoni, rossi, cotti, al microonde	Verdure e ortaggi	100	200	42	1.1	0.4	7.9	2.3	7.9	0.06
+005630	Peperoni, rossi, crudi	Verdure e ortaggi	82	200	34	0.9	0.3	6.5	1.9	6.5	0.04
+005640	Peperoni, verdi, crudi	Verdure e ortaggi	81	200	31	0.7	0.2	6	1.9	6	
+007270	Pere, candite	Frutta	100	150	294	1	0.4	73.9	4.5	73.9	
+007261	Pere, fresche, Abate Fetel	Frutta	89	150	59	0.2	0.3	12.7	3.8	12.7	
+007262	Pere, fresche, Coscia	Frutta	93	150	42	0.3	0.1	8.6	3.8	8.6	
+007263	Pere, fresche, Kaiser	Frutta	91	150	48	0.3	0.5	9.2	3.8	9.2	
+007264	Pere, fresche, Max-Red Barlett	Frutta	90	150	50	0.3	0.4	10	3.8	10	
+007260	Pere, fresche, senza buccia	Frutta	84	150	43	0.3	0.1	8.8	3.8	8.8	0.01
+007265	Pere, fresche, William	Frutta	90	150	52	0.3	0.5	10.2	3.8	10.2	
+122100	Pesce gatto	Prodotti della pesca	60	150	92	15.5	3.3	0.2	0	0.2	0.16
+007300	Pesche, disidratate	Frutta	100	30	364	4.8	0.9	88	3.5	88	0.05
+007290	Pesche, fresche, con buccia	Frutta	95	150	28	0.7	0	5.8	1.9	5.8	
+007280	Pesche, fresche, senza buccia	Frutta	91	150	30	0.8	0.1	6.1	1.6	6.1	0.01
+007310	Pesche, sciroppate	Frutta	100	30	56	0.5	0	14	0.9	14	0.01
+007320	Pesche, secche	Frutta	100	30	280	3.1	0.7	68.3	2.8	68.3	0.04
+007330	Peschenoci, fresche	Frutta	90	150	36	1.4	0.1	7	1.5	7	
+108520	Piccione giovane, crudo	Carni fresche	90	100	138	22.1	5.5	0	0	0	
+008590	Pinoli	Frutta secca a guscio e semi oleaginosi	29	30	604	31.9	50.3	4	4.5	3.9	
+004700	Piselli, freschi	Legumi	31	150	64	5.5	0.6	6.5	6.3	4	0
+004706	Piselli, freschi, cotti, in padella	Legumi	100	150	104	9.7	1	11.5	6.4	7	
+004720	Piselli, in scatola, scolati	Legumi	100	150	78	5.3	0.6	11.1	5.1	3.9	0.6
+004710	Piselli, secchi	Legumi	100	50	317	21.7	2	48.2	15.7	2.9	0.1
+004730	Piselli, surgelati	Legumi	100	150	61	5.4	0.3	6.5	6.3	4	0.32
+008600	Pistacchi	Frutta secca a guscio e semi oleaginosi	50	30	629	18.1	56.1	8.1	10.6	4.5	0
+008605	Pistacchio di Bronte DOP	Frutta secca a guscio e semi oleaginosi	50	30	595	24.3	48.9	7.3	15.3	7.3	0
+000700	Pizza bianca	Cereali e derivati	100	50	306	7.9	5.9	57.9	2.3	2.1	1.97
+000710	Pizza con pomodoro	Cereali e derivati	100	50	248	7.6	6.6	40.7	2.7	2.9	0.7
+000720	Pizza con pomodoro e mozzarella	Cereali e derivati	100	50	255	12.1	7.6	35.5	2.5	2.5	1.94
+000076	Polenta, cotta	Cereali e derivati	100	340	73	0.9	0.04	17.8	0.9	0.2	0.23
+000075	Polenta, cruda	Cereali e derivati	100	70	323	8	0.7	72.7	6.2	0.6	0.01
+106273	Pollo, ala, con pelle, cotta, al forno	Carni fresche	60	85	283	31.7	17.4	0	0	0	0.42
+106270	Pollo, ala, con pelle, crudo	Carni fresche	63	100	196	16.7	14.3	0	0	0	0.25
+106403	Pollo, fuso, con pelle, cotto, al forno	Carni fresche	62	84	201	31.2	8.5	0	0	0	0.34
+106400	Pollo, fuso, con pelle, crudo	Carni fresche	67	100	125	18.4	5.7	0	0	0	0.22
+106413	Pollo, fuso, senza pelle, cotto, al forno	Carni fresche	64	85	175	29.9	6.2	0	0	0	0.32
+106410	Pollo, fuso, senza pelle, crudo	Carni fresche	66	100	107	18.5	3.7	0	0	0	0.21
+106203	Pollo, intero, con pelle, cotto, al forno	Carni fresche	73	90	200	27.1	10.2	0	0	0	0.23
+106251	Pollo, intero, con pelle, cotto, arrosto	Carni fresche	74	85	245	28.3	14.7	0	0	0	0.19
+106200	Pollo, intero, con pelle, crudo	Carni fresche	77	100	171	19	10.6	0	0	0	0.15
+106213	Pollo, intero, senza pelle, cotto, al forno	Carni fresche	63	90	160	27.9	5.4	0	0	0	0.23
+106261	Pollo, intero, senza pelle, cotto, arrosto	Carni fresche	59	83	206	28.9	10	0	0	0	0.21
+106210	Pollo, intero, senza pelle, crudo	Carni fresche	62	100	110	19.4	3.6	0	0	0	0.17
+106506	Pollo, petto, cotto, in padella	Carni fresche	98	75	129	30.2	0.9	0	0	0	0.12
+106500	Pollo, petto, crudo	Carni fresche	98	100	100	23.3	0.8	0	0	0	0.08
+106603	Pollo, sovracoscia, con pelle, cotto, al forno	Carni fresche	83	90	219	26.7	12.5	0	0	0	0.25
+106600	Pollo, sovracoscia, con pelle, crudo	Carni fresche	86	100	196	17.4	14	0	0	0	0.18
+106613	Pollo, sovracoscia, senza pelle, cotto, al forno	Carni fresche	81	85	188	28.3	8.3	0	0	0	0.28
+106610	Pollo, sovracoscia, senza pelle, crudo	Carni fresche	83	100	132	18.7	6.3	0	0	0	0.17
+115600	Polmone di bovini	Frattaglie	100	100	75	14	2.1	0	0	0	0.49
+127150	Polpo	Prodotti della pesca	90	150	57	10.6	1	1.4	0	1.4	
+006660	Pomodori, conserva	Verdure e ortaggi	100	100	100	3.9	0.4	20.4	2	20.4	1.9
+006600	Pomodori, da insalata, freschi	Verdure e ortaggi	100	200	19	1.2	0.2	2.8	1	2.8	0.01
+006610	Pomodori, maturi, freschi	Verdure e ortaggi	100	200	23	1	0.2	3.5	2	3.5	0.01
+006640	Pomodori, Nerina, rossi, freschi	Verdure e ortaggi	100	200	21	1.1	0.4	2.8	1.4	2.8	0.04
+006630	Pomodori, Nerina, verdi, freschi	Verdure e ortaggi	100	200	21	0.9	0.4	2.8	1.5	2.8	0.04
+006670	Pomodori, passata	Verdure e ortaggi	100	100	21	1.3	0.2	3	1.5	3	0.04
+006680	Pomodori, pelati in scatola	Verdure e ortaggi	100	100	22	1.2	0.5	3	0.9	3	0.02
+006620	Pomodori, San Marzano, freschi	Verdure e ortaggi	100	200	21	1.1	0.2	3	2	3	0.01
+006690	Pomodori, succo	Verdure e ortaggi	100	125	16	0.8	0	3	0.6	3	0.57
+006650	Pomodorini ciliegino, freschi	Verdure e ortaggi	100	250	37	1.1	0.4	7.2	1	9	0.01
+008070	Pompelmo, fresco	Frutta	70	150	29	0.6	0	6.2	1.6	6.2	0
+501200	Pop corn	Prodotti vari	100	30	408	12	4.2	77.9	15.1		0.01
+005655	Porri, cotti, bolliti	Verdure e ortaggi	100	200	35	2.1	0.1	5.3	3	5.3	0.01
+005650	Porri, crudi	Verdure e ortaggi	77	200	35	2.1	0.1	5.2	2.9	5.2	0.01
+006840	Prezzemolo, fresco	Verdure e ortaggi	80	5	30	3.7	0.6	0	5	0	0.05
+110400	Prosciutto cotto	Carni trasformate e conservate	100	50	138	15.7	7.6	1.7	0		2.1
+110410	Prosciutto cotto, alta qualità	Carni trasformate e conservate	100	50	182	18	11.9	0.8	0		1.9
+110411	Prosciutto cotto, alta qualità, sgrassato	Carni trasformate e conservate	100	50	126	19.5	5	0.9	0		2
+110420	Prosciutto cotto, scelto	Carni trasformate e conservate	100	50	155	17.5	9.2	0.6	0		1.9
+110421	Prosciutto cotto, scelto, sgrassato	Carni trasformate e conservate	100	50	115	19.4	4	0.5	0		2
+110401	Prosciutto cotto, sgrassato	Carni trasformate e conservate	100	50	107	17	3.5	1.9	0		2.1
+110500	Prosciutto crudo di Modena DOP	Carni trasformate e conservate	100	50	309	25.6	22.9	0.1	0		5.1
+110501	Prosciutto crudo di Modena DOP, sgrassato	Carni trasformate e conservate	100	50	201	30.2	8.9	0.1	0		6
+110505	Prosciutto crudo di montagna	Carni trasformate e conservate	100	50	303	26.2	22	0	0	0	
+110511	Prosciutto crudo di Parma DOP, sgrassato	Carni trasformate e conservate	100	50	176	29.1	6.4	0.4	0		5.1
+110515	Prosciutto crudo di Pietraroja	Carni trasformate e conservate	100	50	358	26.2	28.1	0	0	0	
+110520	Prosciutto crudo di San Daniele DOP	Carni trasformate e conservate	100	50	271	25.7	18.6	0.2	0		4.5
+110521	Prosciutto crudo di San Daniele DOP, sgrassato	Carni trasformate e conservate	100	50	176	29	6.5	0.4	0		5.1
+110510	Prosciutto crudo DOP, di Parma	Carni trasformate e conservate	100	50	269	25.9	18.3	0.3	0		4.4
+110525	Prosciutto crudo, disossato	Carni trasformate e conservate	100	50	224	26.9	12.9	0	0	0	5.59
+110526	Prosciutto crudo, disossato, sgrassato	Carni trasformate e conservate	100	50	159	29.3	4.6	0	0	0	6.1
+110530	Prosciutto crudo, gambuccio	Carni trasformate e conservate	100	50	306	26.2	22.4	0	0	0	
+110535	Prosciutto crudo, Nazionale	Carni trasformate e conservate	100	50	235	27.8	13.7	0.1	0		6
+110536	Prosciutto crudo, Nazionale, sgrassato	Carni trasformate e conservate	100	50	169	30.5	5.1	0.3	0		6.9
+166100	Provolone	Formaggi e latticini	100	50	374	28.1	28.2	2	0	2	2.15
+007340	Prugne, fresche	Frutta	90	150	45	0.5	0.1	10.5	1.5	10.5	0.01
+007350	Prugne, gialle	Frutta	96	150	30	0.5	0.1	6.6	1.4	6.6	0.01
+007360	Prugne, rosse	Frutta	87	150	45	0.5	0.1	10.5	1.6	10.5	
+007370	Prugne, secche	Frutta	88	30	236	2.2	0.5	55	8.4	55	0.02
+108530	Quaglia, crudo	Carni fresche	67	100	161	25	6.8	0	0	0	0.1
+000097	Quinoa, cotta, bollita	Cereali e derivati	100	250	140	4.8	2.5	24.3	3.6	3.1	0.01
+000096	Quinoa, cruda	Cereali e derivati	100	80	376	15.4	8.1	57.8	12.2	5.3	0
+005441	Radicchio rosso di Treviso IGP, precoce	Verdure e ortaggi	95	80	16	1.6	0.1	1	2.5	1	0.03
+005442	Radicchio rosso di Treviso IGP, tardivo	Verdure e ortaggi	75	80	16	1.5	0.1	1.4	2.1	1.4	0.01
+005443	Radicchio variegato di Castelfranco IGP	Verdure e ortaggi	95	80	16	1.3	0.1	1.4	2.1	1.4	0.04
+005440	Radicchio, rosso, fresco	Verdure e ortaggi	72	80	19	1.4	0.1	1.6	3	1.6	0.03
+005450	Radicchio, verde, fresco	Verdure e ortaggi	95	80	14	1.9	0.5	0.5	0	0.5	
+109510	Rana, crudo	Carni fresche		100	64	15.5	0.2	0	0	0	
+005665	Rape, cotte, bollite	Verdure e ortaggi	100	200	26	1.1	0	4.3	2.8	4.1	0.03
+005660	Rape, crude	Verdure e ortaggi	69	200	24	1	0	4	2.6	3.8	0.04
+005670	Ravanelli, freschi	Verdure e ortaggi	99	200	13	0.8	0.1	1.8	1.3	1.8	0.15
+000876	Ravioli, cotti	Cereali e derivati	100	175	177	7.2	4.6	27.5	1.6	1.4	
+000875	Ravioli, crudi, freschi	Cereali e derivati	100	125	265	10.6	7.3	40.7	2.2	1.8	
+122200	Razza	Prodotti della pesca	32	150	68	14.2	0.9	0.7	0	0.7	0.28
+115710	Rene di bovini	Frattaglie	100	100	118	18.4	4.6	0.8	0	0.8	0.45
+007770	Ribes, freschi	Frutta	98	150	52	0.9	0	9.7	5.8	9.7	0.01
+166800	Ricotta di bufala	Formaggi e latticini	100	100	212	10.5	17.3	3.7	0	3.7	
+166810	Ricotta di pecora	Formaggi e latticini	100	100	157	9.5	11.5	4.2	0	4.2	0.21
+166820	Ricotta di vacca	Formaggi e latticini	100	100	146	8.8	10.9	3.5	0	3.5	0.2
+000135	Riso Basmati, cotto, bollito	Cereali e derivati	100	240	113	3	0.6	25.2	0.7	0.7	0.01
+000130	Riso Basmati, crudo	Cereali e derivati	100	80	367	9	1.9	82.9	1.3	1.1	0
+000145	Riso Venere, cotto, bollito	Cereali e derivati	100	170	160	3.5	0.3	36.9	2.4	1.6	0.01
+000140	Riso Venere, crudo	Cereali e derivati	100	80	355	7.8	1.3	80.4	5.1	2.2	0
+000100	Riso, brillato	Cereali e derivati	100	80	334	6.7	0.4	80.4	1	0.2	0.01
+000105	Riso, brillato, cotto, bollito	Cereali e derivati	100	260	100	2	0.1	24.2	0.2	0.1	0
+000110	Riso, integrale	Cereali e derivati	100	80	341	7.5	1.9	77.4	1.9	1.2	0.02
+000115	Riso, integrale, cotto, bollito	Cereali e derivati	100	250	113	2.5	0.6	25.5	0.8	0.4	0.01
+000120	Riso, parboiled	Cereali e derivati	100	80	338	7.4	0.3	81.3	0.5	0.3	0.02
+000125	Riso, parboiled, cotto, bollito	Cereali e derivati	100	236	97	2.1	0.1	23.3	0.3	0.2	0.01
+003050	Riso, soffiato, da prima colazione	Cereali e derivati	100	30	354	6	1	85.1	1	9	0
+166850	Robiola	Formaggi e latticini	100	50	338	20	27.7	2.3	0	2.3	
+122300	Rombo	Prodotti della pesca	55	150	81	16.3	1.3	1.2	0	1.2	0.32
+006850	Rosmarino, fresco	Verdure e ortaggi	100	5	110	1.4	4.4	13.5	7	13.5	0.04
+005460	Rucola o Ruchetta, fresca	Verdure e ortaggi	100	80	30	2.6	0.3	3.9	0.9	3.9	
+110600	Salame Brianza	Carni trasformate e conservate	100	50	384	26.5	30.5	1	0	1	4.57
+110620	Salame Fabriano	Carni trasformate e conservate	100	50	420	26.5	34.3	1.5	0	1.5	4.21
+110630	Salame Felino	Carni trasformate e conservate	100	50	375	30.5	27.9	0.5	0	0.5	4.24
+110640	Salame Milano	Carni trasformate e conservate	100	50	385	25.4	31	1.1	0		3.9
+110650	Salame Napoli	Carni trasformate e conservate	100	50	378	27.4	29.7	0.2	0		4.1
+110660	Salame nostrano	Carni trasformate e conservate	100	50	370	27.3	28.5	1.1	0	1.1	4.08
+110670	Salame ungherese	Carni trasformate e conservate	100	50	420	23.6	35.7	1.1	0		4
+110610	Salami italiani alla cacciatora DOP	Carni trasformate e conservate	100	50	411	28.4	32.7	0.7	0		4.2
+122400	Salmone	Prodotti della pesca	65	150	185	18.4	12	1	0	1	0.24
+122410	Salmone, affumicato	Prodotti della pesca	100	50	147	25.4	4.5	1.2	0	1.2	4.7
+122430	Salmone, in salamoia	Prodotti della pesca	98	50	192	21.1	11.5	1	0	1	1.35
+122500	Salpa	Prodotti della pesca		150	104	18	2.7	2	0	2	
+110730	Salsiccia di Calabria	Carni trasformate e conservate	100	50	366	33.6	25.2	1.3	0	1.3	
+110700	Salsiccia di fegato	Carni trasformate e conservate	100	50	424	12.4	41.2	0.9	0	0.9	2.02
+110710	Salsiccia di suino, fresca	Carni trasformate e conservate	100	50	304	15.4	26.7	0.6	0	0.6	2.75
+110716	Salsiccia di suino, fresca, cotta, in padella	Carni trasformate e conservate	100	50	324	22.2	26.1	0	0	0	3.18
+110720	Salsiccia di suino, secca	Carni trasformate e conservate	100	50	514	22	47.3	0	0	0	
+006860	Salvia, fresco	Verdure e ortaggi	100	5	132	3.9	4.6	15.6	8.2	15.6	0.01
+122600	Sarago	Prodotti della pesca		150	97	20.7	1.2	1	0	0	
+122700	Sarda	Prodotti della pesca	70	150	129	20.8	4.5	1.5	0	1.5	0.17
+122800	Sardine	Prodotti della pesca	75	150	225	20.3	15.4	1.5	0	1.5	0.29
+122806	Sardine, fritte	Prodotti della pesca	75	150	324	32.3	21.2	1	0	1	
+215000	Savoiardi, industriali	Dolci	100	100	395	11.9	9.2	69.6	1.6	39.3	
+167200	Scamorza	Formaggi e latticini	100	50	334	25	25.6	1	0	1	
+005465	Scarola	Verdure e ortaggi	80	80	19	1.1	0.3	2.3	1.8	2.3	0.1
+005466	Scarola IV gamma, fresca	Verdure e ortaggi	100	80	17	0.9	0.2	2.2	1.6	2.2	0.11
+122900	Scorfano	Prodotti della pesca		150	82	19	0.4	0.6	0	0.6	
+005690	Sedano rapa, crudo	Verdure e ortaggi	72	200	29	1.9	0.1	3.8	3.1	3.8	
+005684	Sedano, cotto, al microonde	Verdure e ortaggi	100	200	24	2.4	0.2	2.4	1.7	2.2	0.34
+005680	Sedano, crudo	Verdure e ortaggi	80	200	23	2.3	0.2	2.4	1.6	2.2	0.35
+192010	Sego di bue	Oli e grassi	100	10	872	0.8	96.5	0	0	0	
+000310	Semola	Cereali e derivati	100	100	346	11.5	0.5	76.9	3.6	1.9	0.03
+127160	Seppia	Prodotti della pesca	50	150	72	14	1.5	0.7	0	0.7	0.89
+123000	Sgombro o maccarello	Prodotti della pesca	80	150	170	17	11.1	0.5	0	0.5	0.33
+123010	Sgombro o maccarello, in salamoia	Prodotti della pesca	100	50	177	19.3	11.1	0	0	0	
+123100	Sogliola	Prodotti della pesca	48	150	83	16.9	1.4	0.8	0	0.8	0.3
+123110	Sogliola, surgelata	Prodotti della pesca	48	150	81	17.3	1.3	0.1	0	0.1	0.3
+509010	Soia, bevanda	Prodotti vari	100	125	32	2.9	1.9	0.8	0	0.8	0.08
+004910	Soia, isolato proteico	Legumi	100	10	369	86.5	0.7	4.5	0		
+509020	Soia, salsa	Prodotti vari	100	30	66	8.7	0	8.3	0	8.3	14.3
+004900	Soia, secca	Legumi	100	50	430	36.9	19.1	23.2	11.9	11	0.01
+509030	Soia, yogurt	Prodotti vari	100	125	72	5	4.2	3.9		3.9	
+110740	Soppressata di Calabria	Carni trasformate e conservate	100	50	377	34.2	26.3	0.9	0	0.9	
+110800	Speck dell'Alto Adige IGP	Carni trasformate e conservate	100	50	299	30.7	19.1	1.2	0		4.1
+123200	Spigola	Prodotti della pesca	54	150	82	16.5	1.5	0.6	0	0.6	0.32
+123220	Spigola d'allevamento, filetti	Prodotti della pesca	100	150	149	21.3	6.8	0.8	0	0.8	
+005704	Spinaci, cotti, al microonde	Verdure e ortaggi	100	200	35	3.4	0.7	3	1.9	0.4	
+005705	Spinaci, cotti, bolliti	Verdure e ortaggi	100	200	41	4	0.8	3.5	2.3	0.5	0.19
+005700	Spinaci, crudi	Verdure e ortaggi	83	200	35	3.4	0.7	2.9	1.9	0.4	0.25
+005710	Spinaci, surgelati	Verdure e ortaggi	100	200	15	2.8	0	0	1.8		0.14
+123300	Storione	Prodotti della pesca		150	145	19.2	7.6	0	0	0	0.11
+167250	Stracchino	Formaggi e latticini	100	50	300	18.5	25.1	0	0	0	
+193010	Strutto o sugna	Oli e grassi	100	10	892	0.3	99	0	0	0	
+108901	Struzzo, solo tessuto muscolare, cotto, al forno	Carni fresche	100	100	101	22.2	1.4	0	0	0	
+108900	Struzzo, solo tessuto muscolare, crudo	Carni fresche	100	100	92	20.9	0.9	0	0	0	
+008930	Succo di frutta	Frutta	100	125	56	0.3	0.1	14.5	0	14.5	
+124100	Suro o sugarello	Prodotti della pesca	55	150	104	18.3	3	1	0	1	0.28
+106700	Tacchino intero, con pelle, crudo	Carni fresche	70	100	135	18.2	6.9	0	0	0	
+106719	Tacchino intero, senza pelle, cotto, al forno	Carni fresche	59	88	117	23.3	2.6	0	0	0	
+106710	Tacchino intero, senza pelle, crudo	Carni fresche	58	100	109	21.9	2.4	0	0	0	
+106800	Tacchino, coscio, con pelle, crudo	Carni fresche	74	100	131	18.1	6.5	0	0	0	
+106856	Tacchino, fesa, cotta, al forno	Carni fresche	100	80	131	29.6	1.4	0	0	0	0.17
+106850	Tacchino, fesa, crudo	Carni fresche	100	100	107	24	1.2	0	0	0	0.13
+106903	Tacchino, fuso, con pelle, cotto, al forno	Carni fresche	71	88	191	26.7	9.3	0	0	0	0.29
+106900	Tacchino, fuso, con pelle, crudo	Carni fresche	74	100	126	17.9	6	0	0	0	0.22
+106913	Tacchino, fuso, senza pelle, cotto, al forno	Carni fresche	72	85	190	28	8.7	0	0	0	0.33
+106910	Tacchino, fuso, senza pelle, crudo	Carni fresche	73	100	113	18	4.6	0	0	0	0.23
+106963	Tacchino, sovracoscia, senza pelle, cotto, al forno	Carni fresche	84	85	182	30.2	6.8	0	0	0	0.28
+106960	Tacchino, sovracoscia, senza pelle, crudo	Carni fresche	86	100	120	18.5	5.1	0	0	0	0.19
+167600	Taleggio	Formaggi e latticini	100	50	315	19	26.2	0.9	0	0.9	2.18
+005470	Tarassaco o dente di leone, fresco	Verdure e ortaggi	100	200	37	3.1	1.1	3.7	0.4	3.7	0.19
+006200	Tartufo, nero	Verdure e ortaggi	79	5	48	6	0.5	0.7	8.4	0.7	
+123400	Tinca	Prodotti della pesca	55	150	79	17.9	0.5	0.9	0	0.9	0.2
+123500	Tonno	Prodotti della pesca	90	150	159	21.5	8.1	0.1	0	0.1	0.11
+123550	Tonno in salamoia, sgocciolato	Prodotti della pesca	100	50	103	25.1	0.3	0	0	0	0.84
+123610	Tonno sott'olio, sgocciolato	Prodotti della pesca	100	50	192	25.2	10.1	0	0	0	0.79
+006596	Topinambur, cotto, bollito	Verdure e ortaggi	100	200	52	1.6	0.1	10.6	2.7		
+202800	Torrone alla mandorla	Dolci	100	30	483	10.8	26.8	52	1.9	52	
+209010	Torta margherita	Dolci	100	100	370	8.9	10.4	63.4	1.4	34.1	
+000880	Tortellini, freschi	Cereali e derivati	100	125	302	12.2	7.1	49.9	1.2	1.3	
+000885	Tortellini, freschi, cotti	Cereali e derivati	100	150	158	6.4	3.7	26	0.6	0.7	
+000890	Tortellini, secchi	Cereali e derivati	100	100	379	15.7	10.8	57.6	1.6	1.5	
+123900	Triglia	Prodotti della pesca	60	150	123	15.8	6.2	1.1	0	1.1	
+115800	Trippa di bovini	Frattaglie	100	100	108	15.8	5	0	0	0	0.27
+124000	Trota	Prodotti della pesca	55	150	86	14.7	3	0	0	0	0.1
+124050	Trota iridea d'allevamento, filetti	Prodotti della pesca	100	150	118	20.3	4.1	0	0	0	0.15
+124010	Trota surgelata	Prodotti della pesca	55	150	92	17.8	2.3	0	0	0	0.1
+124013	Trota surgelata, cotta, al microonde	Prodotti della pesca	55	150	105	20.4	2.6	0	0	0	0.12
+124014	Trota surgelata, cotta, in forno	Prodotti della pesca	55	110	136	26.7	3.2	0	0	0	
+508100	Tè, foglie	Prodotti vari	100	2	108	19.6	2	3		3	0.11
+180010	Uova di anatra, intero	Uova	88	50	190	12.2	15.4	0.7	0	0.7	0.3
+182010	Uova di gallina, albume	Uova	100	35	43	10.7	0	0	0	0	0.45
+181100	Uova di gallina, intero	Uova	91	50	128	12.4	8.7	0	0	0	0.34
+181500	Uova di gallina, intero, congelato	Uova	100	50	128	12.4	8.7	0	0	0	
+181117	Uova di gallina, intero, cotto, a frittata o strapazzato	Uova	100	50	150	14.6	10.2	0	0	0	
+181105	Uova di gallina, intero, cotto, alla coque o sodo	Uova	100	50	128	12.4	8.7	0	0	0	
+181600	Uova di gallina, intero, in polvere	Uova	100	100	537	51.9	36.4	0.4	0	0.4	1.43
+183010	Uova di gallina, tuorlo	Uova	100	15	325	15.8	29.1	0	0	0	0.11
+183800	Uova di gallina, tuorlo, congelato	Uova	100	15	325	15.8	29.1	0	0	0	
+183015	Uova di gallina, tuorlo, cotto, in camicia	Uova	100	15	325	15.8	29.1	0	0	0	
+183900	Uova di gallina, tuorlo, in polvere	Uova	100	100	642	31.2	57.5	0.02	0	0.02	
+185010	Uova di oca, intero	Uova	87	50	189	13.8	14.4	1	0	1	
+189010	Uova di tacchina, intero	Uova	87	50	147	12.8	10.2	1	0	1	
+007390	Uva, bianca, fresca	Frutta	95	150	86	0.4	0.1	21.5	1.4	21.5	0
+007380	Uva, fresca	Frutta	94	150	64	0.5	0.1	15.6	1.5	15.6	0
+007400	Uva, nera, fresca	Frutta	95	150	53	0.5	0.1	12.6	1.6	12.6	0
+007410	Uva, secca	Frutta	100	30	293	1.9	0.6	72	5.2	72	0.13
+007420	Uva, succo, in cartone	Frutta	100	125	66	0.3	0	17.3	0	17.3	0.01
+006990	Vegetali misti, surgelati	Verdure e ortaggi	100	200	67	3.3	0.3	13.7			0.15
+101521	Vitello, filetto, cotto in padella	Carni fresche	100	83	126	24.4	3.2	0	0	0	
+101520	Vitello, filetto, crudo	Carni fresche	100	100	107	20.7	2.7	0	0	0	0.22
+127170	Vongola	Prodotti della pesca	25	150	65	9.8	1.2	3.9	0	0	1.48
+214500	Wafer ricoperto di cioccolato	Dolci	100	30	498	8.2	26.6	60.3		46.8	0.28
+110906	Wurstel di puro suino, cotto	Carni trasformate e conservate	100	50	259	14.6	22.2	0.3	0		2.3
+110900	Wurstel di puro suino, crudo	Carni trasformate e conservate	100	50	250	13.2	21.1	1.9	0		2.2
+158000	Yogurt caprino	Latte e yogurt	100	125	60	3.6	2.9	5.1	0	5.1	0.15
+150500	Yogurt da latte intero, alla frutta	Latte e yogurt	100	125	80	3.4	2.8	10.5	1	10.5	
+151000	Yogurt da latte, parzialmente scremato	Latte e yogurt	100	125	43	3.4	1.7	3.8	0	3.8	0.11
+152000	Yogurt da latte, scremato	Latte e yogurt	100	125	36	3.3	0.9	4	0	4	0.14
+150030	Yogurt greco, 0% lipidi	Latte e yogurt	100	125	51	9	0	4	0	4	
+150035	Yogurt greco, 0% lipidi, aromatizzato	Latte e yogurt	100	125	86	7.5	0	15	0	14	
+150020	Yogurt greco, da latte intero	Latte e yogurt	100	125	115	6.4	9.1	2	0	2	0.18
+150025	Yogurt greco, da latte magro, alla frutta	Latte e yogurt	100	125	74	6	0.9	11	0.5	11	
+150015	Yogurt, 0% lipidi	Latte e yogurt	100	125	42	4.7	0.1	6	0	6	
+150010	Yogurt, da latte intero	Latte e yogurt	100	125	66	3.8	3.9	4.3	0	4.3	0.12
+110950	Zampone confezionato, precotto	Carni trasformate e conservate	100	50	361	19.1	31.6	0	0	0	1.91
+110955	Zampone Modena IGP, cotto	Carni trasformate e conservate	100	50	262	23.7	17.5	2.6	0		1.7
+005720	Zucca gialla, fresca	Verdure e ortaggi	81	200	29	1.1	0.1	3.5	5.5	2.5	
+201500	Zucchero, saccarosio	Dolci	100	5	392	0	0	104.5	0	104.5	0
+005741	Zucchine chiare, cotte, al vapore	Verdure e ortaggi	100	200	20	2	0	2.5	1.3	2.5	0
+005742	Zucchine chiare, cotte, in padella grigliate	Verdure e ortaggi	100	200	29	0	0.2	5.7	2.8	5.7	0.01
+005740	Zucchine, chiare	Verdure e ortaggi	86	200	17	1.9	0.1	1.7	1.2	1.6	0
+005744	Zucchine, chiare, cotte, al microonde	Verdure e ortaggi	100	200	23	2	0.1	3	1.6	3	0.01
+005735	Zucchine, cotte, bollite	Verdure e ortaggi	100	200	30	3.2	0.2	3.4	1.3	3.2	
+005730	Zucchine, crude	Verdure e ortaggi	88	200	16	1.5	0.1	1.7	1.2	1.8	0
+005754	Zucchine, scure, cotte, al microonde	Verdure e ortaggi	100	200	23	1.8	0	3.5	1.5	3.5	0
+005751	Zucchine, scure, cotte, al vapore	Verdure e ortaggi	100	200	20	1.6	0.1	2.7	1.5	2.7	0
+005752	Zucchine, scure, cotte, in padella grigliate	Verdure e ortaggi	100	200	37	2.7	0.1	5.6	2	5.5	0.01
+005750	Zucchine, scure, crude	Verdure e ortaggi	89	200	17	1.4	0.1	2.1	1.2	2	0

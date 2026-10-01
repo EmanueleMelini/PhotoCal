@@ -25,6 +25,9 @@ data class AnalyzedFood(
     @SerialName("protein_g") val proteinG: Double? = null,
     @SerialName("carbs_g") val carbsG: Double? = null,
     @SerialName("fat_g") val fatG: Double? = null,
+    @SerialName("fiber_g") val fiberG: Double? = null,
+    @SerialName("sugars_g") val sugarsG: Double? = null,
+    @SerialName("salt_g") val saltG: Double? = null,
     /** "high", "medium" or "low". */
     val confidence: String? = null,
     /** Code of the matching CREA food (empty if none or if the tables are disabled). */
@@ -46,6 +49,9 @@ internal val FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
                     property("protein_g", "NUMBER", "Protein in grams")
                     property("carbs_g", "NUMBER", "Carbohydrates in grams")
                     property("fat_g", "NUMBER", "Fat in grams")
+                    property("fiber_g", "NUMBER", "Fiber in grams, if known")
+                    property("sugars_g", "NUMBER", "Sugars in grams, if known")
+                    property("salt_g", "NUMBER", "Salt in grams, if known")
                     property("crea_code", "STRING", "CREA code of the matching food, empty if none")
                     putJsonObject("confidence") {
                         put("type", "STRING")
@@ -57,8 +63,10 @@ internal val FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
                     }
                 }
                 val fields = listOf("name", "grams", "kcal", "protein_g", "carbs_g", "fat_g", "confidence", "crea_code")
+                // Fiber, sugars and salt are optional: the model leaves them out when unsure
+                val optional = listOf("fiber_g", "sugars_g", "salt_g")
                 putJsonArray("required") { fields.forEach { add(it) } }
-                putJsonArray("propertyOrdering") { fields.forEach { add(it) } }
+                putJsonArray("propertyOrdering") { (fields + optional).forEach { add(it) } }
             }
         }
         property("notes", "STRING", "Short remarks: assumed condiments, uncertainties")

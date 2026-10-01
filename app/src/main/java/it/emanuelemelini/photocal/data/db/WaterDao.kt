@@ -25,6 +25,12 @@ interface WaterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(intake: WaterIntake)
 
+    @Query("SELECT * FROM water_intake ORDER BY date")
+    suspend fun getAll(): List<WaterIntake>
+
+    @Query("DELETE FROM water_intake")
+    suspend fun deleteAll()
+
     /** Adds [deltaMl] (negative to remove) to the day, never going below zero. */
     @Transaction
     suspend fun add(date: LocalDate, deltaMl: Int, now: Instant) {

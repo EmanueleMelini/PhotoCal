@@ -9,6 +9,16 @@
     <!-- In-app updates from GitHub Releases: the user still grants "Install unknown apps" and
          confirms every install -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- Health Connect: requested only when the user connects it in Settings -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+    <uses-permission android:name="android.permission.health.WRITE_WEIGHT" />
+    <uses-permission android:name="android.permission.health.WRITE_HYDRATION" />
+
+    <!-- Health Connect app on Android 13 and lower -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
 
     <application
         android:name=".PhotoCalApp"
@@ -38,7 +48,23 @@
                     android:path="/d"
                     android:scheme="https" />
             </intent-filter>
+            <!-- Health Connect permission rationale (Android 13 and lower) -->
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
         </activity>
+
+        <!-- Health Connect permission rationale (Android 14+) -->
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- App icon choice (Settings > Appearance): exactly one alias is enabled at a time.
              The alias names are used by AppIcon: don't rename them. -->

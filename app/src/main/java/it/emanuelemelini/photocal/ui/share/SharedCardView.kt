@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.MealType
+import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.share.SharedCard
@@ -224,7 +225,12 @@ private fun Meals(entries: List<SharedEntry>) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 4.dp)) {
                     Column(Modifier.weight(1f)) {
                         Text(entry.name, style = MaterialTheme.typography.bodyLarge)
-                        quantityLabel(entry.grams, entry.servingUnit, entry.servings)?.let {
+                        val label = if (entry.pieces != null) {
+                            quantityLabel(entry.grams, ServingUnit.PIECE, entry.pieces, entry.pieceLabel)
+                        } else {
+                            quantityLabel(entry.grams, entry.servingUnit, entry.servings)
+                        }
+                        label?.let {
                             Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }

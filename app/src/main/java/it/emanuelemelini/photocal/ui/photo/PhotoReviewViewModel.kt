@@ -91,6 +91,15 @@ data class ReviewItem(
         )
     }
 
+    /**
+     * Fiber, sugars and salt for the grams of the row, from the ratios of the chosen source
+     * (not editable here: they can be changed later from the diary).
+     */
+    fun extras(): Triple<Double?, Double?, Double?> {
+        val g = parseDecimal(grams)?.takeIf { it > 0 } ?: return Triple(null, null, null)
+        return Triple(perGram?.fiber?.times(g), perGram?.sugars?.times(g), perGram?.salt?.times(g))
+    }
+
     private fun perGram(valueText: String): Double? {
         val value = parseDecimal(valueText) ?: return null
         val g = parseDecimal(grams)?.takeIf { it > 0 } ?: return null
@@ -225,6 +234,7 @@ class PhotoReviewViewModel(
             val now = Instant.now()
             foodRepository.addAll(
                 current.mapIndexed { index, item ->
+                    val (fiber, sugars, salt) = item.extras()
                     FoodEntry(
                         date = date,
                         mealType = mealType,
@@ -238,6 +248,9 @@ class PhotoReviewViewModel(
                         photoPath = photoPath,
                         // Staggered milliseconds to keep the row order in the diary
                         createdAt = now.plusMillis(index.toLong()),
+                        fiberG = fiber,
+                        sugarsG = sugars,
+                        saltG = salt,
                     )
                 }
             )

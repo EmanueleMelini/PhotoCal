@@ -9,7 +9,8 @@ import java.time.LocalDate
 /**
  * What a share link carries: one day or a week, in read-only form. Short JSON names keep the
  * link short; null fields are the ones the sender chose to hide. Field names and meanings are
- * part of the link format: change them only with a new [ShareCodec.VERSION].
+ * part of the link format: change them only with a new [ShareCodec.VERSION]. A new optional
+ * field that older versions can simply ignore doesn't need one.
  */
 @Serializable
 data class SharedCard(
@@ -58,9 +59,16 @@ data class SharedEntry(
     @SerialName("n") val name: String,
     @SerialName("k") val kcal: Double,
     @SerialName("g") val grams: Double? = null,
-    /** [ServingUnit] name. */
+    /** [ServingUnit] name, never [ServingUnit.PIECE]: older versions reject unknown units. */
     @SerialName("u") val unit: String? = null,
     @SerialName("s") val servings: Double? = null,
+    /**
+     * Number of pieces (since 1.4.0), with [grams] as the total and no [unit]: older versions
+     * ignore it and show the grams.
+     */
+    @SerialName("pc") val pieces: Double? = null,
+    /** Name of the pieces from the package, e.g. "biscotti" (null = the generic "pieces"). */
+    @SerialName("pl") val pieceLabel: String? = null,
 ) {
     val mealType: MealType? get() = MealType.entries.find { it.name == meal }
     val servingUnit: ServingUnit? get() = ServingUnit.entries.find { it.name == unit }

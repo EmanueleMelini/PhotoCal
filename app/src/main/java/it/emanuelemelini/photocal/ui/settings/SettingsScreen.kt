@@ -81,6 +81,7 @@ private const val AI_STUDIO_URL = "https://aistudio.google.com/apikey"
 fun SettingsScreen(
     onBack: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenHealthPrivacy: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
@@ -290,6 +291,14 @@ fun SettingsScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) { Text(stringResource(R.string.action_save)) }
+
+            HorizontalDivider()
+
+            HealthSection(onOpenPrivacy = onOpenHealthPrivacy)
+
+            HorizontalDivider()
+
+            DataSection(onMessage = { text -> scope.launch { snackbarHostState.showSnackbar(text) } })
 
             HorizontalDivider()
 

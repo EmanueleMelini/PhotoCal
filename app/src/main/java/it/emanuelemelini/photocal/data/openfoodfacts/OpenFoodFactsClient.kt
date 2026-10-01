@@ -63,6 +63,7 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
             ?: nutriments?.double("energy-kj_100g")?.let { it / KJ_PER_KCAL }
         val quantityUnit = string("product_quantity_unit")?.lowercase()
         val quantityText = string("quantity")?.lowercase().orEmpty()
+        val servingQuantity = double("serving_quantity")?.takeIf { it > 0 }
         return Product(
             barcode = barcode,
             // Name in the app language when available, otherwise the generic one
@@ -74,8 +75,12 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
             proteinPer100 = nutriments?.double("proteins_100g"),
             carbsPer100 = nutriments?.double("carbohydrates_100g"),
             fatPer100 = nutriments?.double("fat_100g"),
-            servingQuantity = double("serving_quantity")?.takeIf { it > 0 },
+            fiberPer100 = nutriments?.double("fiber_100g"),
+            sugarsPer100 = nutriments?.double("sugars_100g"),
+            saltPer100 = saltPer100(nutriments?.double("salt_100g"), nutriments?.double("sodium_100g")),
+            servingQuantity = servingQuantity,
             packageQuantity = double("product_quantity")?.takeIf { it > 0 },
+            servingPieces = ServingSize.parse(string("serving_size"), servingQuantity),
             isLiquid = quantityUnit == "ml" || LIQUID_QUANTITY.containsMatchIn(quantityText),
             imageUrl = string("image_front_small_url"),
         )
@@ -94,8 +99,13 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
         const val KJ_PER_KCAL = 4.184
         val FIELDS = listOf(
             "product_name", *AppLanguage.entries.map { "product_name_${it.tag}" }.toTypedArray(), "brands", "nutriments", "quantity",
-            "serving_quantity", "product_quantity", "product_quantity_unit", "image_front_small_url",
+            "serving_size", "serving_quantity", "product_quantity", "product_quantity_unit", "image_front_small_url",
         ).joinToString(",")
         val LIQUID_QUANTITY = Regex("""\d\s*(ml|cl|l)\b""")
     }
 }
+
+/** Salt per 100 g; without it, from sodium as on food labels (salt = sodium × 2.5). */
+internal fun saltPer100(salt: Double?, sodium: Double?): Double? = salt ?: sodium?.times(SALT_PER_SODIUM)
+
+private const val SALT_PER_SODIUM = 2.5

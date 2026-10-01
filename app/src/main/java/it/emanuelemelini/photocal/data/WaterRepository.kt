@@ -8,8 +8,8 @@ import java.time.LocalDate
 
 class WaterRepository(
     private val dao: WaterDao,
-    /** Called after every change, e.g. to refresh the home screen widget. */
-    private val onChanged: suspend () -> Unit = {},
+    /** Called after every change of a day, e.g. to refresh the home screen widget. */
+    private val onChanged: suspend (LocalDate) -> Unit = {},
 ) {
 
     fun observeMl(date: LocalDate): Flow<Int> = dao.observeMl(date).map { it ?: 0 }
@@ -26,6 +26,6 @@ class WaterRepository(
 
     private suspend fun change(date: LocalDate, deltaMl: Int) {
         dao.add(date, deltaMl, Instant.now())
-        onChanged()
+        onChanged(date)
     }
 }

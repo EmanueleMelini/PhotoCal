@@ -8,8 +8,16 @@ import it.emanuelemelini.photocal.data.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.flow.first
 
-/** Kcal and macros per gram of food. */
-data class PerGram(val kcal: Double, val protein: Double?, val carbs: Double?, val fat: Double?)
+/** Kcal, macros, fiber, sugars and salt per gram of food. */
+data class PerGram(
+    val kcal: Double,
+    val protein: Double?,
+    val carbs: Double?,
+    val fat: Double?,
+    val fiber: Double? = null,
+    val sugars: Double? = null,
+    val salt: Double? = null,
+)
 
 /** Estimated food: AI values and, if found, the matching CREA food. */
 data class EstimatedFood(
@@ -21,11 +29,19 @@ data class EstimatedFood(
     val aiProteinG: Double?,
     val aiCarbsG: Double?,
     val aiFatG: Double?,
+    val aiFiberG: Double?,
+    val aiSugarsG: Double?,
+    val aiSaltG: Double?,
     val aiPerGram: PerGram?,
     val crea: CreaFood?,
 ) {
     val creaPerGram: PerGram?
-        get() = crea?.let { PerGram(it.kcal / 100, it.proteinG?.div(100), it.carbsG?.div(100), it.fatG?.div(100)) }
+        get() = crea?.let {
+            PerGram(
+                it.kcal / 100, it.proteinG?.div(100), it.carbsG?.div(100), it.fatG?.div(100),
+                it.fiberG?.div(100), it.sugarsG?.div(100), it.saltG?.div(100),
+            )
+        }
 
     /** Values to use: CREA when there is a match, otherwise the AI estimate. */
     val perGram: PerGram? get() = creaPerGram ?: aiPerGram
@@ -66,7 +82,12 @@ class FoodEstimator(
             aiProteinG = proteinG,
             aiCarbsG = carbsG,
             aiFatG = fatG,
-            aiPerGram = g?.let { PerGram(kcal / it, proteinG?.div(it), carbsG?.div(it), fatG?.div(it)) },
+            aiFiberG = fiberG,
+            aiSugarsG = sugarsG,
+            aiSaltG = saltG,
+            aiPerGram = g?.let {
+                PerGram(kcal / it, proteinG?.div(it), carbsG?.div(it), fatG?.div(it), fiberG?.div(it), sugarsG?.div(it), saltG?.div(it))
+            },
             // The code picked by the AI counts only if it really exists in the table
             crea = creaCode?.takeIf { it.isNotBlank() }?.let { creaTable.get(it) },
         )

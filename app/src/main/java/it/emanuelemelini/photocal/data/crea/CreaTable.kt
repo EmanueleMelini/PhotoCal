@@ -13,6 +13,9 @@ data class CreaFood(
     val proteinG: Double?,
     val fatG: Double?,
     val carbsG: Double?,
+    val fiberG: Double?,
+    val sugarsG: Double?,
+    val saltG: Double?,
 )
 
 /**
@@ -50,12 +53,15 @@ class CreaTable(private val context: Context) {
             proteinG = cols[6].toDoubleOrNull(),
             fatG = cols[7].toDoubleOrNull(),
             carbsG = cols[8].toDoubleOrNull(),
+            fiberG = cols[9].toDoubleOrNull(),
+            sugarsG = cols[10].toDoubleOrNull(),
+            saltG = cols[11].toDoubleOrNull(),
         )
     }
 
     companion object {
         const val SOURCE = "CREA – Tabelle di composizione degli alimenti (alimentinutrizione.it)"
         private const val ASSET = "crea_foods.tsv"
-        private const val COLUMN_COUNT = 10
+        private const val COLUMN_COUNT = 12
     }
 }

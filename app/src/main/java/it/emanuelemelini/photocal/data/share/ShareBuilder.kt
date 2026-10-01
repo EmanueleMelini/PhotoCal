@@ -4,6 +4,8 @@ import it.emanuelemelini.photocal.BuildConfig
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.WaterRepository
 import it.emanuelemelini.photocal.data.WeightRepository
+import it.emanuelemelini.photocal.data.db.FoodEntry
+import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
@@ -63,16 +65,7 @@ class ShareBuilder(
                 waterMl = if (options.water) water[day] ?: 0 else null,
                 weightKg = weights[day]?.let(::round1),
                 entries = if (options.meals && !options.week) {
-                    foodRepository.observeEntries(day).first().map { entry ->
-                        SharedEntry(
-                            meal = entry.mealType.name,
-                            name = entry.name.trim().take(ShareValidation.MAX_ENTRY_NAME),
-                            kcal = round1(entry.kcal),
-                            grams = entry.grams?.let(::round1),
-                            unit = entry.servingUnit?.name,
-                            servings = entry.servings?.let(::round1),
-                        )
-                    }.take(ShareValidation.MAX_ENTRIES)
+                    foodRepository.observeEntries(day).first().map { it.toSharedEntry() }.take(ShareValidation.MAX_ENTRIES)
                 } else {
                     null
                 },
@@ -107,8 +100,6 @@ class ShareBuilder(
     /** Payload of a link opened from outside (the part after '#'). */
     fun decode(payload: String): ShareCodec.Result = ShareCodec.decode(payload, key)
 
-    private fun round1(value: Double): Double = (value * 10).roundToLong() / 10.0
-
     companion object {
         /** The data travel after '#': browsers never send that part to the server. */
         fun linkPrefix() = "https://${BuildConfig.SHARE_HOST}$PATH#"
@@ -116,3 +107,21 @@ class ShareBuilder(
         const val PATH = "/d"
     }
 }
+
+/** Entry of a shared day. */
+internal fun FoodEntry.toSharedEntry(): SharedEntry {
+    val inPieces = servingUnit == ServingUnit.PIECE
+    return SharedEntry(
+        meal = mealType.name,
+        name = name.trim().take(ShareValidation.MAX_ENTRY_NAME),
+        kcal = round1(kcal),
+        grams = grams?.let(::round1),
+        // Pieces go in their own fields, so older versions still read the grams
+        unit = servingUnit?.takeUnless { inPieces }?.name,
+        servings = servings?.takeUnless { inPieces }?.let(::round1),
+        pieces = servings?.takeIf { inPieces }?.let(::round1),
+        pieceLabel = servingLabel?.trim()?.take(ShareValidation.MAX_PIECE_LABEL)?.takeIf { inPieces && it.isNotEmpty() },
+    )
+}
+
+private fun round1(value: Double): Double = (value * 10).roundToLong() / 10.0

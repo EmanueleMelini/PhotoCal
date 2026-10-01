@@ -9,10 +9,15 @@ data class Product(
     val proteinPer100: Double?,
     val carbsPer100: Double?,
     val fatPer100: Double?,
+    val fiberPer100: Double? = null,
+    val sugarsPer100: Double? = null,
+    val saltPer100: Double? = null,
     /** Serving suggested by the manufacturer, in g or ml. */
     val servingQuantity: Double?,
     /** Package content, in g or ml. */
     val packageQuantity: Double?,
+    /** Pieces in the manufacturer's serving, when the package says how many. */
+    val servingPieces: ServingPieces?,
     val isLiquid: Boolean,
     val imageUrl: String?,
 ) {

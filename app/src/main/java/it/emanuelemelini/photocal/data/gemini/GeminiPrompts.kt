@@ -17,6 +17,8 @@ internal object GeminiPrompts {
           glasses and packages as size references. For drinks use grams equal to the ml.
         - Compute kcal, protein, carbohydrates and fat (in grams) with standard nutrition
           values (CREA or USDA tables), for the food as eaten (cooked, dressed).
+        - When the tables give them, also add fiber, sugars and salt (in grams); leave them
+          out if unknown.
         - Consider likely condiments (oil, butter, sauces, sugar). If significant, add them
           as a separate item, e.g. "Extra virgin olive oil (estimated)", without also counting
           them inside the dish, and mention them in notes.
@@ -40,6 +42,8 @@ internal object GeminiPrompts {
         - grams: weight of the portion in grams (for drinks, ml).
         - Compute kcal, protein, carbohydrates and fat (in grams) with standard nutrition
           values (CREA or USDA tables), for the food as eaten.
+        - When the tables give them, also add fiber, sugars and salt (in grams); leave them
+          out if unknown.
         - If the description is ambiguous, pick the most common interpretation and say so
           in notes.
         - If the description isn't about food or drinks, return an empty items list and

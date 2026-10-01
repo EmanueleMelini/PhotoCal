@@ -3,12 +3,16 @@ package it.emanuelemelini.photocal
 import android.app.Application
 import android.content.Context
 import it.emanuelemelini.photocal.data.FoodRepository
+import it.emanuelemelini.photocal.data.SavedFoodRepository
 import it.emanuelemelini.photocal.data.WaterRepository
 import it.emanuelemelini.photocal.data.WeightRepository
+import it.emanuelemelini.photocal.data.backup.BackupManager
 import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.data.db.AppDatabase
 import it.emanuelemelini.photocal.data.estimate.FoodEstimator
 import it.emanuelemelini.photocal.data.gemini.GeminiClient
+import it.emanuelemelini.photocal.data.health.HealthConnect
+import it.emanuelemelini.photocal.data.health.HealthSync
 import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
 import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
@@ -81,13 +85,17 @@ class AppContainer(context: Context) {
     val photoStorage = PhotoStorage(context)
     val profilePhotoStorage = ProfilePhotoStorage(context)
     val settingsRepository = SettingsRepository(context)
-    val weightRepository = WeightRepository(database.weightDao())
-    val waterRepository = WaterRepository(database.waterDao()) {
+    val healthConnect = HealthConnect(context)
+    private val healthSync = HealthSync(healthConnect, settingsRepository, applicationScope)
+    val weightRepository = WeightRepository(database.weightDao()) { date, weightKg -> healthSync.weight(date, weightKg) }
+    val waterRepository: WaterRepository = WaterRepository(database.waterDao()) { date ->
         waterWidget.update()
         reminderNotifier.refreshWater()
+        healthSync.water(date, waterRepository.mlFor(date))
     }
     val waterWidget: WaterWidget = WaterWidget(context, waterRepository, settingsRepository)
-    val foodRepository: FoodRepository = FoodRepository(database.foodDao(), photoStorage) { date, meal ->
+    val savedFoodRepository = SavedFoodRepository(database.savedFoodDao())
+    val foodRepository: FoodRepository = FoodRepository(database.foodDao(), savedFoodRepository, photoStorage) { date, meal ->
         // A meal logged today makes its pending reminder pointless
         if (date == LocalDate.now()) reminderNotifier.cancelMeal(meal)
     }
@@ -104,4 +112,8 @@ class AppContainer(context: Context) {
         applicationScope,
     )
     val whatsNew = WhatsNew(context, settingsRepository)
+    val backupManager = BackupManager(context, database, settingsRepository, photoStorage) {
+        reminderScheduler.rescheduleAll()
+        waterWidget.update()
+    }
 }

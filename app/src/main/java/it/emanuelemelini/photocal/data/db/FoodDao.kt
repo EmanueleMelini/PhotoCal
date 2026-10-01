@@ -38,12 +38,22 @@ interface FoodDao {
     @Query("SELECT * FROM food_entries WHERE date = :date ORDER BY createdAt")
     fun observeByDate(date: LocalDate): Flow<List<FoodEntry>>
 
+    @Query("SELECT * FROM food_entries WHERE date = :date ORDER BY createdAt")
+    suspend fun getByDate(date: LocalDate): List<FoodEntry>
+
+    @Query("SELECT * FROM food_entries ORDER BY date, createdAt")
+    suspend fun getAll(): List<FoodEntry>
+
+    @Query("DELETE FROM food_entries")
+    suspend fun deleteAll()
+
     @Query(
         """
         SELECT COALESCE(SUM(kcal), 0) AS kcal,
                COALESCE(SUM(proteinG), 0) AS proteinG,
                COALESCE(SUM(carbsG), 0) AS carbsG,
-               COALESCE(SUM(fatG), 0) AS fatG
+               COALESCE(SUM(fatG), 0) AS fatG,
+               SUM(fiberG) AS fiberG, SUM(sugarsG) AS sugarsG, SUM(saltG) AS saltG
         FROM food_entries WHERE date = :date
         """
     )
@@ -54,7 +64,8 @@ interface FoodDao {
         SELECT COALESCE(SUM(kcal), 0) AS kcal,
                COALESCE(SUM(proteinG), 0) AS proteinG,
                COALESCE(SUM(carbsG), 0) AS carbsG,
-               COALESCE(SUM(fatG), 0) AS fatG
+               COALESCE(SUM(fatG), 0) AS fatG,
+               SUM(fiberG) AS fiberG, SUM(sugarsG) AS sugarsG, SUM(saltG) AS saltG
         FROM food_entries WHERE date = :date
         """
     )

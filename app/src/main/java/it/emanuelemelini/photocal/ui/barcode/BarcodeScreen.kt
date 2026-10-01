@@ -55,13 +55,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.google.mlkit.common.MlKitException
 import it.emanuelemelini.photocal.R
+import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.data.openfoodfacts.Product
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.components.QuantityRow
 import it.emanuelemelini.photocal.ui.components.errorText
+import it.emanuelemelini.photocal.ui.extrasLabel
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.pieceName
 import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -74,7 +77,7 @@ fun BarcodeScreen(
 ) {
     val container = appContainer()
     val viewModel: BarcodeViewModel = viewModel {
-        BarcodeViewModel(createSavedStateHandle(), container.foodRepository, container.openFoodFactsClient)
+        BarcodeViewModel(createSavedStateHandle(), container.foodRepository, container.savedFoodRepository, container.openFoodFactsClient)
     }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -160,6 +163,7 @@ fun BarcodeScreen(
 
                 is BarcodeStatus.Found -> ProductForm(
                     product = status.product,
+                    offline = status.offline,
                     viewModel = viewModel,
                     onScanAgain = ::startScan,
                 )
@@ -242,10 +246,19 @@ private fun MessageCard(
 @Composable
 private fun ProductForm(
     product: Product,
+    offline: Boolean,
     viewModel: BarcodeViewModel,
     onScanAgain: () -> Unit,
 ) {
     val unitLabel = if (product.isLiquid) "ml" else "g"
+
+    if (offline) {
+        Text(
+            stringResource(R.string.barcode_offline),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
 
     OutlinedCard(Modifier.fillMaxWidth()) {
         Row(
@@ -294,14 +307,37 @@ private fun ProductForm(
         unit = viewModel.unit,
         onUnitChange = viewModel::onUnitChange,
         isError = viewModel.showErrors && !viewModel.quantityValid,
+        units = ServingUnit.entries,
+        pieceGrams = viewModel.pieceGrams,
+        onPieceGramsChange = viewModel::onPieceGramsChange,
+        pieceGramsError = viewModel.showErrors && !viewModel.pieceGramsValid,
+        pieceLabel = product.servingPieces?.label,
     )
 
-    if (product.servingQuantity != null || product.packageQuantity != null) {
+    val pieces = product.servingPieces
+    if (product.servingQuantity != null || product.packageQuantity != null || pieces != null) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             product.servingQuantity?.let { serving ->
+                val label = if (pieces != null) {
+                    val count = serving / pieces.pieceGrams
+                    stringResource(
+                        R.string.barcode_one_serving_pieces,
+                        "${count.formatAmount()} ${pieceName(count, pieces.label)}",
+                        serving.formatAmount(),
+                        unitLabel,
+                    )
+                } else {
+                    stringResource(R.string.barcode_one_serving, serving.formatAmount(), unitLabel)
+                }
                 AssistChip(
                     onClick = { viewModel.useAmount(serving, product.isLiquid) },
-                    label = { Text(stringResource(R.string.barcode_one_serving, serving.formatAmount(), unitLabel)) },
+                    label = { Text(label) },
+                )
+            }
+            pieces?.let {
+                AssistChip(
+                    onClick = { viewModel.useOnePiece(it.pieceGrams) },
+                    label = { Text(stringResource(R.string.barcode_one_piece, pieceName(1.0, null), it.pieceGrams.formatAmount())) },
                 )
             }
             product.packageQuantity?.takeIf { it != product.servingQuantity }?.let { pack ->
@@ -332,6 +368,9 @@ private fun ProductForm(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        extrasLabel(values.fiberG, values.sugarsG, values.saltG)?.let {
+            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
     }
 
     MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)

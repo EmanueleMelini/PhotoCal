@@ -1,18 +1,18 @@
 package it.emanuelemelini.photocal.ui.entry
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +25,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -50,11 +55,14 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import it.emanuelemelini.photocal.R
+import it.emanuelemelini.photocal.data.db.SavedFood
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.components.NumberField
 import it.emanuelemelini.photocal.ui.components.QuantityRow
 import it.emanuelemelini.photocal.ui.components.errorText
+import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.quantityLabel
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +73,7 @@ fun EntryScreen(
 ) {
     val container = appContainer()
     val viewModel: EntryViewModel = viewModel {
-        EntryViewModel(createSavedStateHandle(), container.foodRepository, container.foodEstimator)
+        EntryViewModel(createSavedStateHandle(), container.foodRepository, container.savedFoodRepository, container.foodEstimator)
     }
     val form = viewModel.form
     val showErrors = viewModel.showErrors
@@ -140,6 +148,10 @@ fun EntryScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            if (viewModel.suggestions.isNotEmpty()) {
+                Suggestions(viewModel.suggestions, onPick = viewModel::useSavedFood)
+            }
+
             AiEstimateSection(
                 estimate = viewModel.aiEstimate,
                 onEstimate = viewModel::estimateWithAi,
@@ -157,6 +169,11 @@ fun EntryScreen(
                 unit = form.unit,
                 onUnitChange = { viewModel.onFormChange(form.copy(unit = it)) },
                 isError = showErrors && !form.quantityValid,
+                units = viewModel.units,
+                pieceGrams = form.pieceGrams,
+                onPieceGramsChange = { viewModel.onFormChange(form.copy(pieceGrams = it)) },
+                pieceGramsError = showErrors && !form.pieceGramsValid,
+                pieceLabel = form.pieceLabel,
             )
 
             NumberField(
@@ -193,6 +210,34 @@ fun EntryScreen(
                     label = stringResource(R.string.entry_fat_g),
                     isError = showErrors && !form.fatValid,
                     error = stringResource(R.string.error_invalid),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Text(stringResource(R.string.entry_extras_optional), style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                NumberField(
+                    value = form.fiber,
+                    onValueChange = { viewModel.onFormChange(form.copy(fiber = it)) },
+                    label = stringResource(R.string.label_fiber_g),
+                    isError = showErrors && !form.fiberValid,
+                    error = stringResource(R.string.error_invalid),
+                    modifier = Modifier.weight(1f),
+                )
+                NumberField(
+                    value = form.sugars,
+                    onValueChange = { viewModel.onFormChange(form.copy(sugars = it)) },
+                    label = stringResource(R.string.label_sugars_g),
+                    isError = showErrors && !form.sugarsValid,
+                    error = stringResource(R.string.error_invalid),
+                    modifier = Modifier.weight(1f),
+                )
+                NumberField(
+                    value = form.salt,
+                    onValueChange = { viewModel.onFormChange(form.copy(salt = it)) },
+                    label = stringResource(R.string.label_salt_g),
+                    isError = showErrors && !form.saltValid,
+                    error = stringResource(R.string.error_invalid),
                     imeAction = ImeAction.Done,
                     modifier = Modifier.weight(1f),
                 )
@@ -222,6 +267,29 @@ fun EntryScreen(
                 TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.action_cancel)) }
             },
         )
+    }
+}
+
+/** Saved foods matching the typed name: one tap fills the form. */
+@Composable
+private fun Suggestions(foods: List<SavedFood>, onPick: (SavedFood) -> Unit) {
+    OutlinedCard(Modifier.fillMaxWidth()) {
+        Text(
+            stringResource(R.string.entry_suggestions),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+        )
+        foods.forEach { food ->
+            val quantity = quantityLabel(food.grams, food.servingUnit, food.servings, food.pieceLabel)
+            val kcal = food.kcalPer100 * food.grams / 100
+            ListItem(
+                headlineContent = { Text(food.name) },
+                supportingContent = { Text(listOfNotNull(quantity, "${kcal.formatKcal()} kcal").joinToString(" · ")) },
+                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                modifier = Modifier.clickable { onPick(food) },
+            )
+        }
     }
 }
 

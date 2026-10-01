@@ -97,12 +97,50 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
 - **Barcode**: lo scanner è quello di Google Play services (nessun permesso fotocamera); il
   modulo viene scaricato all'installazione. I valori nutrizionali arrivano da
   [Open Food Facts](https://world.openfoodfacts.org) (API v3). Il codice si può anche digitare.
+- **Pezzi (barcode)**: oltre a grammi e ml, la quantità si può dare in pezzi (es. 3 biscotti).
+  Scegliendo "pezzi" compare "Grammi per pezzo", sempre modificabile: è già compilato quando il
+  testo della porzione su Open Food Facts (`serving_size`) dice quanti pezzi sono, per esempio
+  "3 biscotti (25 g)" o "25 g (3 biscuits)" (`ServingSize.kt`). Se quel testo nomina i pezzi al
+  plurale, nel diario compare il suo nome ("3 biscotti (25 g)"), altrimenti "pezzi"/"pieces".
+  Il diario salva i grammi totali, il numero di pezzi e il nome; i grammi di un pezzo si
+  ricavano da questi. Nell'inserimento manuale "pezzi" compare solo per un alimento già usato
+  in pezzi (dai recenti o dai suggerimenti).
+- **Recenti e preferiti**: ogni voce nuova (foto, barcode, manuale) salva il suo alimento nella
+  tabella `saved_foods`, con i valori per 100 g e l'ultima quantità; il barcode per codice, gli
+  altri per nome. "Recenti" nel menu + mostra i preferiti (cuore) e gli ultimi 50, con ricerca;
+  tenendo premuto si toglie un alimento. Toccandolo si apre il form già compilato, con kcal e
+  valori che seguono la quantità. Nell'inserimento manuale, da 2 lettere del nome compaiono fino
+  a 5 suggerimenti. Le copie non contano come uso. Il barcode usa il nome e i grammi per pezzo
+  salvati e, senza connessione, il prodotto salvato.
+- **Copia**: pressione lunga su una voce → "Duplica" (stesso giorno e pasto) o "Copia in…";
+  l'icona accanto al pasto copia il pasto, quella in alto il giorno (ogni voce nel suo pasto).
+  Il dialogo propone oggi, o domani se si copia da oggi. La foto è condivisa tra le copie.
+- **Fibre, zuccheri e sale**: da Open Food Facts (`fiber_100g`, `sugars_100g`, `salt_100g`, o
+  sodio × 2,5), dalle tabelle CREA e, facoltativi, dalla stima Gemini. Si scrivono anche a mano
+  ("Altri valori") e il totale del giorno compare sotto le macro in Oggi. Nessun obiettivo.
+- **Backup** (Impostazioni → Dati): "Esporta backup" scrive un file JSON (`data/backup/`) con
+  diario, peso, acqua, alimenti salvati e impostazioni, senza API key né foto (di ogni foto
+  resta il nome del file, ricollegato se la foto è ancora sul telefono). "Ripristina" controlla
+  formato, versione e valori, poi chiede: **Sostituisci tutto** (cancella i dati del telefono e
+  ripristina anche le impostazioni) o **Unisci** (aggiunge le voci che mancano, confrontando
+  giorno, pasto, nome e kcal; peso e acqua solo dei giorni vuoti; impostazioni invariate).
+  "Esporta diario (CSV)" scrive una riga per voce: in italiano `;` e virgola decimale, in
+  inglese `,` e punto, UTF-8 con BOM. Si usa il selettore file di Android (nessun permesso).
+- **Salute di Android** (Health Connect, Impostazioni): "Collega" chiede i permessi di lettura di
+  passi e calorie attive e di scrittura di peso e acqua. Oggi mostra passi e kcal bruciate del
+  giorno; con "Aggiungi le calorie bruciate all'obiettivo" (spento di default) l'obiettivo del
+  giorno è base + bruciate (conviene mettere "Sedentario" nel profilo). Con "Scrivi peso e
+  acqua" ogni pesata e ogni bicchiere da quel momento vanno in Health Connect, un record per
+  giorno con id fisso (`photocal-weight-<data>`, `photocal-water-<data>`), aggiornato a ogni
+  modifica. Storico, promemoria e condivisione usano l'obiettivo base. Su Android 13 e precedenti
+  serve l'app Health Connect dal Play Store. La pagina "Dati di salute e privacy" è quella che
+  Health Connect apre dalla schermata dei permessi.
 
 ## Stack
 
 Kotlin, Jetpack Compose (Material 3), MVVM con DI manuale, Room, DataStore,
 Navigation Compose, OkHttp + kotlinx.serialization (REST Gemini, Open Food Facts), Coil,
-Google Code Scanner (ML Kit). minSdk 26, targetSdk 37.
+Google Code Scanner (ML Kit), Health Connect. minSdk 26, targetSdk 37.
 
 ## Dati CREA
 
@@ -113,6 +151,9 @@ le pagine del portale [alimentinutrizione.it](https://www.alimentinutrizione.it/
 ```bash
 python3 tools/crea/build_crea_table.py
 ```
+
+Colonne: kcal, proteine, grassi, carboidrati disponibili, fibra totale, zuccheri solubili e
+sale (dal sodio in mg × 2,5 / 1000). Con la cache già scaricata la rigenerazione non fa richieste.
 
 Fonte dei dati: CREA – Centro di ricerca Alimenti e Nutrizione, *Tabelle di composizione
 degli alimenti*. Le condizioni d'uso del sito chiedono di citare la fonte.
@@ -158,12 +199,16 @@ firma: per passare da debug a release serve disinstallare.
   Le build non firmate usano una chiave di sviluppo, i cui link le release rifiutano.
 - **Verifica**: `adb shell pm get-app-links it.emanuelemelini.photocal` deve dire `verified`
   per il dominio.
+- **Formato**: `SharedCard.kt`, versione 1. Le versioni vecchie ignorano i campi che non
+  conoscono ma rifiutano le unità sconosciute: per questo le voci in pezzi viaggiano con i soli
+  grammi più due campi nuovi (`pc`, `pl`), e chi ha una versione prima della 1.4.0 vede "25 g".
 
 ## Database
 
 Gli schemi di Room sono esportati in `app/schemas/` (versionati). Dalla 1.0.0 l'app è
 installata con dati veri: ogni modifica allo schema richiede una migrazione in
-`AppDatabase.kt` (v1 → v2 aggiunge il registro del peso, v2 → v3 il contatore dell'acqua).
+`AppDatabase.kt` (v1 → v2 aggiunge il registro del peso, v2 → v3 il contatore dell'acqua,
+v3 → v4 nome dei pezzi, fibre, zuccheri e sale delle voci e la tabella degli alimenti salvati).
 
 ## Build e installazione
 
@@ -199,12 +244,17 @@ app/src/main/java/it/emanuelemelini/photocal/
 │   ├── http/             utilità OkHttp condivise
 │   ├── photo/            file delle foto, ridimensionamento
 │   ├── reminders/        promemoria: orari, allarmi, notifiche
-│   └── FoodRepository.kt
+│   ├── backup/           backup JSON, ripristino, CSV
+│   ├── health/           Health Connect: letture e scritture
+│   ├── FoodRepository.kt
+│   └── SavedFoodRepository.kt  alimenti recenti e preferiti
 └── ui/
     ├── today/            schermata Oggi
     ├── entry/            inserimento/modifica manuale
     ├── photo/            revisione dell'analisi foto
     ├── barcode/          scansione e prodotto da Open Food Facts
+    ├── recent/           alimenti recenti e preferiti
+    ├── health/           privacy dei dati di salute
     ├── history/          storico e grafico
     ├── profile/          profilo e obiettivi
     ├── weight/           registro del peso

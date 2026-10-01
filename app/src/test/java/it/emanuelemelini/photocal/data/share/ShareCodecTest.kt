@@ -1,9 +1,15 @@
 package it.emanuelemelini.photocal.data.share
 
+import it.emanuelemelini.photocal.data.db.FoodEntry
+import it.emanuelemelini.photocal.data.db.MealType
+import it.emanuelemelini.photocal.data.db.ServingUnit
+import it.emanuelemelini.photocal.data.db.Source
 import it.emanuelemelini.photocal.data.share.ShareCodec.Result
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
+import java.time.LocalDate
 import java.util.Base64
 import java.util.zip.Deflater
 import javax.crypto.Mac
@@ -28,6 +34,7 @@ class ShareCodecTest {
                 entries = listOf(
                     SharedEntry(meal = "LUNCH", name = "Pasta al pomodoro", kcal = 520.0, grams = 250.0),
                     SharedEntry(meal = "DINNER", name = "Vino rosso", kcal = 250.0, grams = 300.0, unit = "WINE_GLASS", servings = 2.0),
+                    SharedEntry(meal = "SNACK", name = "Biscotti", kcal = 120.0, grams = 25.0, pieces = 3.0, pieceLabel = "biscotti"),
                 ),
             )
         ),
@@ -81,6 +88,19 @@ class ShareCodecTest {
             assertEquals(Result.Invalid, ShareCodec.decode(ShareCodec.encode(card, key), key))
         }
         assertEquals(Result.Invalid, ShareCodec.decode(signed("""{"v":1,"n":"x","s":1,"d":[{"t":20725,"k":NaN}]}"""), key))
+    }
+
+    @Test
+    fun piecesAreNotAUnit() {
+        val entry = FoodEntry(
+            date = LocalDate.of(2026, 9, 30), mealType = MealType.SNACK, name = "Biscotti", grams = 25.0, kcal = 120.0,
+            proteinG = null, carbsG = null, fatG = null, source = Source.BARCODE, photoPath = null, createdAt = Instant.EPOCH,
+            servingUnit = ServingUnit.PIECE, servings = 3.0, servingLabel = "biscotti",
+        ).toSharedEntry()
+        // Older versions reject unknown units: they must only find the grams
+        assertEquals(SharedEntry(meal = "SNACK", name = "Biscotti", kcal = 120.0, grams = 25.0, pieces = 3.0, pieceLabel = "biscotti"), entry)
+        val piecesAsUnit = day.copy(days = listOf(day.days[0].copy(entries = listOf(entry.copy(unit = "PIECE", servings = 3.0)))))
+        assertEquals(Result.Invalid, ShareCodec.decode(ShareCodec.encode(piecesAsUnit, key), key))
     }
 
     @Test

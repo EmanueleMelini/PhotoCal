@@ -1,5 +1,6 @@
 package it.emanuelemelini.photocal.data.share
 
+import it.emanuelemelini.photocal.data.db.ServingUnit
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
@@ -118,6 +119,7 @@ object ShareCodec {
 internal object ShareValidation {
     const val MAX_NAME = 40
     const val MAX_ENTRY_NAME = 100
+    const val MAX_PIECE_LABEL = 30
     const val MAX_ENTRIES = 80
     const val MAX_AVATAR_CHARS = 16_000
 
@@ -153,7 +155,9 @@ internal object ShareValidation {
             entry.name.isNotBlank() && entry.name.length <= MAX_ENTRY_NAME &&
             entry.kcal in 0.0..20_000.0 &&
             inRange(entry.grams, 0.0..20_000.0) && inRange(entry.servings, 0.0..1_000.0) &&
-            (entry.unit == null || entry.servingUnit != null)
+            (entry.unit == null || entry.servingUnit.let { it != null && it != ServingUnit.PIECE }) &&
+            inRange(entry.pieces, 0.0..1_000.0) && (entry.pieces == null || entry.unit == null) &&
+            (entry.pieceLabel == null || entry.pieceLabel.isNotBlank() && entry.pieceLabel.length <= MAX_PIECE_LABEL)
 
     private fun inRange(value: Int?, range: IntRange) = value == null || value in range
 

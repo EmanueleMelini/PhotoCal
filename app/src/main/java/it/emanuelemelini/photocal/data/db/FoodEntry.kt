@@ -24,4 +24,12 @@ data class FoodEntry(
     val servingUnit: ServingUnit? = null,
     /** Number of servings in [servingUnit], e.g. 2 wine glasses. */
     val servings: Double? = null,
+    /**
+     * Name of the pieces from the package, e.g. "biscotti", only for [ServingUnit.PIECE]
+     * (null = the generic "pieces"). It is a plural: it is not used for a single piece.
+     */
+    val servingLabel: String? = null,
+    val fiberG: Double? = null,
+    val sugarsG: Double? = null,
+    val saltG: Double? = null,
 )

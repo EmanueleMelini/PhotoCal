@@ -59,6 +59,12 @@ data class Settings(
     val useCrea: Boolean = true,
     /** All reminders are off until the user turns them on. */
     val reminders: Map<ReminderType, ReminderConfig> = ReminderType.entries.associateWith { ReminderConfig(it) },
+    /** Health Connect turned on by the user (the permissions can still be revoked from Android). */
+    val healthConnected: Boolean = false,
+    /** Weight and water are written to Health Connect. */
+    val healthWrite: Boolean = true,
+    /** Active calories burned are added to the daily kcal goal. */
+    val healthAddBurned: Boolean = false,
 )
 
 class SettingsRepository(private val context: Context) {
@@ -91,6 +97,9 @@ class SettingsRepository(private val context: Context) {
                     time = prefs[reminderTimeKey(type)]?.let { LocalTime.ofSecondOfDay(it * 60L) } ?: type.defaultTime,
                 )
             },
+            healthConnected = prefs[HEALTH_CONNECTED] ?: false,
+            healthWrite = prefs[HEALTH_WRITE] ?: true,
+            healthAddBurned = prefs[HEALTH_ADD_BURNED] ?: false,
         )
     }
 
@@ -147,6 +156,50 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[reminderTimeKey(type)] = time.hour * 60 + time.minute }
     }
 
+    suspend fun setHealthConnected(connected: Boolean) {
+        context.dataStore.edit { it[HEALTH_CONNECTED] = connected }
+    }
+
+    suspend fun setHealthWrite(enabled: Boolean) {
+        context.dataStore.edit { it[HEALTH_WRITE] = enabled }
+    }
+
+    suspend fun setHealthAddBurned(enabled: Boolean) {
+        context.dataStore.edit { it[HEALTH_ADD_BURNED] = enabled }
+    }
+
+    /**
+     * Settings from a backup, in a single write. The Gemini API key, the update checks and the
+     * Health Connect link (its permissions belong to this phone) are left as they are.
+     */
+    suspend fun restore(settings: Settings) {
+        context.dataStore.edit { prefs ->
+            prefs[KCAL_GOAL] = settings.dailyKcalGoal
+            prefs.setOrRemove(PROTEIN_GOAL, settings.proteinGoalG)
+            prefs.setOrRemove(CARBS_GOAL, settings.carbsGoalG)
+            prefs.setOrRemove(FAT_GOAL, settings.fatGoalG)
+            prefs[WATER_GOAL] = settings.waterGoalMl
+            prefs[GLASS_ML] = settings.glassMl
+            val profile = settings.profile
+            prefs.setOrRemove(PROFILE_NAME, profile.name.trim().takeIf { it.isNotEmpty() })
+            prefs.setOrRemove(SEX, profile.sex?.name)
+            prefs.setOrRemove(BIRTH_YEAR, profile.birthYear)
+            prefs.setOrRemove(HEIGHT_CM, profile.heightCm)
+            prefs.setOrRemove(ACTIVITY, profile.activity?.name)
+            prefs[WEIGHT_GOAL] = profile.goal.name
+            prefs[GEMINI_MODEL] = settings.geminiModel
+            prefs[THEME_MODE] = settings.themeMode.name
+            prefs[DYNAMIC_COLOR] = settings.dynamicColor
+            prefs[USE_CREA] = settings.useCrea
+            settings.reminders.values.forEach { config ->
+                prefs[reminderEnabledKey(config.type)] = config.enabled
+                prefs[reminderTimeKey(config.type)] = config.time.hour * 60 + config.time.minute
+            }
+            prefs[HEALTH_WRITE] = settings.healthWrite
+            prefs[HEALTH_ADD_BURNED] = settings.healthAddBurned
+        }
+    }
+
     /** Epoch day of the last successful update check (not a setting: kept out of [Settings]). */
     suspend fun lastUpdateCheckDay(): Long? = context.dataStore.data.first()[LAST_UPDATE_CHECK]
 
@@ -195,6 +248,9 @@ class SettingsRepository(private val context: Context) {
         private val USE_CREA = booleanPreferencesKey("use_crea")
         private val LAST_UPDATE_CHECK = longPreferencesKey("last_update_check_day")
         private val LAST_SEEN_VERSION = intPreferencesKey("last_seen_version_code")
+        private val HEALTH_CONNECTED = booleanPreferencesKey("health_connected")
+        private val HEALTH_WRITE = booleanPreferencesKey("health_write")
+        private val HEALTH_ADD_BURNED = booleanPreferencesKey("health_add_burned")
 
         private fun reminderEnabledKey(type: ReminderType) =
             booleanPreferencesKey("reminder_${type.name.lowercase()}_enabled")

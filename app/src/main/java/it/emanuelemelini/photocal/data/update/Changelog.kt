@@ -16,6 +16,7 @@ object Changelog {
      * strings.xml files: ChangelogTest fails when the current version is missing.
      */
     val entries = listOf(
+        ChangelogEntry(5, "1.4.0", R.array.changelog_1_4_0),
         ChangelogEntry(4, "1.3.0", R.array.changelog_1_3_0),
         ChangelogEntry(3, "1.2.0", R.array.changelog_1_2_0),
         ChangelogEntry(2, "1.1.0", R.array.changelog_1_1_0),

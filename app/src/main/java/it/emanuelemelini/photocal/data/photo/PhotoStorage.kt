@@ -26,6 +26,10 @@ class PhotoStorage(private val context: Context) {
     fun uriFor(file: File): Uri =
         FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
 
+    /** Path of the photo [fileName] if it is still on this phone, e.g. after restoring a backup. */
+    fun existingPath(fileName: String): String? =
+        File(directory, File(fileName).name).takeIf { it.isFile }?.absolutePath
+
     fun delete(path: String) {
         File(path).delete()
     }

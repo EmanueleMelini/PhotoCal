@@ -56,7 +56,10 @@ fun NumberField(
     )
 }
 
-/** Quantity + unit (grams, ml, cups, glasses...), with the ml conversion below. */
+/**
+ * Quantity + unit (grams, ml, cups, glasses...), with the ml conversion below. With
+ * [ServingUnit.PIECE] among the [units], choosing it shows the grams of one piece.
+ */
 @Composable
 fun QuantityRow(
     quantity: String,
@@ -65,25 +68,49 @@ fun QuantityRow(
     onUnitChange: (ServingUnit) -> Unit,
     isError: Boolean,
     modifier: Modifier = Modifier,
+    units: List<ServingUnit> = ServingUnit.fixedSize,
+    pieceGrams: String = "",
+    onPieceGramsChange: (String) -> Unit = {},
+    pieceGramsError: Boolean = false,
+    /** Name of the pieces from the package, e.g. "biscotti". */
+    pieceLabel: String? = null,
 ) {
-    val ml = parseDecimal(quantity)?.times(unit.gramsPerUnit)
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = modifier) {
-        NumberField(
-            value = quantity,
-            onValueChange = onQuantityChange,
-            label = stringResource(R.string.label_quantity),
-            isError = isError,
-            error = stringResource(R.string.error_required_f),
-            helper = ml
-                ?.takeIf { unit != ServingUnit.GRAMS && unit != ServingUnit.MILLILITERS }
-                ?.let { stringResource(R.string.quantity_ml_equivalent, it.formatAmount()) },
-            modifier = Modifier.weight(1f),
-        )
-        UnitSelector(
-            selected = unit,
-            onSelect = onUnitChange,
-            modifier = Modifier.weight(1f),
-        )
+    val count = parseDecimal(quantity)
+    val helper = when (unit) {
+        ServingUnit.GRAMS, ServingUnit.MILLILITERS -> null
+        ServingUnit.PIECE -> count?.let { unit.grams(it, parseDecimal(pieceGrams)) }
+            ?.let { stringResource(R.string.quantity_grams_equivalent, it.formatAmount()) }
+        else -> count?.let { stringResource(R.string.quantity_ml_equivalent, (it * unit.gramsPerUnit).formatAmount()) }
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            NumberField(
+                value = quantity,
+                onValueChange = onQuantityChange,
+                label = stringResource(R.string.label_quantity),
+                isError = isError,
+                error = stringResource(R.string.error_required_f),
+                helper = helper,
+                modifier = Modifier.weight(1f),
+            )
+            UnitSelector(
+                selected = unit,
+                onSelect = onUnitChange,
+                units = units,
+                pieceLabel = pieceLabel,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        if (unit == ServingUnit.PIECE) {
+            NumberField(
+                value = pieceGrams,
+                onValueChange = onPieceGramsChange,
+                label = stringResource(R.string.label_piece_grams),
+                isError = pieceGramsError,
+                error = stringResource(R.string.error_required_m_pl),
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 
@@ -93,6 +120,8 @@ fun UnitSelector(
     selected: ServingUnit,
     onSelect: (ServingUnit) -> Unit,
     modifier: Modifier = Modifier,
+    units: List<ServingUnit> = ServingUnit.fixedSize,
+    pieceLabel: String? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -101,7 +130,7 @@ fun UnitSelector(
         modifier = modifier,
     ) {
         OutlinedTextField(
-            value = unitMenuLabel(selected),
+            value = unitMenuLabel(selected, pieceLabel),
             onValueChange = {},
             readOnly = true,
             singleLine = true,
@@ -112,9 +141,9 @@ fun UnitSelector(
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            ServingUnit.entries.forEach { unit ->
+            units.forEach { unit ->
                 DropdownMenuItem(
-                    text = { Text(unitMenuLabel(unit)) },
+                    text = { Text(unitMenuLabel(unit, pieceLabel)) },
                     onClick = {
                         onSelect(unit)
                         expanded = false
@@ -146,9 +175,11 @@ fun MealSelector(
     }
 }
 
-/** Picker label of a unit, e.g. "calice (150 ml)". */
+/** Picker label of a unit, e.g. "calice (150 ml)", or the name of the pieces from the package. */
 @Composable
-private fun unitMenuLabel(unit: ServingUnit): String = stringResource(unit.menuRes, unit.gramsPerUnit.toInt())
+private fun unitMenuLabel(unit: ServingUnit, pieceLabel: String?): String =
+    if (unit == ServingUnit.PIECE) pieceLabel ?: stringResource(unit.menuRes)
+    else stringResource(unit.menuRes, unit.gramsPerUnit.toInt())
 
 fun errorText(show: Boolean, message: String): (@Composable () -> Unit)? =
     if (show) {

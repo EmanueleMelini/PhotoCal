@@ -26,4 +26,10 @@ interface WeightDao {
 
     @Query("SELECT * FROM weight_entries ORDER BY date DESC LIMIT 1")
     fun observeLatest(): Flow<WeightEntry?>
+
+    @Query("SELECT * FROM weight_entries ORDER BY date")
+    suspend fun getAll(): List<WeightEntry>
+
+    @Query("DELETE FROM weight_entries")
+    suspend fun deleteAll()
 }

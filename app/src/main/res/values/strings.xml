@@ -15,6 +15,7 @@
     <string name="history_range_month">30 giorni</string>
     <string name="unit_menu_grams">grammi</string>
     <string name="unit_menu_ml">ml</string>
+    <string name="unit_menu_piece">pezzi</string>
     <string name="unit_menu_espresso_cup">tazzina (%1$d ml)</string>
     <string name="unit_menu_cup">tazza (%1$d ml)</string>
     <string name="unit_menu_glass">bicchiere (%1$d ml)</string>
@@ -34,6 +35,9 @@
     <string name="label_unit">Unità</string>
     <string name="error_required_f">Obbligatoria</string>
     <string name="quantity_ml_equivalent">= %1$s ml</string>
+    <string name="quantity_grams_equivalent">= %1$s g</string>
+    <string name="label_piece_grams">Grammi per pezzo</string>
+    <string name="error_required_m_pl">Obbligatori</string>
     <string name="error_gemini_missing_key">API key Gemini mancante: inseriscila nelle Impostazioni.</string>
     <string name="error_gemini_invalid_key">API key non valida o senza permessi: controllala nelle Impostazioni.</string>
     <string name="error_gemini_model_not_found">Modello \"%1$s\" non disponibile: controlla il nome nelle Impostazioni.</string>
@@ -66,6 +70,30 @@
     <string name="fab_photo">Foto</string>
     <string name="fab_barcode">Barcode</string>
     <string name="fab_manual">Manuale</string>
+    <string name="fab_recent">Recenti</string>
+    <string name="today_burned">%1$s kcal bruciate</string>
+    <string name="today_goal_with_burned">%1$s (obiettivo %2$d + %3$d)</string>
+    <string name="copy_action">Copia</string>
+    <string name="copy_day">Copia il giorno</string>
+    <string name="copy_day_title">Copia il giorno in…</string>
+    <string name="copy_meal">Copia il pasto</string>
+    <string name="copy_meal_title">Copia il pasto in…</string>
+    <string name="copy_entry_title">Copia la voce in…</string>
+    <string name="copy_entry">Copia in…</string>
+    <string name="copy_duplicate">Duplica</string>
+    <string name="copy_go">Vai</string>
+    <string name="entry_actions">Altre azioni</string>
+    <string name="recent_title">Recenti e preferiti</string>
+    <string name="recent_search">Cerca</string>
+    <string name="recent_favorites">Preferiti</string>
+    <string name="recent_recent">Recenti</string>
+    <string name="recent_empty">Gli alimenti che aggiungi al diario compaiono qui: toccane uno per aggiungerlo di nuovo.</string>
+    <string name="recent_no_results">Nessun alimento trovato.</string>
+    <string name="recent_add_favorite">Aggiungi ai preferiti</string>
+    <string name="recent_remove_favorite">Togli dai preferiti</string>
+    <string name="recent_remove">Rimuovi dall\'elenco</string>
+    <string name="entry_suggestions">Già usati</string>
+    <string name="barcode_offline">Senza connessione: valori salvati sul telefono.</string>
     <string name="entry_title_edit">Modifica voce</string>
     <string name="entry_title_new">Nuova voce</string>
     <string name="photo_content_description">Foto del pasto</string>
@@ -130,9 +158,18 @@
     <string name="barcode_diary_name">Nome nel diario</string>
     <string name="barcode_one_serving">1 porzione (%1$s %2$s)</string>
     <string name="barcode_package">Confezione (%1$s %2$s)</string>
+    <string name="barcode_one_serving_pieces">1 porzione (%1$s, %2$s %3$s)</string>
+    <string name="barcode_one_piece">1 %1$s (%2$s g)</string>
     <string name="macro_protein_g">Proteine %1$s g</string>
     <string name="macro_carbs_g">Carboidrati %1$s g</string>
     <string name="macro_fat_g">Grassi %1$s g</string>
+    <string name="extra_fiber_g">Fibre %1$s g</string>
+    <string name="extra_sugars_g">Zuccheri %1$s g</string>
+    <string name="extra_salt_g">Sale %1$s g</string>
+    <string name="label_fiber_g">Fibre g</string>
+    <string name="label_sugars_g">Zuccheri g</string>
+    <string name="label_salt_g">Sale g</string>
+    <string name="entry_extras_optional">Altri valori (facoltativi)</string>
     <string name="barcode_scan_another">Scansiona un altro prodotto</string>
     <string name="history_title">Storico</string>
     <string name="history_average">Media giornaliera</string>
@@ -166,6 +203,43 @@
     <string name="settings_use_crea">Usa tabelle CREA</string>
     <string name="settings_use_crea_hint">L\'AI riconosce alimento e grammi, le kcal arrivano dalle tabelle di composizione degli alimenti quando c\'è la voce corrispondente. Fonte: %1$s.</string>
     <string name="settings_saved">Impostazioni salvate</string>
+    <string name="settings_data">Dati</string>
+    <string name="health_title">Salute di Android</string>
+    <string name="health_intro">Con Health Connect PhotoCal legge i passi e le calorie bruciate col movimento e scrive peso e acqua, così le altre app di salute li vedono.</string>
+    <string name="health_not_supported">Health Connect non è disponibile su questo telefono.</string>
+    <string name="health_install">Installa Health Connect</string>
+    <string name="health_connect">Collega</string>
+    <string name="health_connected">Collegato</string>
+    <string name="health_disconnect">Scollega</string>
+    <string name="health_partial">Alcuni permessi non sono stati dati.</string>
+    <string name="health_permissions">Gestisci i permessi</string>
+    <string name="health_write">Scrivi peso e acqua</string>
+    <string name="health_write_hint">Ogni pesata e ogni bicchiere da adesso in poi.</string>
+    <string name="health_add_burned">Aggiungi le calorie bruciate all\'obiettivo</string>
+    <string name="health_add_burned_hint">Nei giorni in cui ti muovi di più puoi mangiare di più. Metti l\'attività del profilo su \"Sedentario\", altrimenti il movimento viene contato due volte.</string>
+    <string name="health_privacy_title">Dati di salute e privacy</string>
+    <string name="health_privacy_read">Letture: PhotoCal legge da Health Connect i passi e le calorie attive del giorno mostrato in Oggi, solo per mostrarli e, se lo scegli, per aggiungere le calorie all\'obiettivo.</string>
+    <string name="health_privacy_write">Scritture: se l\'opzione è attiva, PhotoCal scrive in Health Connect il peso registrato e l\'acqua bevuta di ogni giorno.</string>
+    <string name="health_privacy_storage">Questi dati restano sul telefono: PhotoCal non li invia a nessun server e non li include nel backup. Puoi togliere i permessi quando vuoi da Health Connect o con \"Scollega\" nelle impostazioni.</string>
+    <string name="data_export">Esporta backup</string>
+    <string name="data_export_hint">Diario, peso, acqua, alimenti salvati e impostazioni in un file JSON. Non contiene la API key né le foto.</string>
+    <string name="data_restore">Ripristina backup</string>
+    <string name="data_restore_hint">Da un file creato con \"Esporta backup\".</string>
+    <string name="data_csv">Esporta diario (CSV)</string>
+    <string name="data_csv_hint">Tutte le voci, da aprire con Excel o Fogli Google.</string>
+    <string name="data_export_done">Backup salvato</string>
+    <string name="data_csv_done">Diario esportato</string>
+    <string name="data_error_write">Non sono riuscito a scrivere il file.</string>
+    <string name="data_error_invalid">Il file non è un backup di PhotoCal o è danneggiato.</string>
+    <string name="data_error_newer">Il backup è stato creato con una versione più nuova di PhotoCal: aggiorna l\'app per ripristinarlo.</string>
+    <string name="data_restore_title">Ripristina backup</string>
+    <string name="data_restore_empty">Backup del %1$s senza voci del diario.</string>
+    <string name="data_restore_replace">Sostituisci tutto</string>
+    <string name="data_restore_merge">Unisci</string>
+    <string name="data_restore_explain">Sostituisci tutto: cancella diario, peso, acqua e alimenti salvati di questo telefono e ripristina anche le impostazioni.\nUnisci: aggiunge solo le voci che mancano, le impostazioni restano queste.</string>
+    <string name="csv_source_photo">Foto</string>
+    <string name="csv_source_manual">Manuale</string>
+    <string name="csv_source_barcode">Barcode</string>
     <plurals name="unit_grams">
         <item quantity="one">g</item>
         <item quantity="other">g</item>
@@ -173,6 +247,42 @@
     <plurals name="unit_ml">
         <item quantity="one">ml</item>
         <item quantity="other">ml</item>
+    </plurals>
+    <plurals name="data_restore_summary">
+        <item quantity="one">Backup del %2$s: %1$d voce del diario, dal %3$s al %4$s.</item>
+        <item quantity="other">Backup del %2$s: %1$d voci del diario, dal %3$s al %4$s.</item>
+    </plurals>
+    <plurals name="data_restore_done">
+        <item quantity="one">Ripristinata %1$d voce</item>
+        <item quantity="other">Ripristinate %1$d voci</item>
+    </plurals>
+    <string-array name="csv_columns">
+        <item>Data</item>
+        <item>Pasto</item>
+        <item>Nome</item>
+        <item>Quantità</item>
+        <item>Unità</item>
+        <item>Grammi</item>
+        <item>Kcal</item>
+        <item>Proteine g</item>
+        <item>Carboidrati g</item>
+        <item>Grassi g</item>
+        <item>Fibre g</item>
+        <item>Zuccheri g</item>
+        <item>Sale g</item>
+        <item>Fonte</item>
+    </string-array>
+    <plurals name="today_steps">
+        <item quantity="one">%1$s passo</item>
+        <item quantity="other">%1$s passi</item>
+    </plurals>
+    <plurals name="copy_done">
+        <item quantity="one">Voce copiata: %2$s</item>
+        <item quantity="other">%1$d voci copiate: %2$s</item>
+    </plurals>
+    <plurals name="unit_piece">
+        <item quantity="one">pezzo</item>
+        <item quantity="other">pezzi</item>
     </plurals>
     <plurals name="unit_espresso_cup">
         <item quantity="one">tazzina</item>
@@ -414,6 +524,16 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_4_0">
+        <item>Barcode: ora puoi contare i pezzi, per esempio 3 biscotti invece di 25 g. Scegli \"pezzi\" nell\'unità: i grammi di un pezzo sono già compilati quando la confezione su Open Food Facts li indica, altrimenti li scrivi tu.</item>
+        <item>Se la porzione della confezione nomina i pezzi (\"3 biscotti\", \"2 fette\"), nel diario compare quel nome, per esempio \"3 biscotti (25 g)\".</item>
+        <item>Recenti e preferiti: dal + scegli \"Recenti\" per riaggiungere con un tocco un alimento già usato, con la stessa quantità (che puoi cambiare). Il cuore lo mette tra i preferiti. Anche nell\'inserimento manuale, mentre scrivi il nome, compaiono gli alimenti già usati.</item>
+        <item>Un prodotto già scansionato si trova anche senza connessione, e il barcode ricorda i grammi per pezzo che hai corretto.</item>
+        <item>Copia: tieni premuta una voce per duplicarla o copiarla in un altro giorno; con l\'icona accanto al pasto copi tutto il pasto, con quella in alto tutto il giorno.</item>
+        <item>Fibre, zuccheri e sale: arrivano da Open Food Facts, dalle tabelle CREA e dalla stima AI, si possono scrivere a mano e il totale del giorno compare in Oggi.</item>
+        <item>Backup: in Impostazioni → Dati esporti tutto in un file e lo ripristini, scegliendo se sostituire i dati o unirli a quelli del telefono. Puoi anche esportare il diario in CSV per Excel.</item>
+        <item>Salute di Android (Health Connect): in Impostazioni collega PhotoCal per vedere passi e calorie bruciate in Oggi, scrivere peso e acqua e, se vuoi, aggiungere le calorie bruciate all\'obiettivo del giorno.</item>
+    </string-array>
     <string-array name="changelog_1_3_0">
         <item>PhotoCal controlla se c\'è una nuova versione su GitHub (all\'avvio, al massimo una volta al giorno, oppure da Impostazioni → Info) e ti mostra le sue novità prima di aggiornare.</item>
         <item>L\'aggiornamento si scarica e si installa dall\'app (con il permesso di installare app), oppure dal browser.</item>

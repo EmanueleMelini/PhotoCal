@@ -36,8 +36,12 @@ NUTRIENTS = {
     "Lipidi (g)": "fat_g",
     "Carboidrati disponibili (g)": "carbs_g",
     "Fibra totale (g)": "fiber_g",
+    "Zuccheri solubili (g)": "sugars_g",
+    "Sodio (mg)": "sodium_mg",
 }
-COLUMNS = ["code", "name", "category", "edible_pct", "portion_g", *NUTRIENTS.values()]
+# Salt (g) = sodium (mg) x 2.5 / 1000, as on food labels
+COLUMNS = ["code", "name", "category", "edible_pct", "portion_g", "kcal", "protein_g", "fat_g", "carbs_g", "fiber_g",
+           "sugars_g", "salt_g"]
 
 
 def fetch(url: str, cache_name: str) -> str:
@@ -92,6 +96,8 @@ def parse_food(code: str, page: str) -> dict | None:
     for label, column in NUTRIENTS.items():
         # Nutrient row: label, unit of measure, value per 100 g, ...
         row[column] = number(after(lines, label, offset=2) or "")
+    sodium = row.pop("sodium_mg")
+    row["salt_g"] = round(sodium * 2.5 / 1000, 2) if sodium is not None else None
     return row if row["kcal"] is not None else None
 
 

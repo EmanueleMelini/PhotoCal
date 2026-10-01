@@ -48,20 +48,45 @@ private fun LocalDate.formatted(skeleton: String, locale: Locale): String {
 /** Plural quantity for a decimal count: "1 calice", "1,5 calici". */
 fun pluralCount(count: Double): Int = if (count == 1.0) 1 else 2
 
-/** Quantity shown in the diary, e.g. "120 g" or "2 calici (300 ml)". */
+/** Quantity shown in the diary, e.g. "120 g", "2 calici (300 ml)" or "3 biscotti (25 g)". */
 @Composable
-fun FoodEntry.quantityLabel(): String? = quantityLabel(grams, servingUnit, servings)
+fun FoodEntry.quantityLabel(): String? = quantityLabel(grams, servingUnit, servings, servingLabel)
 
 /** Same label from the raw values, e.g. for the entries of a shared day. */
 @Composable
-fun quantityLabel(grams: Double?, unit: ServingUnit?, count: Double?): String? {
+fun quantityLabel(grams: Double?, unit: ServingUnit?, count: Double?, pieceLabel: String? = null): String? {
     if (unit != null && unit != ServingUnit.GRAMS && count != null) {
         if (unit == ServingUnit.MILLILITERS) return "${count.formatAmount()} ml"
+        if (unit == ServingUnit.PIECE) {
+            val name = pieceName(count, pieceLabel)
+            return grams?.let { "${count.formatAmount()} $name (${it.formatAmount()} g)" } ?: "${count.formatAmount()} $name"
+        }
         val name = pluralStringResource(unit.nameRes, pluralCount(count))
         return "${count.formatAmount()} $name (${(count * unit.gramsPerUnit).formatAmount()} ml)"
     }
     return grams?.let { "${it.formatAmount()} g" }
 }
+
+/**
+ * Name of [count] pieces: the one from the package (a plural, so not for a single piece),
+ * otherwise the translated "pezzo"/"pezzi".
+ */
+@Composable
+fun pieceName(count: Double, label: String?): String =
+    label?.takeIf { pluralCount(count) != 1 } ?: pluralStringResource(R.plurals.unit_piece, pluralCount(count))
+
+/** Fiber, sugars and salt, e.g. "Fibre 2 g · Zuccheri 10 g · Sale 0,3 g"; null when none is known. */
+@Composable
+fun extrasLabel(fiberG: Double?, sugarsG: Double?, saltG: Double?): String? =
+    listOfNotNull(
+        fiberG?.let { stringResource(R.string.extra_fiber_g, it.formatAmount()) },
+        sugarsG?.let { stringResource(R.string.extra_sugars_g, it.formatAmount()) },
+        saltG?.let { stringResource(R.string.extra_salt_g, it.formatSalt()) },
+    ).takeIf { it.isNotEmpty() }?.joinToString(" · ")
+
+/** Salt keeps two decimals under 1 g: 0,25 g matters on a daily total of about 5 g. */
+fun Double.formatSalt(locale: Locale = AppLocale.current): String =
+    if (this in 0.0..<1.0) String.format(locale, "%.2f", this) else formatAmount(locale)
 
 /** Signed change with a real minus sign, e.g. "+0,4" or "−1,6". */
 fun Double.formatSignedAmount(): String = when {

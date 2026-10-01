@@ -20,10 +20,19 @@ sealed interface LaunchRequest {
     /** A shared day: [payload] is the part of the link after '#', still to be checked. */
     data class OpenShared(val payload: String) : LaunchRequest
 
+    /** Health Connect shows why PhotoCal asks for its permissions. */
+    data object HealthPrivacy : LaunchRequest
+
     companion object {
         private const val EXTRA_ACTION = "launch_action"
         private const val EXTRA_MEAL = "launch_meal"
         private const val EXTRA_PAYLOAD = "launch_payload"
+
+        /** Health Connect permission rationale: up to Android 13 and from Android 14 (activity-alias). */
+        private val HEALTH_RATIONALE_ACTIONS = setOf(
+            "androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE",
+            "android.intent.action.VIEW_PERMISSION_USAGE",
+        )
 
         /** Intent that brings the existing MainActivity to front (singleTop) with the request. */
         fun intent(context: Context, request: LaunchRequest): Intent {
@@ -34,6 +43,7 @@ sealed interface LaunchRequest {
                 is AddManual -> "manual" to request.meal
                 ShareToday -> "share_today" to null
                 is OpenShared -> "shared" to null
+                HealthPrivacy -> "health_privacy" to null
             }
             return Intent(context, MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -43,6 +53,7 @@ sealed interface LaunchRequest {
         }
 
         fun from(intent: Intent?): LaunchRequest? {
+            if (intent?.action in HEALTH_RATIONALE_ACTIONS) return HealthPrivacy
             // App Link: https://<share host>/d#<payload>
             val data = intent?.data
             if (intent?.action == Intent.ACTION_VIEW && data != null) {
@@ -59,6 +70,7 @@ sealed interface LaunchRequest {
                 "manual" -> AddManual(meal)
                 "share_today" -> ShareToday
                 "shared" -> OpenShared(intent.getStringExtra(EXTRA_PAYLOAD).orEmpty())
+                "health_privacy" -> HealthPrivacy
                 else -> null
             }
         }

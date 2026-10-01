@@ -9,8 +9,11 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,6 +36,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
@@ -74,15 +79,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.ui.appContainer
+import it.emanuelemelini.photocal.ui.extrasLabel
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.formatLiters
@@ -92,6 +100,7 @@ import it.emanuelemelini.photocal.ui.relativeLabel
 import it.emanuelemelini.photocal.ui.shortLabel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -110,6 +119,7 @@ fun TodayScreen(
     onOpenSettings: () -> Unit,
     onPhotoTaken: (photoPath: String, date: LocalDate, meal: MealType?) -> Unit,
     onScanBarcode: (LocalDate) -> Unit,
+    onOpenRecent: (LocalDate) -> Unit,
     onShare: (LocalDate) -> Unit,
 ) {
     val container = appContainer()
@@ -120,12 +130,20 @@ fun TodayScreen(
             container.foodRepository,
             container.waterRepository,
             container.settingsRepository,
+            container.healthConnect,
         )
+    }
+    // Steps and calories change during the day: read them again when coming back
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshActivity()
+        onPauseOrDispose {}
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
+    var copyRequest by remember { mutableStateOf<CopyRequest?>(null) }
+    var copied by remember { mutableStateOf<Pair<LocalDate, Int>?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -201,6 +219,13 @@ fun TodayScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
+                    if (state.meals.isNotEmpty()) {
+                        IconButton(onClick = {
+                            copyRequest = CopyRequest(state.meals.flatMap { it.entries }, state.date, null, R.string.copy_day_title)
+                        }) {
+                            Icon(painterResource(R.drawable.ic_content_copy), contentDescription = stringResource(R.string.copy_day))
+                        }
+                    }
                     if (state.canShare) {
                         IconButton(onClick = { onShare(state.date) }) {
                             Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share_day))
@@ -228,6 +253,10 @@ fun TodayScreen(
                 onManual = {
                     fabExpanded = false
                     onAddManual(state.date)
+                },
+                onRecent = {
+                    fabExpanded = false
+                    onOpenRecent(state.date)
                 },
             )
         },
@@ -273,11 +302,45 @@ fun TodayScreen(
             }
             state.meals.forEach { group ->
                 item(key = "meal-${group.mealType}") {
-                    MealHeader(group)
+                    MealHeader(group, onCopy = {
+                        copyRequest = CopyRequest(group.entries, state.date, group.mealType, R.string.copy_meal_title)
+                    })
                 }
                 items(group.entries, key = { it.id }) { entry ->
-                    EntryRow(entry = entry, onClick = { onEditEntry(entry) })
+                    EntryRow(
+                        entry = entry,
+                        onClick = { onEditEntry(entry) },
+                        onDuplicate = { viewModel.duplicate(entry) },
+                        onCopy = {
+                            copyRequest = CopyRequest(listOf(entry), entry.date, entry.mealType, R.string.copy_entry_title)
+                        },
+                    )
                 }
+            }
+        }
+    }
+
+    copyRequest?.let { request ->
+        CopyDialog(
+            request = request,
+            onDismiss = { copyRequest = null },
+            onCopy = { date, meal ->
+                copyRequest = null
+                viewModel.copy(request.entries, date, meal) { count -> copied = date to count }
+            },
+        )
+    }
+
+    // Snackbar after a copy, with a shortcut to the day the entries went to
+    copied?.let { (date, count) ->
+        val message = pluralStringResource(R.plurals.copy_done, count, count, date.relativeLabel() ?: date.shortLabel())
+        val go = stringResource(R.string.copy_go)
+        LaunchedEffect(date, count) {
+            copied = null
+            // In the screen scope: clearing [copied] ends this effect, not the snackbar
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(message, actionLabel = go, duration = SnackbarDuration.Short)
+                if (result == SnackbarResult.ActionPerformed) viewModel.selectDate(date)
             }
         }
     }
@@ -394,6 +457,14 @@ private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (overGoal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            activityLabel(state)?.let {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
             Spacer(Modifier.height(16.dp))
             HorizontalDivider()
             Spacer(Modifier.height(12.dp))
@@ -402,8 +473,37 @@ private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
                 MacroItem(stringResource(R.string.macro_carbs), totals.carbsG, state.carbsGoalG)
                 MacroItem(stringResource(R.string.macro_fat), totals.fatG, state.fatGoalG)
             }
+            extrasLabel(totals.fiberG, totals.sugarsG, totals.saltG)?.let {
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
+}
+
+/**
+ * Steps and burned calories from Health Connect, e.g. "6.540 passi · 320 kcal bruciate", and
+ * the base goal when they are added to it.
+ */
+@Composable
+private fun activityLabel(state: TodayUiState): String? {
+    val activity = state.activity ?: return null
+    val parts = listOfNotNull(
+        activity.steps?.let { steps ->
+            val count = steps.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+            pluralStringResource(R.plurals.today_steps, count, NumberFormat.getIntegerInstance(AppLocale.current).format(steps))
+        },
+        activity.activeKcal?.let { stringResource(R.string.today_burned, it.formatKcal()) },
+    )
+    if (parts.isEmpty()) return null
+    val line = parts.joinToString(" · ")
+    return if (state.burnedKcalAdded > 0) stringResource(R.string.today_goal_with_burned, line, state.baseKcalGoal, state.burnedKcalAdded) else line
 }
 
 /** Glasses of water of the day, with − / + buttons; tapping the card opens the goals. */
@@ -484,12 +584,12 @@ private fun MacroItem(label: String, grams: Double, goal: Int?) {
 }
 
 @Composable
-private fun MealHeader(group: MealGroup) {
+private fun MealHeader(group: MealGroup, onCopy: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp),
+            .padding(start = 16.dp, end = 4.dp, top = 8.dp),
     ) {
         Text(
             text = stringResource(group.mealType.labelRes),
@@ -502,11 +602,22 @@ private fun MealHeader(group: MealGroup) {
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.primary,
         )
+        IconButton(onClick = onCopy) {
+            Icon(
+                painterResource(R.drawable.ic_content_copy),
+                contentDescription = stringResource(R.string.copy_meal),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(20.dp),
+            )
+        }
     }
 }
 
+/** Tap to edit; long press for duplicate and copy. */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun EntryRow(entry: FoodEntry, onClick: () -> Unit) {
+private fun EntryRow(entry: FoodEntry, onClick: () -> Unit, onDuplicate: () -> Unit, onCopy: () -> Unit) {
+    var menuOpen by remember { mutableStateOf(false) }
     val details = listOfNotNull(
         entry.quantityLabel(),
         entry.proteinG?.let { stringResource(R.string.macro_short_protein, it.formatAmount()) },
@@ -514,31 +625,53 @@ private fun EntryRow(entry: FoodEntry, onClick: () -> Unit) {
         entry.fatG?.let { stringResource(R.string.macro_short_fat, it.formatAmount()) },
     ).joinToString(" · ")
 
-    ListItem(
-        headlineContent = { Text(entry.name) },
-        leadingContent = entry.photoPath?.let { path ->
-            {
-                AsyncImage(
-                    model = File(path),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(MaterialTheme.shapes.small),
-                )
-            }
-        },
-        supportingContent = if (details.isNotEmpty()) {
-            { Text(details) }
-        } else null,
-        trailingContent = {
-            Text("${entry.kcal.formatKcal()} kcal", style = MaterialTheme.typography.bodyLarge)
-        },
-        modifier = Modifier.clickable(onClick = onClick),
-    )
+    Box {
+        ListItem(
+            headlineContent = { Text(entry.name) },
+            leadingContent = entry.photoPath?.let { path ->
+                {
+                    AsyncImage(
+                        model = File(path),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(44.dp)
+                            .clip(MaterialTheme.shapes.small),
+                    )
+                }
+            },
+            supportingContent = if (details.isNotEmpty()) {
+                { Text(details) }
+            } else null,
+            trailingContent = {
+                Text("${entry.kcal.formatKcal()} kcal", style = MaterialTheme.typography.bodyLarge)
+            },
+            modifier = Modifier.combinedClickable(
+                onClick = onClick,
+                onLongClick = { menuOpen = true },
+                onLongClickLabel = stringResource(R.string.entry_actions),
+            ),
+        )
+        DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.copy_duplicate)) },
+                onClick = {
+                    menuOpen = false
+                    onDuplicate()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.copy_entry)) },
+                onClick = {
+                    menuOpen = false
+                    onCopy()
+                },
+            )
+        }
+    }
 }
 
-/** "+" FAB that expands into the three add actions. */
+/** "+" FAB that expands into the add actions. */
 @Composable
 private fun AddFab(
     expanded: Boolean,
@@ -546,6 +679,7 @@ private fun AddFab(
     onPhoto: () -> Unit,
     onBarcode: () -> Unit,
     onManual: () -> Unit,
+    onRecent: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.End,
@@ -563,6 +697,7 @@ private fun AddFab(
             ) {
                 FabAction(stringResource(R.string.fab_photo), painterResource(R.drawable.ic_photo_camera), onClick = onPhoto)
                 FabAction(stringResource(R.string.fab_barcode), painterResource(R.drawable.ic_barcode), onClick = onBarcode)
+                FabAction(stringResource(R.string.fab_recent), painterResource(R.drawable.ic_history), onClick = onRecent)
                 FabAction(stringResource(R.string.fab_manual), rememberVectorPainter(Icons.Default.Edit), onClick = onManual)
             }
         }
