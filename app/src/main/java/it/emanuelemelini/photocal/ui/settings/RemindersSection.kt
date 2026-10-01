@@ -39,12 +39,17 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-/** Reminder switches and times; asks for the notification permission on the first switch. */
+/**
+ * Reminder switches and times, then the PhotoCal news (push); asks for the notification
+ * permission when one of them is turned on.
+ */
 @Composable
 fun RemindersSection(
     reminders: Map<ReminderType, ReminderConfig>,
     onEnabledChange: (ReminderType, Boolean) -> Unit,
     onTimeChange: (ReminderType, LocalTime) -> Unit,
+    newsEnabled: Boolean,
+    onNewsChange: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     var notificationsAllowed by remember { mutableStateOf(notificationsAllowed(context)) }
@@ -66,7 +71,7 @@ fun RemindersSection(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 
-    if (!notificationsAllowed && reminders.values.any { it.enabled }) {
+    if (!notificationsAllowed && (newsEnabled || reminders.values.any { it.enabled })) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.settings_notifications_off),
@@ -100,10 +105,29 @@ fun RemindersSection(
                 checked = config.enabled,
                 onCheckedChange = { enabled ->
                     onEnabledChange(type, enabled)
-                    if (enabled && needsPermission(context)) permissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    if (enabled && needsNotificationPermission(context)) permissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
                 },
             )
         }
+    }
+
+    // Not a reminder: sent from Firebase when there is something new, at no set time
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(stringResource(R.string.settings_news), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                stringResource(R.string.settings_news_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Switch(
+            checked = newsEnabled,
+            onCheckedChange = { enabled ->
+                onNewsChange(enabled)
+                if (enabled && needsNotificationPermission(context)) permissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+            },
+        )
     }
 
     editing?.let { config ->
@@ -145,12 +169,13 @@ private fun TimePickerDialog(initial: LocalTime, onConfirm: (LocalTime) -> Unit,
 private fun timeFormatter(): DateTimeFormatter =
     DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(AppLocale.current)
 
-private fun needsPermission(context: Context): Boolean =
+/** Notification permission still to be asked (Android 13+). */
+fun needsNotificationPermission(context: Context): Boolean =
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
 
 private fun notificationsAllowed(context: Context): Boolean =
-    !needsPermission(context) && NotificationManagerCompat.from(context).areNotificationsEnabled()
+    !needsNotificationPermission(context) && NotificationManagerCompat.from(context).areNotificationsEnabled()
 
 private fun openNotificationSettings(context: Context) {
     context.startActivity(

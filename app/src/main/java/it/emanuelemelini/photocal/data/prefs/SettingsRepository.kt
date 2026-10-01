@@ -73,7 +73,18 @@ data class Settings(
     val healthWrite: Boolean = true,
     /** Active calories burned are added to the daily kcal goal. */
     val healthAddBurned: Boolean = false,
+    /**
+     * Usage statistics and crash reports sent to Firebase; null until the user answers the
+     * first-start question. Per device: never in backups.
+     */
+    val usageStats: Boolean? = null,
+    val crashReports: Boolean? = null,
+    /** Push notifications about PhotoCal news (Firebase topics). */
+    val newsNotifications: Boolean = true,
 ) {
+    /** The first-start privacy question is still to be asked. */
+    val privacyConsentPending: Boolean get() = usageStats == null || crashReports == null
+
     fun aiApiKey(provider: AiProvider): String = aiApiKeys[provider].orEmpty()
 
     fun aiModel(provider: AiProvider): String = aiModels[provider]?.takeIf { it.isNotBlank() } ?: provider.defaultModel
@@ -125,6 +136,9 @@ class SettingsRepository(private val context: Context) {
             healthConnected = prefs[HEALTH_CONNECTED] ?: false,
             healthWrite = prefs[HEALTH_WRITE] ?: true,
             healthAddBurned = prefs[HEALTH_ADD_BURNED] ?: false,
+            usageStats = prefs[USAGE_STATS],
+            crashReports = prefs[CRASH_REPORTS],
+            newsNotifications = prefs[NEWS_NOTIFICATIONS] ?: true,
         )
     }
 
@@ -203,9 +217,30 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[HEALTH_ADD_BURNED] = enabled }
     }
 
+    /** Answer to the first-start question: the same choice for both. */
+    suspend fun setPrivacyConsent(granted: Boolean) {
+        context.dataStore.edit {
+            it[USAGE_STATS] = granted
+            it[CRASH_REPORTS] = granted
+        }
+    }
+
+    suspend fun setUsageStats(enabled: Boolean) {
+        context.dataStore.edit { it[USAGE_STATS] = enabled }
+    }
+
+    suspend fun setCrashReports(enabled: Boolean) {
+        context.dataStore.edit { it[CRASH_REPORTS] = enabled }
+    }
+
+    suspend fun setNewsNotifications(enabled: Boolean) {
+        context.dataStore.edit { it[NEWS_NOTIFICATIONS] = enabled }
+    }
+
     /**
-     * Settings from a backup, in a single write. The AI API keys, the update checks and the
-     * Health Connect link (its permissions belong to this phone) are left as they are.
+     * Settings from a backup, in a single write. The AI API keys, the update checks, the
+     * Health Connect link (its permissions belong to this phone) and the privacy choices are
+     * left as they are.
      */
     suspend fun restore(settings: Settings) {
         context.dataStore.edit { prefs ->
@@ -290,6 +325,9 @@ class SettingsRepository(private val context: Context) {
         private val HEALTH_CONNECTED = booleanPreferencesKey("health_connected")
         private val HEALTH_WRITE = booleanPreferencesKey("health_write")
         private val HEALTH_ADD_BURNED = booleanPreferencesKey("health_add_burned")
+        private val USAGE_STATS = booleanPreferencesKey("usage_stats")
+        private val CRASH_REPORTS = booleanPreferencesKey("crash_reports")
+        private val NEWS_NOTIFICATIONS = booleanPreferencesKey("news_notifications")
 
         /** "gemini_api_key" and "gemini_model" are the keys of the versions before 1.5.0. */
         private fun apiKeyKey(provider: AiProvider) = stringPreferencesKey("${provider.prefKey}_api_key")

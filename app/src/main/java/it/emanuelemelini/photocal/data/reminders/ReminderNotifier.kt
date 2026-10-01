@@ -22,6 +22,7 @@ import it.emanuelemelini.photocal.data.WaterRepository
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.prefs.Settings
+import it.emanuelemelini.photocal.data.push.NewsMessagingService
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.update.AppVersion
 import it.emanuelemelini.photocal.data.update.GitHubReleasesClient
@@ -55,6 +56,8 @@ class ReminderNotifier(
                 NotificationChannel(CHANNEL_SUMMARIES, res.getString(R.string.channel_summaries), NotificationManager.IMPORTANCE_LOW),
                 NotificationChannel(CHANNEL_WATER, res.getString(R.string.channel_water_reminders), NotificationManager.IMPORTANCE_DEFAULT),
                 NotificationChannel(CHANNEL_UPDATES, res.getString(R.string.channel_updates), NotificationManager.IMPORTANCE_DEFAULT),
+                // Push notifications from Firebase (NewsMessagingService)
+                NotificationChannel(NewsMessagingService.CHANNEL, res.getString(R.string.channel_news), NotificationManager.IMPORTANCE_DEFAULT),
             )
         )
     }

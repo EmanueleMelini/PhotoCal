@@ -2,8 +2,8 @@
 
 App Android personale per contare le calorie giornaliere: diario manuale, riconoscimento
 dei pasti da foto con l'AI che scegli (Gemini, OpenAI, Claude o un servizio compatibile
-OpenAI), scansione barcode con Open Food Facts. Tutto locale sul
-telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
+OpenAI), scansione barcode con Open Food Facts. Diario solo sul telefono, nessun backend;
+Firebase per le notifiche con le novità e, solo con il consenso, statistiche e report dei crash. Il piano completo è in [PLAN.md](PLAN.md).
 
 Sito: **[photocal.emanuelemelini.dev](https://photocal.emanuelemelini.dev)**, con la presentazione
 dell'app e il download dell'ultima versione.
@@ -166,12 +166,28 @@ dell'app e il download dell'ultima versione.
   modifica. Storico, promemoria e condivisione usano l'obiettivo base. Su Android 13 e precedenti
   serve l'app Health Connect dal Play Store. La pagina "Dati di salute e privacy" è quella che
   Health Connect apre dalla schermata dei permessi.
+- **Statistiche e crash** (Firebase, `data/telemetry/Telemetry.kt`): Analytics e Crashlytics sono
+  spenti nel manifest e si accendono solo con il consenso, chiesto al primo avvio (prima del
+  changelog) e modificabile in Impostazioni → Privacy. Senza consenso le statistiche vengono
+  azzerate e i crash non inviati cancellati; l'ID pubblicitario non viene mai raccolto. Si
+  inviano solo nomi fissi: `screen_view` (nome della schermata, mai gli argomenti della route),
+  `food_added` (`source`: photo/manual/barcode), `ai_request` (`provider`, `kind`, `outcome`) e le
+  proprietà `ai_provider`, `theme`, `app_language`, `health_connect`, `reminders_on`. Mai cibi,
+  quantità, peso o dati di Health Connect. Le build debug non inviano niente. Informativa:
+  [`site/privacy.html`](site/privacy.html).
+- **Novità (push)** (`data/push/News.kt`): niente server, si invia dalla console Firebase →
+  Messaging → nuova campagna di notifica, con destinazione **Argomento**. Ogni installazione è
+  iscritta a `news` (tutti) e a `news-it` o `news-en` (lingua dell'app, aggiornata a ogni avvio);
+  le build debug anche a `news-debug`, per provare un messaggio sul proprio telefono prima di
+  mandarlo a tutti. Con l'app chiusa la notifica la mostra il sistema (canale `news`), con l'app
+  aperta `NewsMessagingService`; il tocco apre Oggi. Si spegne in Impostazioni → Promemoria e
+  novità. Serve Google Play Services sul telefono.
 
 ## Stack
 
 Kotlin, Jetpack Compose (Material 3), MVVM con DI manuale, Room, DataStore,
 Navigation Compose, OkHttp + kotlinx.serialization (REST Gemini, OpenAI, Anthropic, Open Food Facts), Coil,
-Google Code Scanner (ML Kit), Health Connect. minSdk 26, targetSdk 37.
+Google Code Scanner (ML Kit), Health Connect, Firebase (Analytics, Crashlytics, Cloud Messaging). minSdk 26, targetSdk 37.
 
 ## Dati CREA
 
@@ -217,6 +233,15 @@ secret `PHOTOCAL_KEYSTORE_BASE64`, `PHOTOCAL_KEYSTORE_PASSWORD` e `PHOTOCAL_KEY_
 aggiornare (bisognerebbe disinstallarla, perdendo i dati). Gli APK di debug hanno un'altra
 firma: per passare da debug a release serve disinstallare.
 
+**Firebase**: `app/google-services.json` non è nella repo (`.gitignore`): in locale si scarica
+dalla console Firebase (Impostazioni progetto → app Android), su GitHub è nel secret
+`PHOTOCAL_GOOGLE_SERVICES_JSON` (`gh secret set PHOTOCAL_GOOGLE_SERVICES_JSON < app/google-services.json`),
+che il workflow scrive in `app/` prima della build. Senza il file la build si ferma. Non è un vero
+segreto (i valori finiscono comunque nell'APK), ma fuori dalla repo pubblica evita gli avvisi di
+secret scanning e i bot che cercano chiavi `AIza`. La sua API key è limitata nella Google Cloud
+Console al package con gli SHA-1 delle chiavi release e debug. Le build release caricano su
+Crashlytics il mapping di R8, così gli stack trace si leggono in chiaro.
+
 ## Sito
 
 La cartella `site/` è pubblicata da Cloudflare Pages su `photocal.emanuelemelini.dev` (il dominio è
@@ -233,6 +258,9 @@ segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
   `release_notes.py` (inglese visibile, italiano nel commento nascosto) e sono lette come in
   `GitHubReleasesClient.parseNotes`. Una versione compare solo quando la sua Release ha l'APK:
   dopo una release la pagina si aggiorna da sola, senza ripubblicare il sito.
+- **`/privacy`** (`privacy.html`): l'informativa, aperta dal dialogo del primo avvio e da
+  Impostazioni → Privacy (`PRIVACY_POLICY_URL`). Va aggiornata se cambiano i dati inviati a
+  Firebase (eventi, proprietà) o i tempi di conservazione impostati nella console.
 - **Screenshot** (`img/`, WebP 540 px, ~430 KB in tutto): presi sull'AVD telefono
   `PhotoCalPhone_API34` con la build release e i dati di prova di
   `tools/site/demo_backup.py` (Impostazioni → Dati → Ripristina backup → Sostituisci tutto, solo
@@ -304,6 +332,8 @@ app/src/main/java/it/emanuelemelini/photocal/
 │   ├── reminders/        promemoria: orari, allarmi, notifiche
 │   ├── backup/           backup JSON, ripristino, CSV
 │   ├── health/           Health Connect: letture e scritture
+│   ├── telemetry/        statistiche e crash (Firebase), solo con il consenso
+│   ├── push/             novità: topic Firebase e notifiche
 │   ├── FoodRepository.kt
 │   └── SavedFoodRepository.kt  alimenti recenti e preferiti
 └── ui/
@@ -313,6 +343,7 @@ app/src/main/java/it/emanuelemelini/photocal/
     ├── barcode/          scansione e prodotto da Open Food Facts
     ├── recent/           alimenti recenti e preferiti
     ├── health/           privacy dei dati di salute
+    ├── privacy/          consenso al primo avvio
     ├── history/          storico e grafico
     ├── profile/          profilo e obiettivi
     ├── weight/           registro del peso

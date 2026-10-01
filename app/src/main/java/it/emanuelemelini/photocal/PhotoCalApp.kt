@@ -18,9 +18,11 @@ import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
 import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.push.NewsTopics
 import it.emanuelemelini.photocal.data.reminders.ReminderNotifier
 import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import it.emanuelemelini.photocal.data.share.ShareBuilder
+import it.emanuelemelini.photocal.data.telemetry.Telemetry
 import it.emanuelemelini.photocal.data.update.AppUpdater
 import it.emanuelemelini.photocal.data.update.GitHubReleasesClient
 import it.emanuelemelini.photocal.data.update.UpdateInstaller
@@ -47,6 +49,12 @@ class PhotoCalApp : Application() {
         super.onCreate()
         container = AppContainer(this)
         container.reminderNotifier.createChannels()
+        container.applicationScope.launch {
+            // Statistics choices, then the properties: the first value applies them at start
+            container.settingsRepository.settings
+                .distinctUntilChanged()
+                .collect { container.telemetry.update(it) }
+        }
         container.applicationScope.launch {
             container.foodRepository.deleteOrphanPhotos()
             // Cheap and robust: alarms are rebuilt from the settings at every start
@@ -86,6 +94,8 @@ class AppContainer(context: Context) {
     val photoStorage = PhotoStorage(context)
     val profilePhotoStorage = ProfilePhotoStorage(context)
     val settingsRepository = SettingsRepository(context)
+    val telemetry = Telemetry(context)
+    val newsTopics = NewsTopics(settingsRepository)
     val healthConnect = HealthConnect(context)
     private val healthSync = HealthSync(healthConnect, settingsRepository, applicationScope)
     val weightRepository = WeightRepository(database.weightDao()) { date, weightKg -> healthSync.weight(date, weightKg) }
@@ -96,7 +106,12 @@ class AppContainer(context: Context) {
     }
     val waterWidget: WaterWidget = WaterWidget(context, waterRepository, settingsRepository)
     val savedFoodRepository = SavedFoodRepository(database.savedFoodDao())
-    val foodRepository: FoodRepository = FoodRepository(database.foodDao(), savedFoodRepository, photoStorage) { date, meal ->
+    val foodRepository: FoodRepository = FoodRepository(
+        database.foodDao(),
+        savedFoodRepository,
+        photoStorage,
+        onEntryAdded = { telemetry.logFoodAdded(it.source) },
+    ) { date, meal ->
         // A meal logged today makes its pending reminder pointless
         if (date == LocalDate.now()) reminderNotifier.cancelMeal(meal)
     }
@@ -104,7 +119,7 @@ class AppContainer(context: Context) {
     val reminderNotifier: ReminderNotifier =
         ReminderNotifier(context, foodRepository, waterRepository, settingsRepository, releasesClient)
     val reminderScheduler = ReminderScheduler(context, settingsRepository)
-    val aiService = AiService(settingsRepository, AiHttp(httpClient))
+    val aiService = AiService(settingsRepository, AiHttp(httpClient), telemetry)
     val foodEstimator = FoodEstimator(aiService, CreaTable(context), settingsRepository)
     val openFoodFactsClient = OpenFoodFactsClient(httpClient)
     val shareBuilder = ShareBuilder(foodRepository, waterRepository, weightRepository, settingsRepository, profilePhotoStorage)

@@ -14,6 +14,7 @@ import it.emanuelemelini.photocal.data.ai.AiService
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
+import it.emanuelemelini.photocal.data.push.NewsTopics
 import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import it.emanuelemelini.photocal.data.reminders.ReminderType
 import it.emanuelemelini.photocal.data.update.AppUpdater
@@ -41,6 +42,7 @@ class SettingsViewModel(
     private val aiService: AiService,
     private val reminderScheduler: ReminderScheduler,
     private val appUpdater: AppUpdater,
+    private val newsTopics: NewsTopics,
 ) : ViewModel() {
 
     /** AI shown in Settings; it becomes the one in use with Save. */
@@ -126,6 +128,22 @@ class SettingsViewModel(
             settingsRepository.setReminderTime(type, time)
             reminderScheduler.reschedule(type)
         }
+    }
+
+    fun setNewsNotifications(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setNewsNotifications(enabled)
+            newsTopics.sync()
+        }
+    }
+
+    /** Applied by the app as soon as they are saved (Telemetry). */
+    fun setUsageStats(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setUsageStats(enabled) }
+    }
+
+    fun setCrashReports(enabled: Boolean) {
+        viewModelScope.launch { settingsRepository.setCrashReports(enabled) }
     }
 
     /** A found update opens its dialog over every screen; the other results stay here. */

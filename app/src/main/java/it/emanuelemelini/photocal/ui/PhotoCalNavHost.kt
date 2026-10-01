@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -90,6 +92,12 @@ fun PhotoCalNavHost(
     onLaunchRequestHandled: () -> Unit,
 ) {
     val navController = rememberNavController()
+    val telemetry = appContainer().telemetry
+
+    // Usage statistics (if allowed): which screens are opened, never their arguments
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry -> telemetry.logScreen(screenName(entry.destination)) }
+    }
 
     NavHost(navController = navController, startDestination = TodayRoute) {
         composable<TodayRoute> { backStackEntry ->
@@ -217,4 +225,21 @@ fun PhotoCalNavHost(
         }
         onLaunchRequestHandled()
     }
+}
+
+/** Fixed names for the statistics: the routes also hold dates, ids and typed names. */
+private fun screenName(destination: NavDestination): String = when {
+    destination.hasRoute<TodayRoute>() -> "today"
+    destination.hasRoute<EntryRoute>() -> "entry"
+    destination.hasRoute<HealthPrivacyRoute>() -> "health_privacy"
+    destination.hasRoute<RecentFoodsRoute>() -> "recent_foods"
+    destination.hasRoute<SettingsRoute>() -> "settings"
+    destination.hasRoute<PhotoReviewRoute>() -> "photo_review"
+    destination.hasRoute<BarcodeRoute>() -> "barcode"
+    destination.hasRoute<HistoryRoute>() -> "history"
+    destination.hasRoute<ProfileRoute>() -> "profile"
+    destination.hasRoute<WeightRoute>() -> "weight"
+    destination.hasRoute<ShareRoute>() -> "share"
+    destination.hasRoute<SharedViewRoute>() -> "shared_view"
+    else -> "other"
 }

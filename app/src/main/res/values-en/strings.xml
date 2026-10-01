@@ -358,11 +358,28 @@
     <string name="reminder_weekly_title">Your week</string>
     <string name="reminder_weekly_empty">No days logged in the last 7 days.</string>
     <string name="reminder_weekly_text">Average %1$s kcal a day · within goal: %2$d/%3$d</string>
-    <string name="settings_reminders">Reminders</string>
+    <string name="settings_reminders">Reminders and news</string>
     <string name="settings_reminders_hint">Notifications from the phone itself, even offline (except the new version one, which asks GitHub). Meal reminders are skipped if the meal is already logged, water ones if you have already drunk enough.</string>
     <string name="settings_notifications_off">PhotoCal notifications are turned off.</string>
     <string name="settings_notifications_enable">Turn on</string>
     <string name="settings_reminder_time">Time</string>
+    <!-- News (push) and privacy (Firebase) -->
+    <string name="settings_news">PhotoCal news</string>
+    <string name="settings_news_hint">A notification when there is something new worth knowing, such as a new feature. They\'re rare.</string>
+    <string name="channel_news">PhotoCal news</string>
+    <string name="privacy_title">Privacy</string>
+    <string name="privacy_consent_title">Help improve PhotoCal</string>
+    <string name="privacy_consent_text">Would you like to send usage statistics and crash reports? They show which features are used and help fix errors. They go through Google Firebase and are tied to a random code of this install, not to your name or account.</string>
+    <string name="privacy_never_sent">Your meals, amounts, weight, photos and other health data are never sent.</string>
+    <string name="privacy_consent_change">You can change your mind at any time in Settings → Privacy.</string>
+    <string name="privacy_consent_notifications">Right after, Android asks for permission to show notifications: they are needed for the reminders you turn on and for PhotoCal news.</string>
+    <string name="privacy_consent_allow">Allow</string>
+    <string name="privacy_consent_deny">No thanks</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_usage_stats">Usage statistics</string>
+    <string name="privacy_usage_stats_hint">Screens opened, features used (photo, barcode, which AI and whether it answered) and app version.</string>
+    <string name="privacy_crash_reports">Crash reports</string>
+    <string name="privacy_crash_reports_hint">When the app closes because of an error: where in the code, phone model and Android version.</string>
     <!-- Profile, goals and weight log -->
     <string name="sex_male">Male</string>
     <string name="sex_female">Female</string>
@@ -531,6 +548,11 @@
     <string name="changelog_title">What\'s new</string>
     <string name="changelog_title_version">What\'s new in PhotoCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_6_0">
+        <item>PhotoCal news: now and then you get a notification when there is something new, such as a new feature. You can turn them off in Settings → Reminders and news.</item>
+        <item>At the first start PhotoCal asks whether you want to send usage statistics and crash reports, to see which features are used and fix errors faster. They start off and stay off if you say no.</item>
+        <item>Your meals, amounts, weight, photos and other health data are never sent. You can change your mind in Settings → Privacy, where you\'ll also find the privacy policy.</item>
+    </string-array>
     <string-array name="changelog_1_5_0">
         <item>Choose your AI: in Settings → Artificial intelligence, besides Gemini, you can use OpenAI or Claude (Anthropic) with your own API key.</item>
         <item>OpenAI-compatible: you can enter the address of another service with the same API (for example OpenRouter or Mistral) and the model name. Photos need a model that reads images.</item>

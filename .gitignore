@@ -14,6 +14,9 @@ local.properties
 *.jks
 *.keystore
 
+# Firebase configuration: in CI it comes from the PHOTOCAL_GOOGLE_SERVICES_JSON secret
+app/google-services.json
+
 # IDE
 .idea/
 *.iml

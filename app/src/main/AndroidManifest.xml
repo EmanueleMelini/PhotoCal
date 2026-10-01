@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Reminders: requested at runtime only when the first reminder is turned on -->
+    <!-- Reminders and news: requested at runtime after the first-start question or when the
+         first reminder is turned on -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Reminder alarms are lost on reboot and must be scheduled again -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -164,6 +165,52 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <!-- Firebase: statistics and crash reports stay off until the user agrees (Telemetry),
+             and never with advertising ids -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_ssaid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_default_allow_analytics_storage"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_default_allow_ad_storage"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_default_allow_ad_user_data"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_default_allow_ad_personalization_signals"
+            android:value="false" />
+
+        <!-- PhotoCal news (Firebase Cloud Messaging topics): shown by the system when the app
+             is in the background, by the service when it is in the foreground -->
+        <service
+            android:name=".data.push.NewsMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="news" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent" />
 
         <!-- Download the Play services barcode scanner module at install time -->
         <meta-data

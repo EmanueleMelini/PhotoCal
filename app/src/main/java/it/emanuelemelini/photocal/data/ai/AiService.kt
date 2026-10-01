@@ -5,6 +5,7 @@ import it.emanuelemelini.photocal.data.ai.anthropic.AnthropicClient
 import it.emanuelemelini.photocal.data.ai.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.ai.openai.OpenAiClient
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.telemetry.Telemetry
 import kotlinx.coroutines.flow.first
 
 /**
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.first
 class AiService(
     private val settingsRepository: SettingsRepository,
     http: AiHttp,
+    private val telemetry: Telemetry,
 ) {
     private val clients: Map<AiProvider, AiClient> = mapOf(
         AiProvider.GEMINI to GeminiClient(http),
@@ -43,12 +45,23 @@ class AiService(
     private suspend fun generate(systemPrompt: String, userPrompt: String, jpeg: ByteArray?, creaCatalog: String?): FoodAnalysis {
         val settings = settingsRepository.settings.first()
         val provider = settings.aiProvider
-        val config = settings.aiConfig(provider).checked(provider)
         val request = AiRequest(
             systemPrompt = systemPrompt + creaCatalog?.let(AiPrompts::creaSection).orEmpty(),
             userPrompt = userPrompt,
             jpeg = jpeg,
         )
+        // Errors are counted too (by type only), to see which AI fails and why
+        val result = try {
+            analyze(provider, settings.aiConfig(provider).checked(provider), request)
+        } catch (e: AiException) {
+            telemetry.logAiRequest(provider, photo = jpeg != null, error = e)
+            throw e
+        }
+        telemetry.logAiRequest(provider, photo = jpeg != null, error = null)
+        return result
+    }
+
+    private suspend fun analyze(provider: AiProvider, config: AiConfig, request: AiRequest): FoodAnalysis {
         // Invalid JSON: one more attempt, then error
         repeat(2) {
             parseFoodAnalysis(clients.getValue(provider).generate(config, request))?.let { return it }

@@ -15,6 +15,8 @@ class FoodRepository(
     private val dao: FoodDao,
     private val savedFoods: SavedFoodRepository,
     private val photoStorage: PhotoStorage,
+    /** Called for every new entry the user adds (not for copies or restored backups). */
+    private val onEntryAdded: (FoodEntry) -> Unit = {},
     /** Called after entries are added, e.g. to dismiss the reminder of that meal. */
     private val onMealLogged: (LocalDate, MealType) -> Unit = { _, _ -> },
 ) {
@@ -40,12 +42,16 @@ class FoodRepository(
     suspend fun add(entry: FoodEntry, barcode: String? = null): Long =
         dao.insert(entry).also {
             savedFoods.recordUse(entry, barcode)
+            onEntryAdded(entry)
             onMealLogged(entry.date, entry.mealType)
         }
 
     suspend fun addAll(entries: List<FoodEntry>) {
         dao.insertAll(entries)
-        entries.forEach { savedFoods.recordUse(it) }
+        entries.forEach {
+            savedFoods.recordUse(it)
+            onEntryAdded(it)
+        }
         notifyLogged(entries)
     }
 

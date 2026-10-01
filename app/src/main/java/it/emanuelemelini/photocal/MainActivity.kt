@@ -17,6 +17,7 @@ import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
 import it.emanuelemelini.photocal.ui.LaunchRequest
 import it.emanuelemelini.photocal.ui.PhotoCalNavHost
+import it.emanuelemelini.photocal.ui.privacy.PrivacyConsent
 import it.emanuelemelini.photocal.ui.shortcuts.AppShortcuts
 import it.emanuelemelini.photocal.ui.theme.PhotoCalTheme
 import it.emanuelemelini.photocal.ui.update.UpdateDialogs
@@ -46,7 +47,10 @@ class MainActivity : AppCompatActivity() {
         container.applicationScope.launch {
             container.waterWidget.update()
             AppShortcuts.publish(this@MainActivity.applicationContext)
+            // News in the app language
+            container.newsTopics.sync()
         }
+        container.telemetry.setLanguage(AppLocale.language)
         setContent {
             val settings: Settings? by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = null)
             // Until preferences are loaded (a few ms) the window background stays visible:
@@ -74,7 +78,9 @@ class MainActivity : AppCompatActivity() {
                     launchRequest = launchRequest,
                     onLaunchRequestHandled = { launchRequest = null },
                 )
-                UpdateDialogs()
+                // First the privacy question, then changelog and updates
+                PrivacyConsent(pending = current.privacyConsentPending, newsNotifications = current.newsNotifications)
+                if (!current.privacyConsentPending) UpdateDialogs()
             }
         }
     }

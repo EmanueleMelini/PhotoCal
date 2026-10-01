@@ -362,11 +362,28 @@
     <string name="reminder_weekly_title">La tua settimana</string>
     <string name="reminder_weekly_empty">Nessun giorno registrato negli ultimi 7 giorni.</string>
     <string name="reminder_weekly_text">Media %1$s kcal al giorno · entro l\'obiettivo: %2$d/%3$d</string>
-    <string name="settings_reminders">Promemoria</string>
+    <string name="settings_reminders">Promemoria e novità</string>
     <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione (tranne la nuova versione, che chiede a GitHub). Quelle dei pasti non arrivano se il pasto è già registrato, quelle dell\'acqua se hai già bevuto abbastanza.</string>
     <string name="settings_notifications_off">Le notifiche di PhotoCal sono disattivate.</string>
     <string name="settings_notifications_enable">Attiva</string>
     <string name="settings_reminder_time">Orario</string>
+    <!-- News (push) and privacy (Firebase) -->
+    <string name="settings_news">Novità di PhotoCal</string>
+    <string name="settings_news_hint">Una notifica quando c\'è qualcosa di nuovo da sapere, per esempio una nuova funzione. Arrivano di rado.</string>
+    <string name="channel_news">Novità di PhotoCal</string>
+    <string name="privacy_title">Privacy</string>
+    <string name="privacy_consent_title">Aiutaci a migliorare PhotoCal</string>
+    <string name="privacy_consent_text">Vuoi inviare statistiche d\'uso e report degli arresti anomali? Servono a capire quali funzioni si usano e a correggere gli errori. Passano da Google Firebase e sono legati a un codice casuale di questa installazione, non al tuo nome o al tuo account.</string>
+    <string name="privacy_never_sent">Non vengono mai inviati i pasti, le quantità, il peso, le foto o altri dati sulla salute.</string>
+    <string name="privacy_consent_change">Puoi cambiare idea quando vuoi in Impostazioni → Privacy.</string>
+    <string name="privacy_consent_notifications">Subito dopo Android ti chiede il permesso per le notifiche: servono per i promemoria che attivi e per le novità di PhotoCal.</string>
+    <string name="privacy_consent_allow">Consenti</string>
+    <string name="privacy_consent_deny">No, grazie</string>
+    <string name="privacy_policy">Informativa sulla privacy</string>
+    <string name="privacy_usage_stats">Statistiche d\'uso</string>
+    <string name="privacy_usage_stats_hint">Schermate aperte, funzioni usate (foto, codice a barre, quale AI e se ha risposto) e versione dell\'app.</string>
+    <string name="privacy_crash_reports">Report degli arresti anomali</string>
+    <string name="privacy_crash_reports_hint">Quando l\'app si chiude per un errore: in che punto del codice, modello del telefono e versione di Android.</string>
     <!-- Profile, goals and weight log -->
     <string name="sex_male">Uomo</string>
     <string name="sex_female">Donna</string>
@@ -543,6 +560,11 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_6_0">
+        <item>Novità di PhotoCal: ogni tanto ricevi una notifica quando c\'è qualcosa di nuovo, per esempio una nuova funzione. Puoi disattivarle in Impostazioni → Promemoria e novità.</item>
+        <item>Alla prima apertura PhotoCal ti chiede se vuoi inviare statistiche d\'uso e report degli arresti anomali, per capire quali funzioni si usano e correggere gli errori più in fretta. All\'inizio sono spente e restano spente se rispondi di no.</item>
+        <item>Non vengono mai inviati i pasti, le quantità, il peso, le foto o altri dati sulla salute. Puoi cambiare idea in Impostazioni → Privacy, dove trovi anche l\'informativa.</item>
+    </string-array>
     <string-array name="changelog_1_5_0">
         <item>Scegli l\'AI: in Impostazioni → Intelligenza artificiale, oltre a Gemini, puoi usare OpenAI o Claude (Anthropic) con la tua API key.</item>
         <item>Compatibile OpenAI: puoi indicare l\'indirizzo di un altro servizio con la stessa API (per esempio OpenRouter o Mistral) e il nome del modello. Per le foto serve un modello che legge le immagini.</item>

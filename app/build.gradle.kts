@@ -6,6 +6,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    // Firebase: reads app/google-services.json (not in the repository: from the Firebase console,
+    // or the PHOTOCAL_GOOGLE_SERVICES_JSON secret in CI) and uploads the R8 mapping of release
+    // builds, so Crashlytics shows readable stack traces
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 /**
@@ -42,8 +47,8 @@ android {
         applicationId = "it.emanuelemelini.photocal"
         minSdk = 26
         targetSdk = 37
-        versionCode = 6
-        versionName = "1.5.0"
+        versionCode = 7
+        versionName = "1.6.0"
 
         manifestPlaceholders["shareHost"] = shareHost
         buildConfigField("String", "SHARE_HOST", "\"$shareHost\"")
@@ -127,6 +132,11 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.health.connect)
     implementation(libs.play.services.code.scanner)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
 }

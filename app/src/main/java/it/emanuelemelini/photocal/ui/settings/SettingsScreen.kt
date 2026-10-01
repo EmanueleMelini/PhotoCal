@@ -89,7 +89,13 @@ fun SettingsScreen(
 ) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
-        SettingsViewModel(container.settingsRepository, container.aiService, container.reminderScheduler, container.appUpdater)
+        SettingsViewModel(
+            container.settingsRepository,
+            container.aiService,
+            container.reminderScheduler,
+            container.appUpdater,
+            container.newsTopics,
+        )
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -211,6 +217,8 @@ fun SettingsScreen(
                 reminders = appearance.reminders,
                 onEnabledChange = viewModel::setReminderEnabled,
                 onTimeChange = viewModel::setReminderTime,
+                newsEnabled = appearance.newsNotifications,
+                onNewsChange = viewModel::setNewsNotifications,
             )
 
             HorizontalDivider()
@@ -353,6 +361,15 @@ fun SettingsScreen(
             HorizontalDivider()
 
             DataSection(onMessage = { text -> scope.launch { snackbarHostState.showSnackbar(text) } })
+
+            HorizontalDivider()
+
+            PrivacySection(
+                usageStats = appearance.usageStats ?: false,
+                crashReports = appearance.crashReports ?: false,
+                onUsageStatsChange = viewModel::setUsageStats,
+                onCrashReportsChange = viewModel::setCrashReports,
+            )
 
             HorizontalDivider()
 
