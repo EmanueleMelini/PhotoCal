@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write
+  # Workload Identity Federation: GitHub's OIDC token, exchanged for a Google one to send the push
+  id-token: write
 
 jobs:
   release:
@@ -64,3 +66,34 @@ jobs:
           apk="PhotoCal-$VERSION.apk"
           cp app/build/outputs/apk/release/app-release.apk "$apk"
           gh release create "$GITHUB_REF_NAME" "$apk" --title "PhotoCal $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+
+      # Push notification to the app users, in their language. "[no-push]" in the tag message
+      # (git tag -a vX.Y.Z -m "PhotoCal X.Y.Z [no-push]") skips it, e.g. for a small fix.
+      # actions/checkout keeps only the commit: the annotated tag is fetched to read its message.
+      - name: Check whether to announce the release
+        id: announce
+        run: |
+          git fetch --depth=1 origin "+refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME"
+          if git tag -l --format='%(contents)' "$GITHUB_REF_NAME" | grep -qF '[no-push]'; then
+            echo "The tag message has [no-push]: no notification"
+            echo "send=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "send=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Authenticate to Google Cloud
+        if: steps.announce.outputs.send == 'true'
+        id: google
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.PHOTOCAL_WIF_PROVIDER }}
+          service_account: ${{ vars.PHOTOCAL_FCM_SERVICE_ACCOUNT }}
+          token_format: access_token
+          create_credentials_file: false
+
+      - name: Announce the new version
+        if: steps.announce.outputs.send == 'true'
+        env:
+          FIREBASE_PROJECT_ID: ${{ vars.PHOTOCAL_FIREBASE_PROJECT_ID }}
+          FCM_ACCESS_TOKEN: ${{ steps.google.outputs.access_token }}
+        run: python3 .github/scripts/notify_update.py "$VERSION"

@@ -1,0 +1,50 @@
+# Sends the "new version" push notification by hand: to news-debug (only debug builds) to try it,
+# or to the users, e.g. if the release workflow couldn't send it. Runs from master only (the
+# Workload Identity Federation condition refuses other branches).
+name: Notify update
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to announce, e.g. 1.7.0"
+        required: true
+      target:
+        description: "debug = news-debug only; users = news-it and news-en"
+        type: choice
+        options:
+          - debug
+          - users
+        default: debug
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Authenticate to Google Cloud
+        id: google
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.PHOTOCAL_WIF_PROVIDER }}
+          service_account: ${{ vars.PHOTOCAL_FCM_SERVICE_ACCOUNT }}
+          token_format: access_token
+          create_credentials_file: false
+
+      - name: Send the notification
+        env:
+          FIREBASE_PROJECT_ID: ${{ vars.PHOTOCAL_FIREBASE_PROJECT_ID }}
+          FCM_ACCESS_TOKEN: ${{ steps.google.outputs.access_token }}
+          VERSION: ${{ inputs.version }}
+          TARGET: ${{ inputs.target }}
+        run: |
+          if [ "$TARGET" = "debug" ]; then
+            python3 .github/scripts/notify_update.py "$VERSION" --debug
+          else
+            python3 .github/scripts/notify_update.py "$VERSION"
+          fi

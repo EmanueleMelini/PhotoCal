@@ -221,6 +221,22 @@ Per una nuova versione:
    corrente;
 3. `git tag v1.1.0 && git push origin v1.1.0`.
 
+**Notifica della nuova versione**: dopo aver pubblicato la Release, il workflow manda una notifica
+push su `news-it` e `news-en` con gli stessi testi del promemoria "Nuova versione"
+(`reminder_update_title` / `reminder_update_text`, letti da `.github/scripts/notify_update.py`);
+il tocco apre il dialogo dell'aggiornamento (`launch_action=show_update`). Per non mandarla, ad
+esempio per una piccola correzione, scrivi `[no-push]` nel messaggio del tag:
+`git tag -a v1.6.1 -m "PhotoCal 1.6.1 [no-push]"`. Il workflow **Notify update** (Actions → Run
+workflow, solo da `master`) la manda a mano: `debug` su `news-debug` (solo build debug) per
+provarla, `users` agli utenti. Anteprima dei messaggi: `python3 .github/scripts/notify_update.py 1.7.0 --dry-run`.
+
+L'autenticazione a Google è senza chiavi (**Workload Identity Federation**): GitHub scambia il
+suo token OIDC con un token del service account `github-fcm@photocal-e2d38.iam.gserviceaccount.com`,
+che ha solo il ruolo *Firebase Cloud Messaging API Admin*. Il provider `github/photocal` accetta
+solo questa repo (per `repository_id`, quindi anche dopo un cambio di nome) e solo i tag `v*` o
+`master`. Provider, service account e progetto sono nelle variabili della repo
+`PHOTOCAL_WIF_PROVIDER`, `PHOTOCAL_FCM_SERVICE_ACCOUNT` e `PHOTOCAL_FIREBASE_PROJECT_ID`.
+
 Le note della Release su GitHub sono lo stesso testo inglese che l'app mostra dopo
 l'aggiornamento: le scrive `.github/scripts/release_notes.py` dall'array di `values-en`, e il
 workflow si ferma se l'array manca. Per vederle in anteprima:
