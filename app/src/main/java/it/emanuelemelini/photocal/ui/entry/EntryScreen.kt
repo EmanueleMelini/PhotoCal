@@ -69,7 +69,7 @@ import java.io.File
 @Composable
 fun EntryScreen(
     onDone: () -> Unit,
-    onOpenSettings: () -> Unit,
+    onOpenAiSettings: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: EntryViewModel = viewModel {
@@ -155,7 +155,7 @@ fun EntryScreen(
             AiEstimateSection(
                 estimate = viewModel.aiEstimate,
                 onEstimate = viewModel::estimateWithAi,
-                onOpenSettings = onOpenSettings,
+                onOpenAiSettings = onOpenAiSettings,
             )
 
             MealSelector(
@@ -297,7 +297,7 @@ private fun Suggestions(foods: List<SavedFood>, onPick: (SavedFood) -> Unit) {
 private fun AiEstimateSection(
     estimate: AiEstimate,
     onEstimate: () -> Unit,
-    onOpenSettings: () -> Unit,
+    onOpenAiSettings: () -> Unit,
 ) {
     val running = estimate == AiEstimate.Running
     OutlinedButton(
@@ -332,7 +332,9 @@ private fun AiEstimateSection(
                 modifier = Modifier.weight(1f),
             )
             if (estimate.needsSettings) {
-                TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
+                TextButton(onClick = onOpenAiSettings) { Text(stringResource(R.string.action_settings)) }
+            } else if (estimate.canChangeModel) {
+                TextButton(onClick = onOpenAiSettings) { Text(stringResource(R.string.action_change_model)) }
             }
         }
         else -> Unit

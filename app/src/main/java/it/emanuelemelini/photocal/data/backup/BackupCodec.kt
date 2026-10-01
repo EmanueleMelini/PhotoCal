@@ -1,5 +1,6 @@
 package it.emanuelemelini.photocal.data.backup
 
+import it.emanuelemelini.photocal.data.ai.AiProvider
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.SavedFood
@@ -12,7 +13,6 @@ import it.emanuelemelini.photocal.data.nutrition.Profile
 import it.emanuelemelini.photocal.data.nutrition.Sex
 import it.emanuelemelini.photocal.data.nutrition.WeightGoal
 import it.emanuelemelini.photocal.data.prefs.Settings
-import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
 import it.emanuelemelini.photocal.data.reminders.ReminderConfig
 import it.emanuelemelini.photocal.data.reminders.ReminderType
@@ -126,7 +126,10 @@ object BackupCodec {
         heightCm = profile.heightCm,
         activity = profile.activity?.name,
         weightGoal = profile.goal.name,
-        geminiModel = geminiModel,
+        geminiModel = aiModel(AiProvider.GEMINI),
+        aiProvider = aiProvider.name,
+        aiModels = aiModels.mapKeys { it.key.name },
+        compatibleBaseUrl = compatibleBaseUrl.takeIf { it.isNotBlank() },
         themeMode = themeMode.name,
         dynamicColor = dynamicColor,
         useCrea = useCrea,
@@ -200,7 +203,13 @@ object BackupCodec {
             goal = weightGoal?.let { value -> WeightGoal.entries.find { it.name == value } } ?: WeightGoal.MAINTAIN,
             name = name,
         ),
-        geminiModel = geminiModel?.takeIf { it.isNotBlank() } ?: SettingsRepository.DEFAULT_GEMINI_MODEL,
+        aiProvider = aiProvider?.let { value -> AiProvider.entries.find { it.name == value } } ?: current.aiProvider,
+        aiModels = buildMap {
+            // Backups before 1.5.0 only have the Gemini model
+            geminiModel?.let { put(AiProvider.GEMINI, it) }
+            aiModels.forEach { (name, model) -> AiProvider.entries.find { it.name == name }?.let { put(it, model) } }
+        }.filterValues { it.isNotBlank() },
+        compatibleBaseUrl = compatibleBaseUrl ?: current.compatibleBaseUrl,
         themeMode = themeMode?.let { value -> ThemeMode.entries.find { it.name == value } } ?: ThemeMode.SYSTEM,
         dynamicColor = dynamicColor,
         useCrea = useCrea,
@@ -252,6 +261,8 @@ object BackupCodec {
 /** Limits of a valid backup: generous for real data, tight enough to restore safely. */
 internal object BackupValidation {
     const val MAX_NAME = 200
+    private const val MAX_MODEL = 200
+    private const val MAX_URL = 500
     const val MAX_ROWS = 200_000
 
     fun isValid(backup: Backup): Boolean {
@@ -288,7 +299,9 @@ internal object BackupValidation {
         settings.kcalGoal in 500..10_000 && listOf(settings.proteinGoalG, settings.carbsGoalG, settings.fatGoalG).all { it == null || it in 0..1_000 } &&
             settings.waterGoalMl in 0..10_000 && settings.glassMl in 50..1_000 && settings.name.length <= MAX_NAME &&
             (settings.birthYear == null || settings.birthYear in 1900..2100) && (settings.heightCm == null || settings.heightCm in 50..300) &&
-            settings.reminders.all { it.minutes in 0..<24 * 60 }
+            settings.reminders.all { it.minutes in 0..<24 * 60 } &&
+            (settings.aiModels.values + listOfNotNull(settings.geminiModel)).all { it.length <= MAX_MODEL } &&
+            (settings.compatibleBaseUrl?.length ?: 0) <= MAX_URL
 
     private fun validName(name: String) = name.isNotBlank() && name.length <= MAX_NAME
 

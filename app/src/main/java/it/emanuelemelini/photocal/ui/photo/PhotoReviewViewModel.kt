@@ -9,13 +9,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
+import it.emanuelemelini.photocal.data.ai.AiException
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.Source
 import it.emanuelemelini.photocal.data.estimate.EstimatedFood
 import it.emanuelemelini.photocal.data.estimate.FoodEstimator
 import it.emanuelemelini.photocal.data.estimate.PerGram
-import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.ui.PhotoReviewRoute
 import it.emanuelemelini.photocal.ui.UiText
@@ -118,6 +118,8 @@ sealed interface ReviewStatus {
         val message: UiText,
         val needsSettings: Boolean,
         val canRetry: Boolean = true,
+        /** The AI answered badly or not at all: offer to pick another model. */
+        val canChangeModel: Boolean = false,
     ) : ReviewStatus
 }
 
@@ -199,8 +201,8 @@ class PhotoReviewViewModel(
                 hasAnalyzed = true
                 showErrors = false
                 ReviewStatus.Ready
-            } catch (e: GeminiException) {
-                ReviewStatus.Error(e.toUiText(), e.needsSettings)
+            } catch (e: AiException) {
+                ReviewStatus.Error(e.toUiText(), e.needsSettings, canChangeModel = e.anotherModelMayHelp)
             }
         }
     }

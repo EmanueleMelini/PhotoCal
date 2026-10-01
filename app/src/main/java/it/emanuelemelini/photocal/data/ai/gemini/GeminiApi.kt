@@ -1,4 +1,4 @@
-package it.emanuelemelini.photocal.data.gemini
+package it.emanuelemelini.photocal.data.ai.gemini
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject

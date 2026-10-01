@@ -3,6 +3,8 @@ package it.emanuelemelini.photocal.ui.photo
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -64,7 +66,7 @@ import java.io.File
 @Composable
 fun PhotoReviewScreen(
     onDone: () -> Unit,
-    onOpenSettings: () -> Unit,
+    onOpenAiSettings: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: PhotoReviewViewModel = viewModel {
@@ -148,10 +150,11 @@ fun PhotoReviewScreen(
                     message = status.message,
                     needsSettings = status.needsSettings,
                     canRetry = status.canRetry,
+                    canChangeModel = status.canChangeModel,
                     onRetry = viewModel::analyze,
-                    onOpenSettings = {
+                    onOpenAiSettings = {
                         viewModel.dismissError()
-                        onOpenSettings()
+                        onOpenAiSettings()
                     },
                     onManual = {
                         viewModel.dismissError()
@@ -262,13 +265,15 @@ private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ErrorCard(
     message: UiText,
     needsSettings: Boolean,
     canRetry: Boolean,
+    canChangeModel: Boolean,
     onRetry: () -> Unit,
-    onOpenSettings: () -> Unit,
+    onOpenAiSettings: () -> Unit,
     onManual: () -> Unit,
 ) {
     Card(
@@ -281,11 +286,15 @@ private fun ErrorCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onErrorContainer,
             )
-            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+            // Three buttons may not fit on one line of a narrow phone
+            FlowRow(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
                 if (needsSettings) {
-                    TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
+                    TextButton(onClick = onOpenAiSettings) { Text(stringResource(R.string.action_settings)) }
                 } else if (canRetry) {
                     TextButton(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
+                }
+                if (canChangeModel) {
+                    TextButton(onClick = onOpenAiSettings) { Text(stringResource(R.string.action_change_model)) }
                 }
                 TextButton(onClick = onManual) { Text(stringResource(R.string.action_manual_entry)) }
             }

@@ -6,11 +6,12 @@ import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.SavedFoodRepository
 import it.emanuelemelini.photocal.data.WaterRepository
 import it.emanuelemelini.photocal.data.WeightRepository
+import it.emanuelemelini.photocal.data.ai.AiHttp
+import it.emanuelemelini.photocal.data.ai.AiService
 import it.emanuelemelini.photocal.data.backup.BackupManager
 import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.data.db.AppDatabase
 import it.emanuelemelini.photocal.data.estimate.FoodEstimator
-import it.emanuelemelini.photocal.data.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.health.HealthConnect
 import it.emanuelemelini.photocal.data.health.HealthSync
 import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
@@ -99,14 +100,16 @@ class AppContainer(context: Context) {
         // A meal logged today makes its pending reminder pointless
         if (date == LocalDate.now()) reminderNotifier.cancelMeal(meal)
     }
-    val reminderNotifier: ReminderNotifier = ReminderNotifier(context, foodRepository, waterRepository, settingsRepository)
+    private val releasesClient = GitHubReleasesClient(httpClient)
+    val reminderNotifier: ReminderNotifier =
+        ReminderNotifier(context, foodRepository, waterRepository, settingsRepository, releasesClient)
     val reminderScheduler = ReminderScheduler(context, settingsRepository)
-    val geminiClient = GeminiClient(settingsRepository, httpClient)
-    val foodEstimator = FoodEstimator(geminiClient, CreaTable(context), settingsRepository)
+    val aiService = AiService(settingsRepository, AiHttp(httpClient))
+    val foodEstimator = FoodEstimator(aiService, CreaTable(context), settingsRepository)
     val openFoodFactsClient = OpenFoodFactsClient(httpClient)
     val shareBuilder = ShareBuilder(foodRepository, waterRepository, weightRepository, settingsRepository, profilePhotoStorage)
     val appUpdater = AppUpdater(
-        GitHubReleasesClient(httpClient),
+        releasesClient,
         UpdateInstaller(context, httpClient),
         settingsRepository,
         applicationScope,

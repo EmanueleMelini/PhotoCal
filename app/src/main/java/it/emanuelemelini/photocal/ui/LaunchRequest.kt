@@ -23,6 +23,9 @@ sealed interface LaunchRequest {
     /** Health Connect shows why PhotoCal asks for its permissions. */
     data object HealthPrivacy : LaunchRequest
 
+    /** "New version" notification: checks again and shows the update dialog. */
+    data object ShowUpdate : LaunchRequest
+
     companion object {
         private const val EXTRA_ACTION = "launch_action"
         private const val EXTRA_MEAL = "launch_meal"
@@ -44,6 +47,7 @@ sealed interface LaunchRequest {
                 ShareToday -> "share_today" to null
                 is OpenShared -> "shared" to null
                 HealthPrivacy -> "health_privacy" to null
+                ShowUpdate -> "show_update" to null
             }
             return Intent(context, MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -71,6 +75,7 @@ sealed interface LaunchRequest {
                 "share_today" -> ShareToday
                 "shared" -> OpenShared(intent.getStringExtra(EXTRA_PAYLOAD).orEmpty())
                 "health_privacy" -> HealthPrivacy
+                "show_update" -> ShowUpdate
                 else -> null
             }
         }

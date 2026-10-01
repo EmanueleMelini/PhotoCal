@@ -28,6 +28,7 @@
     <string name="action_cancel">Annulla</string>
     <string name="action_delete">Elimina</string>
     <string name="action_retry">Riprova</string>
+    <string name="action_change_model">Cambia modello</string>
     <string name="action_settings">Impostazioni</string>
     <string name="action_manual_entry">Inserisci a mano</string>
     <string name="label_meal">Pasto</string>
@@ -38,21 +39,23 @@
     <string name="quantity_grams_equivalent">= %1$s g</string>
     <string name="label_piece_grams">Grammi per pezzo</string>
     <string name="error_required_m_pl">Obbligatori</string>
-    <string name="error_gemini_missing_key">API key Gemini mancante: inseriscila nelle Impostazioni.</string>
-    <string name="error_gemini_invalid_key">API key non valida o senza permessi: controllala nelle Impostazioni.</string>
-    <string name="error_gemini_model_not_found">Modello \"%1$s\" non disponibile: controlla il nome nelle Impostazioni.</string>
-    <string name="error_gemini_rate_limited">Limite richieste raggiunto, riprova tra poco.</string>
+    <string name="error_ai_missing_key">API key %1$s mancante: inseriscila nelle Impostazioni.</string>
+    <string name="error_ai_invalid_key">API key %1$s non valida o senza permessi: controllala nelle Impostazioni.</string>
+    <string name="error_ai_missing_model">Manca il nome del modello: inseriscilo nelle Impostazioni.</string>
+    <string name="error_ai_invalid_base_url">Indirizzo del servizio mancante o non valido: controllalo nelle Impostazioni (deve iniziare con https://).</string>
+    <string name="error_ai_model_not_found">Modello \"%1$s\" non disponibile: controlla il nome nelle Impostazioni.</string>
+    <string name="error_ai_rate_limited">Limite richieste raggiunto, riprova tra poco.</string>
     <string name="error_network">Nessuna connessione a Internet: controlla la rete e riprova.</string>
-    <string name="error_gemini_invalid_response">Risposta dell\'AI non valida. Riprova oppure inserisci gli alimenti a mano.</string>
-    <string name="error_gemini_blocked">L\'AI ha rifiutato la richiesta (%1$s).</string>
-    <string name="error_gemini_http">Errore del servizio Gemini (%1$d).</string>
-    <string name="error_gemini_http_detail">Errore del servizio Gemini (%1$d): %2$s</string>
+    <string name="error_ai_invalid_response">Risposta dell\'AI non valida. Riprova oppure inserisci gli alimenti a mano.</string>
+    <string name="error_ai_blocked">L\'AI ha rifiutato la richiesta (%1$s).</string>
+    <string name="error_ai_http">Errore del servizio %1$s (%2$d).</string>
+    <string name="error_ai_http_detail">Errore del servizio %1$s (%2$d): %3$s</string>
     <string name="error_off_not_found">Prodotto non presente su Open Food Facts.</string>
     <string name="error_off_server">Open Food Facts non risponde (errore %1$d). Riprova più tardi.</string>
     <string name="action_ok">OK</string>
     <string name="action_close">Chiudi</string>
     <string name="action_add">Aggiungi</string>
-    <string name="today_photo_needs_key">Per l\'analisi delle foto serve la API key Gemini</string>
+    <string name="today_photo_needs_key">Per l\'analisi delle foto scegli l\'AI e inserisci la sua API key</string>
     <string name="today_no_camera">Nessuna app fotocamera disponibile</string>
     <string name="today_history">Storico</string>
     <string name="today_empty">Nessuna voce per questo giorno.\nTocca + per aggiungere un alimento.</string>
@@ -193,12 +196,23 @@
     <string name="settings_theme">Tema</string>
     <string name="settings_dynamic_colors">Colori dinamici</string>
     <string name="settings_dynamic_colors_hint">Usa i colori dello sfondo del telefono</string>
-    <string name="settings_gemini_hint">Serve per riconoscere i pasti dalle foto. La chiave resta solo su questo telefono.</string>
+    <string name="settings_ai_title">Intelligenza artificiale</string>
+    <string name="settings_ai_hint">Riconosce i pasti dalle foto e stima i valori dalle descrizioni. Scegli il servizio e usa la tua API key: resta solo su questo telefono.</string>
+    <string name="ai_provider_gemini" translatable="false">Gemini</string>
+    <string name="ai_provider_openai" translatable="false">OpenAI</string>
+    <string name="ai_provider_anthropic" translatable="false">Claude</string>
+    <string name="ai_provider_compatible">Compatibile OpenAI</string>
+    <string name="settings_base_url">Indirizzo del servizio</string>
+    <string name="settings_base_url_hint">L\'indirizzo base dell\'API compatibile con OpenAI, ad esempio https://openrouter.ai/api/v1</string>
     <string name="settings_api_key">API key</string>
+    <string name="settings_api_key_optional">API key (se il servizio la richiede)</string>
     <string name="settings_hide">Nascondi</string>
     <string name="settings_show">Mostra</string>
-    <string name="settings_get_api_key">Crea una API key gratuita su Google AI Studio</string>
+    <string name="settings_get_api_key_gemini">Crea una API key gratuita su Google AI Studio</string>
+    <string name="settings_get_api_key_openai">Crea una API key su OpenAI Platform</string>
+    <string name="settings_get_api_key_anthropic">Crea una API key sulla Claude Platform</string>
     <string name="settings_model">Modello</string>
+    <string name="settings_model_compatible_hint">Il nome del modello come lo indica il servizio. Per le foto serve un modello che legge le immagini.</string>
     <string name="settings_test_connection">Test connessione</string>
     <string name="settings_use_crea">Usa tabelle CREA</string>
     <string name="settings_use_crea_hint">L\'AI riconosce alimento e grammi, le kcal arrivano dalle tabelle di composizione degli alimenti quando c\'è la voce corrispondente. Fonte: %1$s.</string>
@@ -317,7 +331,12 @@
     <string name="reminder_water_half_hint">Se non sei ancora a metà</string>
     <string name="reminder_water_goal">Acqua: obiettivo</string>
     <string name="reminder_water_goal_hint">Se non l\'hai ancora raggiunto</string>
+    <string name="reminder_update">Nuova versione</string>
+    <string name="reminder_update_hint">Controlla su GitHub se c\'è un aggiornamento (serve la connessione)</string>
+    <string name="reminder_update_title">PhotoCal %1$s disponibile</string>
+    <string name="reminder_update_text">Tocca per vedere le novità e aggiornare.</string>
     <string name="channel_water_reminders">Promemoria acqua</string>
+    <string name="channel_updates">Aggiornamenti</string>
     <string name="reminder_water_half_title">A metà dell\'acqua di oggi?</string>
     <string name="reminder_water_goal_title">Obiettivo d\'acqua di oggi</string>
     <string name="reminder_water_text">%1$s. %2$s</string>
@@ -344,7 +363,7 @@
     <string name="reminder_weekly_empty">Nessun giorno registrato negli ultimi 7 giorni.</string>
     <string name="reminder_weekly_text">Media %1$s kcal al giorno · entro l\'obiettivo: %2$d/%3$d</string>
     <string name="settings_reminders">Promemoria</string>
-    <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione. Quelle dei pasti non arrivano se il pasto è già registrato, quelle dell\'acqua se hai già bevuto abbastanza.</string>
+    <string name="settings_reminders_hint">Notifiche dal telefono, anche senza connessione (tranne la nuova versione, che chiede a GitHub). Quelle dei pasti non arrivano se il pasto è già registrato, quelle dell\'acqua se hai già bevuto abbastanza.</string>
     <string name="settings_notifications_off">Le notifiche di PhotoCal sono disattivate.</string>
     <string name="settings_notifications_enable">Attiva</string>
     <string name="settings_reminder_time">Orario</string>
@@ -524,6 +543,14 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_5_0">
+        <item>Scegli l\'AI: in Impostazioni → Intelligenza artificiale, oltre a Gemini, puoi usare OpenAI o Claude (Anthropic) con la tua API key.</item>
+        <item>Compatibile OpenAI: puoi indicare l\'indirizzo di un altro servizio con la stessa API (per esempio OpenRouter o Mistral) e il nome del modello. Per le foto serve un modello che legge le immagini.</item>
+        <item>Ogni AI ha la sua chiave e il suo modello: se cambi AI e poi torni indietro, li ritrovi. La chiave Gemini che avevi già inserito resta dov\'era.</item>
+        <item>Se l\'AI non risponde o dà una risposta non valida, oltre a Riprova e Inserisci a mano trovi \"Cambia modello\", che apre le Impostazioni già sulla sezione dell\'AI.</item>
+        <item>Il backup ricorda l\'AI scelta e i modelli; le API key restano solo sul telefono.</item>
+        <item>Nuovo promemoria \"Nuova versione\": in Impostazioni → Promemoria scegli l\'orario e PhotoCal controlla ogni giorno su GitHub se c\'è un aggiornamento. Ti avvisa una sola volta per versione; toccando la notifica vedi le novità e aggiorni.</item>
+    </string-array>
     <string-array name="changelog_1_4_0">
         <item>Barcode: ora puoi contare i pezzi, per esempio 3 biscotti invece di 25 g. Scegli \"pezzi\" nell\'unità: i grammi di un pezzo sono già compilati quando la confezione su Open Food Facts li indica, altrimenti li scrivi tu.</item>
         <item>Se la porzione della confezione nomina i pezzi (\"3 biscotti\", \"2 fette\"), nel diario compare quel nome, per esempio \"3 biscotti (25 g)\".</item>

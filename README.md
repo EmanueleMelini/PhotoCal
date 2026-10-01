@@ -1,8 +1,12 @@
 # PhotoCal
 
 App Android personale per contare le calorie giornaliere: diario manuale, riconoscimento
-dei pasti da foto con Gemini, scansione barcode con Open Food Facts. Tutto locale sul
+dei pasti da foto con l'AI che scegli (Gemini, OpenAI, Claude o un servizio compatibile
+OpenAI), scansione barcode con Open Food Facts. Tutto locale sul
 telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
+
+Sito: **[photocal.emanuelemelini.dev](https://photocal.emanuelemelini.dev)**, con la presentazione
+dell'app e il download dell'ultima versione.
 
 ## Stato
 
@@ -14,8 +18,26 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
 
 ## Note d'uso
 
-- **API key Gemini**: si crea gratis su [Google AI Studio](https://aistudio.google.com/apikey) e si
-  incolla in Impostazioni. Resta solo sul telefono ed è esclusa dal backup di Android.
+- **AI e API key** (Impostazioni → Intelligenza artificiale): si sceglie il servizio e si incolla
+  la sua chiave. Gemini ha una chiave gratuita su [Google AI Studio](https://aistudio.google.com/apikey);
+  OpenAI e Claude (Anthropic) usano le chiavi a pagamento di [OpenAI Platform](https://platform.openai.com/api-keys)
+  e della [Claude Platform](https://platform.claude.com/settings/keys). "Compatibile OpenAI" chiede
+  l'indirizzo base (solo `https://`, es. `https://openrouter.ai/api/v1`), il modello e, se serve,
+  la chiave: va bene ogni servizio con l'API Chat Completions; per le foto il modello deve leggere
+  le immagini. Ogni AI tiene la sua chiave e il suo modello (`gemini_api_key` è la stessa chiave
+  delle versioni prima della 1.5.0). Le chiavi restano solo sul telefono, sono escluse dal backup
+  di Android e dal file di backup, che salva invece l'AI scelta, i modelli e l'indirizzo.
+- **Risposta dell'AI**: stessi prompt e stesso JSON per tutte; cambia solo come si vincola lo
+  schema (`responseSchema` per Gemini, JSON Schema `strict` per OpenAI, `output_config.format`
+  per Claude). Se un servizio compatibile non conosce `json_schema`, l'app riprova in modalità
+  `json_object` con lo schema nel prompt. Con Claude Opus 5.5, Opus 5, Fable 5.1 e Sonnet 5.5
+  è attivo il `fallbacks: "default"` lato server, che rifà la richiesta su un altro modello se i
+  filtri di sicurezza la rifiutano.
+- **Se l'AI non risponde** (errore del servizio, risposta non valida, rifiuto; non per rete o
+  impostazioni da correggere) la revisione della foto mostra Riprova, "Cambia modello" e
+  Inserisci a mano, l'inserimento manuale "Cambia modello". Porta alle Impostazioni già sulla
+  sezione AI (`SettingsRoute(showAi = true)`), come il pulsante Impostazioni degli errori di
+  configurazione.
 - **Bevande**: nell'inserimento manuale la quantità si può indicare in tazzine (30 ml), tazze
   (250 ml), bicchieri (200 ml), calici (150 ml) o ml; l'app salva i ml come grammi (1 ml ≈ 1 g).
   Le capienze sono in `ServingUnit.kt`.
@@ -91,6 +113,15 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   qualcosa va storto, resta il link per scaricare l'APK dal browser. Android rifiuta un APK con
   una firma diversa da quella dell'app installata, quindi sopra una build debug l'aggiornamento
   non si installa.
+- **Promemoria "Nuova versione"** (spento di default, ore 10:00): all'orario scelto chiede a
+  GitHub l'ultima Release e, se è più nuova di quella installata, mostra una notifica sul canale
+  "Aggiornamenti" con la prima novità. Avvisa una sola volta per versione (`last_notified_update`
+  nelle preferenze); senza rete tace e riprova il giorno dopo. Toccandola si apre l'app con il
+  dialogo di aggiornamento, anche se il controllo giornaliero è già stato fatto. Come il
+  controllo all'avvio, non fa nulla nelle build debug. Per provarlo sull'emulatore serve una
+  build che si dichiari più vecchia dell'ultima Release e `adb root` per lanciare la sveglia:
+  `adb shell am broadcast -n it.emanuelemelini.photocal/.data.reminders.ReminderAlarmReceiver
+  --es reminder_type UPDATE`.
 - **Novità**: alla prima apertura dopo un aggiornamento compare il changelog delle versioni
   nuove, in italiano o in inglese secondo la lingua dell'app. Dopo un'installazione da zero non
   compare. Si rilegge in Impostazioni → Info.
@@ -116,7 +147,7 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
   l'icona accanto al pasto copia il pasto, quella in alto il giorno (ogni voce nel suo pasto).
   Il dialogo propone oggi, o domani se si copia da oggi. La foto è condivisa tra le copie.
 - **Fibre, zuccheri e sale**: da Open Food Facts (`fiber_100g`, `sugars_100g`, `salt_100g`, o
-  sodio × 2,5), dalle tabelle CREA e, facoltativi, dalla stima Gemini. Si scrivono anche a mano
+  sodio × 2,5), dalle tabelle CREA e, facoltativi, dalla stima AI. Si scrivono anche a mano
   ("Altri valori") e il totale del giorno compare sotto le macro in Oggi. Nessun obiettivo.
 - **Backup** (Impostazioni → Dati): "Esporta backup" scrive un file JSON (`data/backup/`) con
   diario, peso, acqua, alimenti salvati e impostazioni, senza API key né foto (di ogni foto
@@ -139,7 +170,7 @@ telefono, nessun backend. Il piano completo è in [PLAN.md](PLAN.md).
 ## Stack
 
 Kotlin, Jetpack Compose (Material 3), MVVM con DI manuale, Room, DataStore,
-Navigation Compose, OkHttp + kotlinx.serialization (REST Gemini, Open Food Facts), Coil,
+Navigation Compose, OkHttp + kotlinx.serialization (REST Gemini, OpenAI, Anthropic, Open Food Facts), Coil,
 Google Code Scanner (ML Kit), Health Connect. minSdk 26, targetSdk 37.
 
 ## Dati CREA
@@ -202,11 +233,13 @@ segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
   `release_notes.py` (inglese visibile, italiano nel commento nascosto) e sono lette come in
   `GitHubReleasesClient.parseNotes`. Una versione compare solo quando la sua Release ha l'APK:
   dopo una release la pagina si aggiorna da sola, senza ripubblicare il sito.
-- **Screenshot** (`img/`, WebP 540 px, ~370 KB in tutto): presi sull'AVD telefono
+- **Screenshot** (`img/`, WebP 540 px, ~430 KB in tutto): presi sull'AVD telefono
   `PhotoCalPhone_API34` con la build release e i dati di prova di
   `tools/site/demo_backup.py` (Impostazioni → Dati → Ripristina backup → Sostituisci tutto, solo
   sull'emulatore); quelli della foto del pasto (`photo-*`) vengono da un telefono vero, perché
-  serve una risposta di Gemini. Senza la barra di stato: `magick in.png -crop 1080x2270+0+130
+  serve una risposta vera dell'AI. Quelli della scelta dell'AI (`ai-*`): Impostazioni con la
+  lingua dell'app su Italiano o English, titolo "Intelligenza artificiale" subito sotto la barra,
+  Claude selezionato e chiave vuota, senza salvare. Senza la barra di stato: `magick in.png -crop 1080x2270+0+130
   +repage out.png`, poi `cwebp -q 78 -m 6 -resize 540 0 -metadata none out.png -o x.webp`.
 - **Pubblicazione**: il progetto Pages è collegato alla repo (cartella `site/`), quindi ogni push
   su `master` pubblica il sito; i commit mostrano il controllo "Cloudflare Pages".
@@ -261,7 +294,7 @@ app/src/main/java/it/emanuelemelini/photocal/
 ├── data/
 │   ├── db/               Room: FoodEntry, DAO, converter
 │   ├── prefs/            DataStore: impostazioni
-│   ├── gemini/           client REST generateContent, prompt, schema
+│   ├── ai/               AiService, prompt, schema; client REST gemini/, openai/, anthropic/
 │   ├── crea/             tabelle CREA (da assets/crea_foods.tsv)
 │   ├── estimate/         stima AI + sostituzione con i valori CREA
 │   ├── nutrition/        profilo, formula del fabbisogno, macro

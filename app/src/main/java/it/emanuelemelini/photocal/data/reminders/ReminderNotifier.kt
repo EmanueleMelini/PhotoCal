@@ -11,8 +11,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import android.util.Log
 import androidx.core.content.ContextCompat
+import it.emanuelemelini.photocal.AppLanguage
 import it.emanuelemelini.photocal.AppLocale
+import it.emanuelemelini.photocal.BuildConfig
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.WaterRepository
@@ -20,6 +23,10 @@ import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.update.AppVersion
+import it.emanuelemelini.photocal.data.update.GitHubReleasesClient
+import it.emanuelemelini.photocal.data.update.UpdateCheckException
+import it.emanuelemelini.photocal.data.update.UpdateNotice
 import it.emanuelemelini.photocal.ui.LaunchRequest
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
@@ -34,6 +41,7 @@ class ReminderNotifier(
     private val foodRepository: FoodRepository,
     private val waterRepository: WaterRepository,
     private val settingsRepository: SettingsRepository,
+    private val releasesClient: GitHubReleasesClient,
 ) {
     private val notifications = NotificationManagerCompat.from(context)
 
@@ -46,6 +54,7 @@ class ReminderNotifier(
                 NotificationChannel(CHANNEL_MEALS, res.getString(R.string.channel_meal_reminders), NotificationManager.IMPORTANCE_DEFAULT),
                 NotificationChannel(CHANNEL_SUMMARIES, res.getString(R.string.channel_summaries), NotificationManager.IMPORTANCE_LOW),
                 NotificationChannel(CHANNEL_WATER, res.getString(R.string.channel_water_reminders), NotificationManager.IMPORTANCE_DEFAULT),
+                NotificationChannel(CHANNEL_UPDATES, res.getString(R.string.channel_updates), NotificationManager.IMPORTANCE_DEFAULT),
             )
         )
     }
@@ -62,6 +71,7 @@ class ReminderNotifier(
         val today = LocalDate.now()
 
         val builder = when {
+            type.checksUpdates -> updateNotification(type, res) ?: return
             type.waterShare != null -> waterNotification(type, type.waterShare, settings, res) ?: return
             type.meal != null -> {
                 // A meal that is already in the diary needs no reminder
@@ -154,6 +164,28 @@ class ReminderNotifier(
             .addAction(0, res.getString(R.string.shortcut_water_long), addGlass(type))
     }
 
+    /**
+     * null when there is nothing new to announce. A failed check is silent: the reminder
+     * tries again the next day.
+     */
+    private suspend fun updateNotification(type: ReminderType, res: Resources): NotificationCompat.Builder? {
+        // A debug build is signed with another key and couldn't install the release anyway
+        if (BuildConfig.DEBUG) return null
+        val release = try {
+            releasesClient.latestRelease()
+        } catch (e: UpdateCheckException) {
+            Log.i(TAG, "Update reminder check failed: ${e.message}")
+            return null
+        } ?: return null
+        val lastNotified = settingsRepository.lastNotifiedUpdate()?.let(AppVersion::parse)
+        if (!UpdateNotice.shouldNotify(AppVersion.parse(BuildConfig.VERSION_NAME), release.version, lastNotified)) return null
+        settingsRepository.setLastNotifiedUpdate(release.version.toString())
+        val language = AppLanguage.entries.find { it.tag == res.configuration.locales[0].language } ?: AppLanguage.ITALIAN
+        val text = release.notesFor(language.tag).firstOrNull() ?: res.getString(R.string.reminder_update_text)
+        return base(CHANNEL_UPDATES, res.getString(R.string.reminder_update_title, release.version.toString()), text)
+            .setContentIntent(activity(type, 0, LaunchRequest.ShowUpdate))
+    }
+
     /** The same broadcast as the widget "+": the repository then calls [refreshWater]. */
     private fun addGlass(type: ReminderType): PendingIntent = PendingIntent.getBroadcast(
         context,
@@ -197,5 +229,7 @@ class ReminderNotifier(
         const val CHANNEL_MEALS = "meal_reminders"
         const val CHANNEL_SUMMARIES = "summaries"
         const val CHANNEL_WATER = "water_reminders"
+        const val CHANNEL_UPDATES = "updates"
+        const val TAG = "ReminderNotifier"
     }
 }

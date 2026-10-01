@@ -27,6 +27,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
     <string name="action_retry">Retry</string>
+    <string name="action_change_model">Change model</string>
     <string name="action_settings">Settings</string>
     <string name="action_manual_entry">Enter manually</string>
     <string name="label_meal">Meal</string>
@@ -37,21 +38,23 @@
     <string name="quantity_grams_equivalent">= %1$s g</string>
     <string name="label_piece_grams">Grams per piece</string>
     <string name="error_required_m_pl">Required</string>
-    <string name="error_gemini_missing_key">Gemini API key missing: enter it in Settings.</string>
-    <string name="error_gemini_invalid_key">Invalid API key or missing permissions: check it in Settings.</string>
-    <string name="error_gemini_model_not_found">Model \"%1$s\" is not available: check its name in Settings.</string>
-    <string name="error_gemini_rate_limited">Request limit reached, try again shortly.</string>
+    <string name="error_ai_missing_key">%1$s API key missing: enter it in Settings.</string>
+    <string name="error_ai_invalid_key">Invalid %1$s API key or missing permissions: check it in Settings.</string>
+    <string name="error_ai_missing_model">The model name is missing: enter it in Settings.</string>
+    <string name="error_ai_invalid_base_url">The service address is missing or invalid: check it in Settings (it must start with https://).</string>
+    <string name="error_ai_model_not_found">Model \"%1$s\" is not available: check its name in Settings.</string>
+    <string name="error_ai_rate_limited">Request limit reached, try again shortly.</string>
     <string name="error_network">No Internet connection: check the network and try again.</string>
-    <string name="error_gemini_invalid_response">Invalid AI response. Try again or enter the foods manually.</string>
-    <string name="error_gemini_blocked">The AI refused the request (%1$s).</string>
-    <string name="error_gemini_http">Gemini service error (%1$d).</string>
-    <string name="error_gemini_http_detail">Gemini service error (%1$d): %2$s</string>
+    <string name="error_ai_invalid_response">Invalid AI response. Try again or enter the foods manually.</string>
+    <string name="error_ai_blocked">The AI refused the request (%1$s).</string>
+    <string name="error_ai_http">%1$s service error (%2$d).</string>
+    <string name="error_ai_http_detail">%1$s service error (%2$d): %3$s</string>
     <string name="error_off_not_found">Product not found on Open Food Facts.</string>
     <string name="error_off_server">Open Food Facts is not responding (error %1$d). Try again later.</string>
     <string name="action_ok">OK</string>
     <string name="action_close">Close</string>
     <string name="action_add">Add</string>
-    <string name="today_photo_needs_key">Photo analysis needs a Gemini API key</string>
+    <string name="today_photo_needs_key">Photo analysis needs an AI and its API key</string>
     <string name="today_no_camera">No camera app available</string>
     <string name="today_history">History</string>
     <string name="today_empty">No entries for this day.\nTap + to add a food.</string>
@@ -192,12 +195,20 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_dynamic_colors">Dynamic colors</string>
     <string name="settings_dynamic_colors_hint">Use the colors of the phone wallpaper</string>
-    <string name="settings_gemini_hint">Used to recognize meals from photos. The key stays on this phone only.</string>
+    <string name="settings_ai_title">Artificial intelligence</string>
+    <string name="settings_ai_hint">Recognizes meals from photos and estimates values from descriptions. Choose the service and use your own API key: it stays on this phone only.</string>
+    <string name="ai_provider_compatible">OpenAI-compatible</string>
+    <string name="settings_base_url">Service address</string>
+    <string name="settings_base_url_hint">Base address of the OpenAI-compatible API, for example https://openrouter.ai/api/v1</string>
     <string name="settings_api_key">API key</string>
+    <string name="settings_api_key_optional">API key (if the service needs one)</string>
     <string name="settings_hide">Hide</string>
     <string name="settings_show">Show</string>
-    <string name="settings_get_api_key">Create a free API key on Google AI Studio</string>
+    <string name="settings_get_api_key_gemini">Create a free API key on Google AI Studio</string>
+    <string name="settings_get_api_key_openai">Create an API key on OpenAI Platform</string>
+    <string name="settings_get_api_key_anthropic">Create an API key on the Claude Platform</string>
     <string name="settings_model">Model</string>
+    <string name="settings_model_compatible_hint">The model name as the service lists it. Photos need a model that reads images.</string>
     <string name="settings_test_connection">Test connection</string>
     <string name="settings_use_crea">Use CREA tables</string>
     <string name="settings_use_crea_hint">The AI recognizes food and grams, the kcal come from the food composition tables when there is a matching food. Source: %1$s.</string>
@@ -315,7 +326,12 @@
     <string name="reminder_water_half_hint">If you aren\'t halfway yet</string>
     <string name="reminder_water_goal">Water: goal</string>
     <string name="reminder_water_goal_hint">If you haven\'t reached it yet</string>
+    <string name="reminder_update">New version</string>
+    <string name="reminder_update_hint">Checks GitHub for an update (needs a connection)</string>
+    <string name="reminder_update_title">PhotoCal %1$s is available</string>
+    <string name="reminder_update_text">Tap to see what\'s new and update.</string>
     <string name="channel_water_reminders">Water reminders</string>
+    <string name="channel_updates">Updates</string>
     <string name="reminder_water_half_title">Halfway through today\'s water?</string>
     <string name="reminder_water_goal_title">Today\'s water goal</string>
     <string name="reminder_water_text">%1$s. %2$s</string>
@@ -343,7 +359,7 @@
     <string name="reminder_weekly_empty">No days logged in the last 7 days.</string>
     <string name="reminder_weekly_text">Average %1$s kcal a day · within goal: %2$d/%3$d</string>
     <string name="settings_reminders">Reminders</string>
-    <string name="settings_reminders_hint">Notifications from the phone itself, even offline. Meal reminders are skipped if the meal is already logged, water ones if you have already drunk enough.</string>
+    <string name="settings_reminders_hint">Notifications from the phone itself, even offline (except the new version one, which asks GitHub). Meal reminders are skipped if the meal is already logged, water ones if you have already drunk enough.</string>
     <string name="settings_notifications_off">PhotoCal notifications are turned off.</string>
     <string name="settings_notifications_enable">Turn on</string>
     <string name="settings_reminder_time">Time</string>
@@ -515,6 +531,14 @@
     <string name="changelog_title">What\'s new</string>
     <string name="changelog_title_version">What\'s new in PhotoCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_5_0">
+        <item>Choose your AI: in Settings → Artificial intelligence, besides Gemini, you can use OpenAI or Claude (Anthropic) with your own API key.</item>
+        <item>OpenAI-compatible: you can enter the address of another service with the same API (for example OpenRouter or Mistral) and the model name. Photos need a model that reads images.</item>
+        <item>Each AI keeps its own key and model: if you switch AI and then go back, you find them again. The Gemini key you already entered stays where it was.</item>
+        <item>When the AI doesn\'t answer or gives an invalid answer, besides Retry and Enter manually you find \"Change model\", which opens Settings right at the AI section.</item>
+        <item>The backup remembers the chosen AI and the models; the API keys stay on the phone only.</item>
+        <item>New \"New version\" reminder: in Settings → Reminders pick the time and PhotoCal checks GitHub every day for an update. It tells you only once per version; tapping the notification shows what\'s new and lets you update.</item>
+    </string-array>
     <string-array name="changelog_1_4_0">
         <item>Barcode: you can now count pieces, for example 3 biscuits instead of 25 g. Choose \"pieces\" as the unit: the grams of one piece are already filled in when the package on Open Food Facts gives them, otherwise you type them.</item>
         <item>When the serving on the package names the pieces (\"3 biscuits\", \"2 slices\"), the diary shows that name, for example \"3 biscuits (25 g)\".</item>

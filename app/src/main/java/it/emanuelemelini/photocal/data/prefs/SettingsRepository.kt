@@ -11,6 +11,8 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import it.emanuelemelini.photocal.R
+import it.emanuelemelini.photocal.data.ai.AiConfig
+import it.emanuelemelini.photocal.data.ai.AiProvider
 import it.emanuelemelini.photocal.data.nutrition.ActivityLevel
 import it.emanuelemelini.photocal.data.nutrition.DailyGoals
 import it.emanuelemelini.photocal.data.nutrition.Profile
@@ -50,8 +52,14 @@ data class Settings(
     val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
     val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
     val profile: Profile = Profile(),
-    val geminiApiKey: String = "",
-    val geminiModel: String = SettingsRepository.DEFAULT_GEMINI_MODEL,
+    /** AI used for photos and text estimates. */
+    val aiProvider: AiProvider = AiProvider.GEMINI,
+    /** API key of each AI: they stay on this phone, never in backups. */
+    val aiApiKeys: Map<AiProvider, String> = emptyMap(),
+    /** Model of each AI; a missing one means the default model. */
+    val aiModels: Map<AiProvider, String> = emptyMap(),
+    /** Base URL of the OpenAI-compatible service, e.g. https://openrouter.ai/api/v1. */
+    val compatibleBaseUrl: String = "",
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     /** Material You colors taken from the wallpaper (Android 12+). */
     val dynamicColor: Boolean = true,
@@ -65,7 +73,18 @@ data class Settings(
     val healthWrite: Boolean = true,
     /** Active calories burned are added to the daily kcal goal. */
     val healthAddBurned: Boolean = false,
-)
+) {
+    fun aiApiKey(provider: AiProvider): String = aiApiKeys[provider].orEmpty()
+
+    fun aiModel(provider: AiProvider): String = aiModels[provider]?.takeIf { it.isNotBlank() } ?: provider.defaultModel
+
+    fun aiConfig(provider: AiProvider) = AiConfig(aiApiKey(provider), aiModel(provider), compatibleBaseUrl)
+
+    /** The chosen AI has what it needs to be called (the service can still reject it). */
+    val aiConfigured: Boolean
+        get() = if (aiProvider.requiresApiKey) aiApiKey(aiProvider).isNotBlank()
+        else compatibleBaseUrl.isNotBlank() && aiModel(aiProvider).isNotBlank()
+}
 
 class SettingsRepository(private val context: Context) {
 
@@ -85,8 +104,14 @@ class SettingsRepository(private val context: Context) {
                 activity = prefs[ACTIVITY]?.let { name -> ActivityLevel.entries.find { it.name == name } },
                 goal = prefs[WEIGHT_GOAL]?.let { name -> WeightGoal.entries.find { it.name == name } } ?: WeightGoal.MAINTAIN,
             ),
-            geminiApiKey = prefs[GEMINI_API_KEY].orEmpty(),
-            geminiModel = prefs[GEMINI_MODEL]?.takeIf { it.isNotBlank() } ?: DEFAULT_GEMINI_MODEL,
+            aiProvider = prefs[AI_PROVIDER]?.let { name -> AiProvider.entries.find { it.name == name } } ?: AiProvider.GEMINI,
+            aiApiKeys = AiProvider.entries.mapNotNull { provider ->
+                prefs[apiKeyKey(provider)]?.takeIf { it.isNotEmpty() }?.let { provider to it }
+            }.toMap(),
+            aiModels = AiProvider.entries.mapNotNull { provider ->
+                prefs[modelKey(provider)]?.takeIf { it.isNotBlank() }?.let { provider to it }
+            }.toMap(),
+            compatibleBaseUrl = prefs[COMPATIBLE_BASE_URL].orEmpty(),
             themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.find { it.name == name } } ?: ThemeMode.SYSTEM,
             dynamicColor = prefs[DYNAMIC_COLOR] ?: true,
             useCrea = prefs[USE_CREA] ?: true,
@@ -103,10 +128,20 @@ class SettingsRepository(private val context: Context) {
         )
     }
 
-    suspend fun saveGemini(geminiApiKey: String, geminiModel: String) {
-        context.dataStore.edit {
-            it[GEMINI_API_KEY] = geminiApiKey
-            it[GEMINI_MODEL] = geminiModel
+    /** The chosen AI with the key and model of every AI, so switching back keeps them. */
+    suspend fun saveAi(
+        provider: AiProvider,
+        apiKeys: Map<AiProvider, String>,
+        models: Map<AiProvider, String>,
+        compatibleBaseUrl: String,
+    ) {
+        context.dataStore.edit { prefs ->
+            prefs[AI_PROVIDER] = provider.name
+            AiProvider.entries.forEach { p ->
+                prefs.setOrRemove(apiKeyKey(p), apiKeys[p]?.trim()?.takeIf { it.isNotEmpty() })
+                prefs.setOrRemove(modelKey(p), models[p]?.trim()?.takeIf { it.isNotEmpty() })
+            }
+            prefs.setOrRemove(COMPATIBLE_BASE_URL, compatibleBaseUrl.trim().takeIf { it.isNotEmpty() })
         }
     }
 
@@ -169,7 +204,7 @@ class SettingsRepository(private val context: Context) {
     }
 
     /**
-     * Settings from a backup, in a single write. The Gemini API key, the update checks and the
+     * Settings from a backup, in a single write. The AI API keys, the update checks and the
      * Health Connect link (its permissions belong to this phone) are left as they are.
      */
     suspend fun restore(settings: Settings) {
@@ -187,7 +222,9 @@ class SettingsRepository(private val context: Context) {
             prefs.setOrRemove(HEIGHT_CM, profile.heightCm)
             prefs.setOrRemove(ACTIVITY, profile.activity?.name)
             prefs[WEIGHT_GOAL] = profile.goal.name
-            prefs[GEMINI_MODEL] = settings.geminiModel
+            prefs[AI_PROVIDER] = settings.aiProvider.name
+            AiProvider.entries.forEach { provider -> prefs.setOrRemove(modelKey(provider), settings.aiModels[provider]) }
+            prefs.setOrRemove(COMPATIBLE_BASE_URL, settings.compatibleBaseUrl.takeIf { it.isNotBlank() })
             prefs[THEME_MODE] = settings.themeMode.name
             prefs[DYNAMIC_COLOR] = settings.dynamicColor
             prefs[USE_CREA] = settings.useCrea
@@ -207,6 +244,13 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[LAST_UPDATE_CHECK] = epochDay }
     }
 
+    /** Last version announced by the "new version" reminder (not a setting: kept out of [Settings]). */
+    suspend fun lastNotifiedUpdate(): String? = context.dataStore.data.first()[LAST_NOTIFIED_UPDATE]
+
+    suspend fun setLastNotifiedUpdate(version: String) {
+        context.dataStore.edit { it[LAST_NOTIFIED_UPDATE] = version }
+    }
+
     /** versionCode whose changelog was last shown; null before 1.3.0 and on a fresh install. */
     suspend fun lastSeenVersionCode(): Int? = context.dataStore.data.first()[LAST_SEEN_VERSION]
 
@@ -223,12 +267,6 @@ class SettingsRepository(private val context: Context) {
         /** Same as the "glass" unit of the manual entry. */
         const val DEFAULT_GLASS_ML = 200
 
-        /** Latest stable Flash model with a free tier (checked on ai.google.dev, September 2026). */
-        const val DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
-
-        /** Suggestions shown in Settings. */
-        val SUGGESTED_GEMINI_MODELS = listOf(DEFAULT_GEMINI_MODEL, "gemini-3.5-flash-lite")
-
         private val KCAL_GOAL = intPreferencesKey("daily_kcal_goal")
         private val PROTEIN_GOAL = intPreferencesKey("protein_goal_g")
         private val CARBS_GOAL = intPreferencesKey("carbs_goal_g")
@@ -241,16 +279,22 @@ class SettingsRepository(private val context: Context) {
         private val HEIGHT_CM = intPreferencesKey("profile_height_cm")
         private val ACTIVITY = stringPreferencesKey("profile_activity")
         private val WEIGHT_GOAL = stringPreferencesKey("profile_weight_goal")
-        private val GEMINI_API_KEY = stringPreferencesKey("gemini_api_key")
-        private val GEMINI_MODEL = stringPreferencesKey("gemini_model")
+        private val AI_PROVIDER = stringPreferencesKey("ai_provider")
+        private val COMPATIBLE_BASE_URL = stringPreferencesKey("openai_compatible_base_url")
         private val THEME_MODE = stringPreferencesKey("theme_mode")
         private val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
         private val USE_CREA = booleanPreferencesKey("use_crea")
         private val LAST_UPDATE_CHECK = longPreferencesKey("last_update_check_day")
         private val LAST_SEEN_VERSION = intPreferencesKey("last_seen_version_code")
+        private val LAST_NOTIFIED_UPDATE = stringPreferencesKey("last_notified_update")
         private val HEALTH_CONNECTED = booleanPreferencesKey("health_connected")
         private val HEALTH_WRITE = booleanPreferencesKey("health_write")
         private val HEALTH_ADD_BURNED = booleanPreferencesKey("health_add_burned")
+
+        /** "gemini_api_key" and "gemini_model" are the keys of the versions before 1.5.0. */
+        private fun apiKeyKey(provider: AiProvider) = stringPreferencesKey("${provider.prefKey}_api_key")
+
+        private fun modelKey(provider: AiProvider) = stringPreferencesKey("${provider.prefKey}_model")
 
         private fun reminderEnabledKey(type: ReminderType) =
             booleanPreferencesKey("reminder_${type.name.lowercase()}_enabled")

@@ -1,13 +1,16 @@
 package it.emanuelemelini.photocal.ui.settings
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.emanuelemelini.photocal.R
-import it.emanuelemelini.photocal.data.gemini.GeminiClient
-import it.emanuelemelini.photocal.data.gemini.GeminiException
+import it.emanuelemelini.photocal.data.ai.AiConfig
+import it.emanuelemelini.photocal.data.ai.AiException
+import it.emanuelemelini.photocal.data.ai.AiProvider
+import it.emanuelemelini.photocal.data.ai.AiService
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
@@ -35,14 +38,23 @@ sealed interface ConnectionTest {
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
-    private val geminiClient: GeminiClient,
+    private val aiService: AiService,
     private val reminderScheduler: ReminderScheduler,
     private val appUpdater: AppUpdater,
 ) : ViewModel() {
 
-    var apiKey by mutableStateOf("")
+    /** AI shown in Settings; it becomes the one in use with Save. */
+    var provider by mutableStateOf(AiProvider.GEMINI)
         private set
-    var model by mutableStateOf("")
+
+    /** Key and model of every AI, so switching back and forth loses nothing. */
+    private val apiKeys = mutableStateMapOf<AiProvider, String>()
+    private val models = mutableStateMapOf<AiProvider, String>()
+
+    val apiKey: String get() = apiKeys[provider].orEmpty()
+    val model: String get() = models[provider].orEmpty()
+
+    var baseUrl by mutableStateOf("")
         private set
     var connectionTest by mutableStateOf<ConnectionTest>(ConnectionTest.Idle)
         private set
@@ -56,18 +68,37 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             val settings = settingsRepository.settings.first()
-            apiKey = settings.geminiApiKey
-            model = settings.geminiModel
+            provider = settings.aiProvider
+            AiProvider.entries.forEach { p ->
+                apiKeys[p] = settings.aiApiKey(p)
+                models[p] = settings.aiModel(p)
+            }
+            baseUrl = settings.compatibleBaseUrl
         }
     }
 
+    fun onProviderChange(value: AiProvider) {
+        provider = value
+        resetConnectionTest()
+    }
+
     fun onApiKeyChange(value: String) {
-        apiKey = value.trim()
-        connectionTest = ConnectionTest.Idle
+        apiKeys[provider] = value.trim()
+        resetConnectionTest()
     }
 
     fun onModelChange(value: String) {
-        model = value.trim()
+        models[provider] = value.trim()
+        resetConnectionTest()
+    }
+
+    fun onBaseUrlChange(value: String) {
+        baseUrl = value.trim()
+        resetConnectionTest()
+    }
+
+    private fun resetConnectionTest() {
+        testJob?.cancel()
         connectionTest = ConnectionTest.Idle
     }
 
@@ -113,19 +144,24 @@ class SettingsViewModel(
         connectionTest = ConnectionTest.Running
         testJob = viewModelScope.launch {
             connectionTest = try {
-                val name = geminiClient.testConnection(apiKey, model.ifBlank { SettingsRepository.DEFAULT_GEMINI_MODEL })
+                val name = aiService.testConnection(provider, AiConfig(apiKey, model.ifBlank { provider.defaultModel }, baseUrl))
                 ConnectionTest.Success(uiText(R.string.settings_connection_ok, name))
-            } catch (e: GeminiException) {
+            } catch (e: AiException) {
                 ConnectionTest.Failure(e.toUiText())
             }
         }
     }
 
-    /** Saves the Gemini key and model (the other settings apply immediately). */
+    /**
+     * Saves the chosen AI with keys and models (the other settings apply immediately). A
+     * default model isn't stored, so it follows the default of later versions.
+     */
     suspend fun save() {
-        settingsRepository.saveGemini(
-            geminiApiKey = apiKey,
-            geminiModel = model.ifBlank { SettingsRepository.DEFAULT_GEMINI_MODEL },
+        settingsRepository.saveAi(
+            provider = provider,
+            apiKeys = apiKeys.toMap(),
+            models = models.filter { (p, m) -> m.isNotBlank() && m != p.defaultModel },
+            compatibleBaseUrl = baseUrl,
         )
     }
 }

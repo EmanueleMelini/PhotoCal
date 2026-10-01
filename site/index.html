@@ -55,25 +55,53 @@
   <section class="card feature shot">
     <div class="it">
       <h2>Foto del pasto</h2>
-      <p>Scatti una foto e Gemini, l'intelligenza artificiale di Google, riconosce gli alimenti e
-        ne stima i grammi. Prima di salvare rivedi ogni voce e correggi nomi e quantità. Con le
+      <p>Scatti una foto e l'intelligenza artificiale che scegli (Gemini, OpenAI, Claude o un
+        servizio compatibile) riconosce gli alimenti e ne stima i grammi. Prima di salvare rivedi ogni voce e correggi nomi e quantità. Con le
         tabelle CREA attive, calorie e macro arrivano dalle tabelle ufficiali italiane di
         composizione degli alimenti invece che dalla stima dell'AI.</p>
-      <p class="muted">Serve una chiave API di Gemini, che si crea gratis su Google AI Studio e si
-        incolla nelle impostazioni. Resta solo sul tuo telefono.</p>
+      <p class="muted">Serve la chiave API del servizio scelto, da incollare nelle impostazioni:
+        quella di Gemini si crea gratis su Google AI Studio. Resta solo sul tuo telefono.</p>
     </div>
     <div class="en">
       <h2>Meal photo</h2>
-      <p>Take a photo and Gemini, Google's AI, recognises the foods and estimates their grams. You
+      <p>Take a photo and the AI you choose (Gemini, OpenAI, Claude or a compatible service)
+        recognises the foods and estimates their grams. You
         review every item and fix names and amounts before saving. With the CREA tables on,
         calories and macros come from the official Italian food composition tables instead of the
         AI estimate.</p>
-      <p class="muted">It needs a Gemini API key, which you create for free on Google AI Studio and
-        paste into the settings. It stays on your phone only.</p>
+      <p class="muted">It needs an API key for the chosen service, pasted into the settings: a Gemini
+        key is free on Google AI Studio. It stays on your phone only.</p>
     </div>
     <div class="shots">
-      <img class="it" src="/img/photo-it.webp" alt="La revisione di una foto analizzata da Gemini" width="540" height="1135" loading="lazy">
-      <img class="en" src="/img/photo-en.webp" alt="The review of a photo analysed by Gemini" width="540" height="1135" loading="lazy">
+      <img class="it" src="/img/photo-it.webp" alt="La revisione di una foto analizzata dall'AI" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/photo-en.webp" alt="The review of a photo analysed by the AI" width="540" height="1135" loading="lazy">
+    </div>
+  </section>
+
+  <section class="card feature shot">
+    <div class="it">
+      <h2>Scegli l'AI</h2>
+      <p>In Impostazioni → Intelligenza artificiale scegli chi analizza foto e descrizioni: Gemini,
+        OpenAI, Claude oppure un altro servizio compatibile con l'API di OpenAI, come OpenRouter o
+        Mistral, indicandone l'indirizzo. Per ognuno incolli la tua chiave API e scegli il modello;
+        se cambi AI e poi torni indietro, ritrovi chiave e modello di prima. Se l'AI non risponde,
+        "Cambia modello" ti porta direttamente qui.</p>
+      <p class="muted">Gemini ha una chiave gratuita; OpenAI e Claude si pagano a consumo con il
+        tuo account. Le chiavi restano solo sul telefono e non finiscono nel backup.</p>
+    </div>
+    <div class="en">
+      <h2>Choose your AI</h2>
+      <p>In Settings → Artificial intelligence you choose who analyses photos and descriptions:
+        Gemini, OpenAI, Claude or another service compatible with the OpenAI API, such as
+        OpenRouter or Mistral, by entering its address. For each one you paste your own API key and
+        pick the model; if you switch AI and then go back, you find the same key and model. If the
+        AI doesn't answer, "Change model" brings you straight here.</p>
+      <p class="muted">Gemini has a free key; OpenAI and Claude are paid per use with your own
+        account. The keys stay on your phone only and are not included in the backup.</p>
+    </div>
+    <div class="shots">
+      <img class="it" src="/img/ai-it.webp" alt="La scelta dell'AI nelle impostazioni, con Claude selezionato" width="540" height="1135" loading="lazy">
+      <img class="en" src="/img/ai-en.webp" alt="The AI choice in the settings, with Claude selected" width="540" height="1135" loading="lazy">
     </div>
   </section>
 
@@ -160,13 +188,15 @@
       <h2>Widget, scorciatoie e promemoria</h2>
       <p>Il widget sulla home mostra i bicchieri di oggi e apre la fotocamera o l'inserimento a
         mano. Tenendo premuta l'icona aggiungi un bicchiere senza aprire l'app. I promemoria dei
-        pasti e dell'acqua arrivano solo se non hai ancora registrato niente.</p>
+        pasti e dell'acqua arrivano solo se non hai ancora registrato niente; quello "Nuova
+        versione" ti avvisa una volta quando esce un aggiornamento.</p>
     </div>
     <div class="en">
       <h2>Widget, shortcuts and reminders</h2>
       <p>The home screen widget shows today's glasses and opens the camera or the manual entry.
         Long-press the icon to add a glass without opening the app. Meal and water reminders only
-        come when you haven't logged anything yet.</p>
+        come when you haven't logged anything yet; the "New version" one tells you once when an
+        update comes out.</p>
     </div>
     <div class="shots">
       <img class="it" src="/img/widget-it.webp" alt="Il widget dei bicchieri d'acqua sulla home" width="430" height="370" loading="lazy">
@@ -208,14 +238,14 @@
     <div class="it">
       <h2>I tuoi dati restano sul telefono</h2>
       <p>Nessun account e nessun server: il diario è salvato solo sul telefono. Dall'app escono
-        solo le foto e i testi che chiedi di analizzare (a Gemini, con la tua chiave), i codici a
+        solo le foto e i testi che chiedi di analizzare (all'AI che hai scelto, con la tua chiave), i codici a
         barre (a Open Food Facts) e il controllo degli aggiornamenti (su GitHub). In Impostazioni →
         Dati esporti tutto in un file di backup, o il diario in CSV per Excel.</p>
     </div>
     <div class="en">
       <h2>Your data stay on your phone</h2>
       <p>No account and no server: the diary is stored on the phone only. The only things that
-        leave the app are the photos and texts you ask to analyse (to Gemini, with your key), the
+        leave the app are the photos and texts you ask to analyse (to the AI you chose, with your key), the
         barcodes (to Open Food Facts) and the update check (on GitHub). In Settings → Data you
         export everything to a backup file, or the diary to CSV for Excel.</p>
     </div>

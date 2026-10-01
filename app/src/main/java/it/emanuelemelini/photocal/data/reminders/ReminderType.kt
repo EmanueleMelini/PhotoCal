@@ -21,6 +21,8 @@ enum class ReminderType(
     val waterShare: Double? = null,
     /** Line under the name in Settings. */
     @StringRes val hintRes: Int? = null,
+    /** Looks for a new release on GitHub instead of reading the diary. */
+    val checksUpdates: Boolean = false,
 ) {
     BREAKFAST(R.string.meal_breakfast, LocalTime.of(8, 30), meal = MealType.BREAKFAST),
     LUNCH(R.string.meal_lunch, LocalTime.of(13, 30), meal = MealType.LUNCH),
@@ -30,6 +32,7 @@ enum class ReminderType(
     WEEKLY_SUMMARY(R.string.reminder_weekly_summary, LocalTime.of(22, 0), weekly = true, hintRes = R.string.reminder_weekly_day),
     WATER_HALF(R.string.reminder_water_half, LocalTime.of(15, 0), waterShare = 0.5, hintRes = R.string.reminder_water_half_hint),
     WATER_GOAL(R.string.reminder_water_goal, LocalTime.of(22, 0), waterShare = 1.0, hintRes = R.string.reminder_water_goal_hint),
+    UPDATE(R.string.reminder_update, LocalTime.of(10, 0), hintRes = R.string.reminder_update_hint, checksUpdates = true),
 }
 
 data class ReminderConfig(

@@ -48,7 +48,7 @@ data class TodayUiState(
     val waterMl: Int = 0,
     val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
     val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
-    val hasApiKey: Boolean = true,
+    val aiConfigured: Boolean = true,
     /** Sharing needs a name in the profile. */
     val canShare: Boolean = false,
     val isLoading: Boolean = true,
@@ -106,7 +106,7 @@ class TodayViewModel(
                     waterMl = waterMl,
                     waterGoalMl = settings.waterGoalMl,
                     glassMl = settings.glassMl,
-                    hasApiKey = settings.geminiApiKey.isNotBlank(),
+                    aiConfigured = settings.aiConfigured,
                     canShare = settings.profile.name.isNotBlank(),
                     isLoading = false,
                 )

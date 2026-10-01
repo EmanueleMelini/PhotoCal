@@ -1,10 +1,10 @@
-package it.emanuelemelini.photocal.data.gemini
+package it.emanuelemelini.photocal.data.ai
 
 /**
  * Prompts in English (clearer for the model); the answer language is a parameter so food
  * names and notes come back in the app language.
  */
-internal object GeminiPrompts {
+internal object AiPrompts {
 
     fun photoSystem(language: String) = """
         You are a nutritionist with deep knowledge of Italian cuisine. You receive a photo of

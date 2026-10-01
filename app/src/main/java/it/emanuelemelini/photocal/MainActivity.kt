@@ -37,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) launchRequest = LaunchRequest.from(intent)
         val container = (application as PhotoCalApp).container
         // Once a day at most, and not again on recreation
-        if (savedInstanceState == null) container.appUpdater.checkAutomatically()
+        if (savedInstanceState == null) {
+            container.appUpdater.checkAutomatically(ignoreDailyLimit = launchRequest == LaunchRequest.ShowUpdate)
+        }
         val settingsRepository = container.settingsRepository
         // Also after a language change, which recreates the activity: widget and shortcut
         // labels follow it
@@ -79,7 +81,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        LaunchRequest.from(intent)?.let { launchRequest = it }
+        LaunchRequest.from(intent)?.let { request ->
+            launchRequest = request
+            if (request == LaunchRequest.ShowUpdate) {
+                (application as PhotoCalApp).container.appUpdater.checkAutomatically(ignoreDailyLimit = true)
+            }
+        }
     }
 
     private companion object {

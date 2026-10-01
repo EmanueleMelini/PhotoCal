@@ -50,8 +50,9 @@ object HealthPrivacyRoute
 @Serializable
 data class RecentFoodsRoute(val dateEpochDay: Long)
 
+/** [showAi]: opens Settings already scrolled to the AI section. */
 @Serializable
-object SettingsRoute
+data class SettingsRoute(val showAi: Boolean = false)
 
 /** [meal]: [MealType] name to preselect, e.g. when the photo comes from a reminder. */
 @Serializable
@@ -109,7 +110,8 @@ fun PhotoCalNavHost(
                 onEditEntry = { entry ->
                     navController.navigate(EntryRoute(entry.date.toEpochDay(), entry.id))
                 },
-                onOpenSettings = { navController.navigate(SettingsRoute) },
+                onOpenSettings = { navController.navigate(SettingsRoute()) },
+                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
                 onPhotoTaken = { path, date, meal ->
                     navController.navigate(PhotoReviewRoute(path, date.toEpochDay(), meal?.name))
                 },
@@ -145,13 +147,13 @@ fun PhotoCalNavHost(
         composable<PhotoReviewRoute> {
             PhotoReviewScreen(
                 onDone = { navController.popBackStack() },
-                onOpenSettings = { navController.navigate(SettingsRoute) },
+                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
             )
         }
         composable<EntryRoute> {
             EntryScreen(
                 onDone = { navController.popBackStack() },
-                onOpenSettings = { navController.navigate(SettingsRoute) },
+                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
             )
         }
         composable<HistoryRoute> {
@@ -164,8 +166,9 @@ fun PhotoCalNavHost(
                 onOpenWeight = { navController.navigate(WeightRoute) },
             )
         }
-        composable<SettingsRoute> {
+        composable<SettingsRoute> { backStackEntry ->
             SettingsScreen(
+                showAi = backStackEntry.toRoute<SettingsRoute>().showAi,
                 onBack = { navController.popBackStack() },
                 onOpenProfile = { navController.navigate(ProfileRoute) },
                 onOpenHealthPrivacy = { navController.navigate(HealthPrivacyRoute) },
@@ -209,6 +212,8 @@ fun PhotoCalNavHost(
             is LaunchRequest.OpenShared -> navController.navigate(SharedViewRoute(request.payload))
             LaunchRequest.ShareToday -> navController.navigate(ShareRoute(todayEpochDay))
             LaunchRequest.HealthPrivacy -> navController.navigate(HealthPrivacyRoute)
+            // The dialog is shown by MainActivity over Today
+            LaunchRequest.ShowUpdate -> Unit
         }
         onLaunchRequestHandled()
     }

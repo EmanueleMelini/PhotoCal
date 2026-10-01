@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.FoodRepository
 import it.emanuelemelini.photocal.data.SavedFoodRepository
+import it.emanuelemelini.photocal.data.ai.AiException
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.SavedFood
@@ -18,7 +19,6 @@ import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.data.db.Source
 import it.emanuelemelini.photocal.data.estimate.FoodEstimator
 import it.emanuelemelini.photocal.data.estimate.PerGram
-import it.emanuelemelini.photocal.data.gemini.GeminiException
 import it.emanuelemelini.photocal.ui.EntryRoute
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
@@ -77,7 +77,8 @@ sealed interface AiEstimate {
     data object Running : AiEstimate
     /** [notes] come from the AI (already in the app language); [creaNames] are the CREA foods used. */
     data class Done(val notes: String?, val creaNames: List<String>) : AiEstimate
-    data class Failed(val message: UiText, val needsSettings: Boolean) : AiEstimate
+    /** [canChangeModel]: the AI answered badly or not at all, another model may do better. */
+    data class Failed(val message: UiText, val needsSettings: Boolean, val canChangeModel: Boolean = false) : AiEstimate
 }
 
 class EntryViewModel(
@@ -252,8 +253,8 @@ class EntryViewModel(
                         creaNames = items.mapNotNull { (item, _) -> item.crea?.name },
                     )
                 }
-            } catch (e: GeminiException) {
-                AiEstimate.Failed(e.toUiText(), e.needsSettings)
+            } catch (e: AiException) {
+                AiEstimate.Failed(e.toUiText(), e.needsSettings, e.anotherModelMayHelp)
             }
         }
     }

@@ -86,7 +86,13 @@ data class BackupSettings(
     val heightCm: Int? = null,
     val activity: String? = null,
     val weightGoal: String? = null,
+    /** Model of Gemini, also read by the versions before 1.5.0. */
     val geminiModel: String? = null,
+    /** Name of the chosen AI provider; the API keys are never exported. */
+    val aiProvider: String? = null,
+    /** Model by AI provider name. */
+    val aiModels: Map<String, String> = emptyMap(),
+    val compatibleBaseUrl: String? = null,
     val themeMode: String? = null,
     val dynamicColor: Boolean = true,
     val useCrea: Boolean = true,

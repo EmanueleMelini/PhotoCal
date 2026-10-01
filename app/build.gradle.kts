@@ -42,8 +42,8 @@ android {
         applicationId = "it.emanuelemelini.photocal"
         minSdk = 26
         targetSdk = 37
-        versionCode = 5
-        versionName = "1.4.0"
+        versionCode = 6
+        versionName = "1.5.0"
 
         manifestPlaceholders["shareHost"] = shareHost
         buildConfigField("String", "SHARE_HOST", "\"$shareHost\"")

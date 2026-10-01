@@ -117,6 +117,8 @@ fun TodayScreen(
     onAddManual: (LocalDate) -> Unit,
     onEditEntry: (FoodEntry) -> Unit,
     onOpenSettings: () -> Unit,
+    /** Settings scrolled to the AI section. */
+    onOpenAiSettings: () -> Unit,
     onPhotoTaken: (photoPath: String, date: LocalDate, meal: MealType?) -> Unit,
     onScanBarcode: (LocalDate) -> Unit,
     onOpenRecent: (LocalDate) -> Unit,
@@ -180,14 +182,14 @@ fun TodayScreen(
 
     fun startPhoto(meal: MealType? = null, date: LocalDate = state.date) {
         fabExpanded = false
-        if (!state.hasApiKey) {
+        if (!state.aiConfigured) {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = photoNeedsKey,
                     actionLabel = settingsLabel,
                     duration = SnackbarDuration.Long,
                 )
-                if (result == SnackbarResult.ActionPerformed) onOpenSettings()
+                if (result == SnackbarResult.ActionPerformed) onOpenAiSettings()
             }
             return
         }

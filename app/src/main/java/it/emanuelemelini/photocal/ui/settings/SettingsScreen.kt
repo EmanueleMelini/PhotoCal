@@ -46,6 +46,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -66,26 +69,27 @@ import it.emanuelemelini.photocal.AppLanguage
 import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.BuildConfig
 import it.emanuelemelini.photocal.R
+import it.emanuelemelini.photocal.data.ai.AiProvider
 import it.emanuelemelini.photocal.data.crea.CreaTable
-import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.update.Changelog
 import it.emanuelemelini.photocal.data.update.UpdateState
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.update.ChangelogDialog
 import kotlinx.coroutines.launch
-
-private const val AI_STUDIO_URL = "https://aistudio.google.com/apikey"
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(
+    /** Opens already scrolled to the AI section (e.g. from an AI error). */
+    showAi: Boolean,
     onBack: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenHealthPrivacy: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: SettingsViewModel = viewModel {
-        SettingsViewModel(container.settingsRepository, container.geminiClient, container.reminderScheduler, container.appUpdater)
+        SettingsViewModel(container.settingsRepository, container.aiService, container.reminderScheduler, container.appUpdater)
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -94,6 +98,17 @@ fun SettingsScreen(
     val appearance by viewModel.appearance.collectAsStateWithLifecycle()
     val updateState by viewModel.updateState.collectAsStateWithLifecycle()
     val savedMessage = stringResource(R.string.settings_saved)
+    val scrollState = rememberScrollState()
+    // Only the first time: after a rotation or coming back the user's position stays
+    var aiScrollDone by rememberSaveable { mutableStateOf(!showAi) }
+    var aiSectionTop by remember { mutableStateOf<Int?>(null) }
+    LaunchedEffect(aiSectionTop) {
+        val top = aiSectionTop
+        if (!aiScrollDone && top != null) {
+            scrollState.scrollTo(top)
+            aiScrollDone = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -113,7 +128,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .padding(padding)
                 .imePadding()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(16.dp),
         ) {
             Text(stringResource(R.string.settings_goal_section), style = MaterialTheme.typography.titleMedium)
@@ -200,16 +215,48 @@ fun SettingsScreen(
 
             HorizontalDivider()
 
-            Text("Gemini", style = MaterialTheme.typography.titleMedium)
+            val provider = viewModel.provider
             Text(
-                stringResource(R.string.settings_gemini_hint),
+                stringResource(R.string.settings_ai_title),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.onGloballyPositioned { aiSectionTop = it.positionInParent().y.roundToInt() },
+            )
+            Text(
+                stringResource(R.string.settings_ai_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                AiProvider.entries.forEach { option ->
+                    FilterChip(
+                        selected = provider == option,
+                        onClick = { viewModel.onProviderChange(option) },
+                        label = { Text(stringResource(option.labelRes)) },
+                    )
+                }
+            }
+
+            if (provider.needsBaseUrl) {
+                OutlinedTextField(
+                    value = viewModel.baseUrl,
+                    onValueChange = viewModel::onBaseUrlChange,
+                    label = { Text(stringResource(R.string.settings_base_url)) },
+                    supportingText = { Text(stringResource(R.string.settings_base_url_hint)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Uri,
+                        autoCorrectEnabled = false,
+                        imeAction = ImeAction.Next,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             OutlinedTextField(
                 value = viewModel.apiKey,
                 onValueChange = viewModel::onApiKeyChange,
-                label = { Text(stringResource(R.string.settings_api_key)) },
+                label = {
+                    Text(stringResource(if (provider.requiresApiKey) R.string.settings_api_key else R.string.settings_api_key_optional))
+                },
                 singleLine = true,
                 visualTransformation = if (showApiKey) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
@@ -224,18 +271,25 @@ fun SettingsScreen(
                 ),
                 modifier = Modifier.fillMaxWidth(),
             )
-            TextButton(onClick = { uriHandler.openUri(AI_STUDIO_URL) }) { Text(stringResource(R.string.settings_get_api_key)) }
+            val keyUrl = provider.keyUrl
+            val keyLinkRes = provider.keyLinkRes
+            if (keyUrl != null && keyLinkRes != null) {
+                TextButton(onClick = { uriHandler.openUri(keyUrl) }) { Text(stringResource(keyLinkRes)) }
+            }
 
             OutlinedTextField(
                 value = viewModel.model,
                 onValueChange = viewModel::onModelChange,
                 label = { Text(stringResource(R.string.settings_model)) },
+                supportingText = if (provider == AiProvider.OPENAI_COMPATIBLE) {
+                    { Text(stringResource(R.string.settings_model_compatible_hint)) }
+                } else null,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(autoCorrectEnabled = false, imeAction = ImeAction.Done),
                 modifier = Modifier.fillMaxWidth(),
             )
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SettingsRepository.SUGGESTED_GEMINI_MODELS.forEach { suggestion ->
+                provider.suggestedModels.forEach { suggestion ->
                     FilterChip(
                         selected = viewModel.model == suggestion,
                         onClick = { viewModel.onModelChange(suggestion) },

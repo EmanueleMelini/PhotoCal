@@ -1,5 +1,6 @@
 package it.emanuelemelini.photocal.data.backup
 
+import it.emanuelemelini.photocal.data.ai.AiProvider
 import it.emanuelemelini.photocal.data.backup.BackupCodec.Result
 import it.emanuelemelini.photocal.data.backup.BackupCodec.toBackup
 import it.emanuelemelini.photocal.data.backup.BackupCodec.toEntry
@@ -45,7 +46,9 @@ class BackupCodecTest {
             dailyKcalGoal = 2200,
             profile = Profile(name = "Mario", activity = ActivityLevel.SEDENTARY),
             themeMode = ThemeMode.PURPLE,
-            geminiApiKey = "secret",
+            aiProvider = AiProvider.ANTHROPIC,
+            aiApiKeys = mapOf(AiProvider.GEMINI to "secret", AiProvider.ANTHROPIC to "secret-too"),
+            aiModels = mapOf(AiProvider.ANTHROPIC to "claude-haiku-4-5"),
             healthAddBurned = true,
         ).toBackup(),
     )
@@ -69,11 +72,28 @@ class BackupCodecTest {
     fun theApiKeyIsNeverExported() {
         assertFalse(BackupCodec.encode(backup).contains("secret"))
         // Restored settings keep the key of this phone
-        val restored = backup.settings!!.toSettings(Settings(geminiApiKey = "mine"))
-        assertEquals("mine", restored.geminiApiKey)
+        val restored = backup.settings!!.toSettings(Settings(aiApiKeys = mapOf(AiProvider.GEMINI to "mine")))
+        assertEquals("mine", restored.aiApiKey(AiProvider.GEMINI))
+        assertEquals("", restored.aiApiKey(AiProvider.ANTHROPIC))
         assertEquals(2200, restored.dailyKcalGoal)
         assertEquals(ThemeMode.PURPLE, restored.themeMode)
         assertTrue(restored.healthAddBurned)
+    }
+
+    @Test
+    fun theChosenAiAndItsModelsAreRestored() {
+        val restored = backup.settings!!.toSettings(Settings())
+        assertEquals(AiProvider.ANTHROPIC, restored.aiProvider)
+        assertEquals("claude-haiku-4-5", restored.aiModel(AiProvider.ANTHROPIC))
+        assertEquals(AiProvider.OPENAI.defaultModel, restored.aiModel(AiProvider.OPENAI))
+    }
+
+    @Test
+    fun backupsBefore150KeepTheGeminiModelAndTheCurrentAi() {
+        val old = BackupSettings(kcalGoal = 2000, waterGoalMl = 1600, glassMl = 200, geminiModel = "gemini-3.5-flash-lite")
+        val restored = old.toSettings(Settings(aiProvider = AiProvider.OPENAI))
+        assertEquals(AiProvider.OPENAI, restored.aiProvider)
+        assertEquals("gemini-3.5-flash-lite", restored.aiModel(AiProvider.GEMINI))
     }
 
     @Test

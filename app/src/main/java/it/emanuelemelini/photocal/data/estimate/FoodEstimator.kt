@@ -2,9 +2,9 @@ package it.emanuelemelini.photocal.data.estimate
 
 import it.emanuelemelini.photocal.data.crea.CreaFood
 import it.emanuelemelini.photocal.data.crea.CreaTable
-import it.emanuelemelini.photocal.data.gemini.AnalyzedFood
-import it.emanuelemelini.photocal.data.gemini.FoodAnalysis
-import it.emanuelemelini.photocal.data.gemini.GeminiClient
+import it.emanuelemelini.photocal.data.ai.AiService
+import it.emanuelemelini.photocal.data.ai.AnalyzedFood
+import it.emanuelemelini.photocal.data.ai.FoodAnalysis
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.flow.first
 
@@ -50,19 +50,19 @@ data class EstimatedFood(
 data class FoodEstimate(val items: List<EstimatedFood>, val notes: String)
 
 /**
- * Estimates with Gemini and, when enabled in Settings, replaces the values with the CREA
+ * Estimates with the AI chosen in Settings and, when enabled in Settings, replaces the values with the CREA
  * tables: the AI recognizes food and grams, the kcal come from the table.
  */
 class FoodEstimator(
-    private val geminiClient: GeminiClient,
+    private val aiService: AiService,
     private val creaTable: CreaTable,
     private val settingsRepository: SettingsRepository,
 ) {
     suspend fun analyzePhoto(jpeg: ByteArray, userNotes: String): FoodEstimate =
-        resolve(geminiClient.analyzePhoto(jpeg, userNotes, creaCatalog()))
+        resolve(aiService.analyzePhoto(jpeg, userNotes, creaCatalog()))
 
     suspend fun estimateFromText(description: String, quantity: String?): FoodEstimate =
-        resolve(geminiClient.estimateFromText(description, quantity, creaCatalog()))
+        resolve(aiService.estimateFromText(description, quantity, creaCatalog()))
 
     private suspend fun creaCatalog(): String? =
         if (settingsRepository.settings.first().useCrea) creaTable.catalog() else null

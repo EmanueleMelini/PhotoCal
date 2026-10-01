@@ -75,12 +75,13 @@ class AppUpdater(
     /**
      * At most once a day and only in release builds: a debug build is signed with another
      * key and couldn't install the release APK anyway. Errors are silent, "Later" means tomorrow.
+     * [ignoreDailyLimit] when the user opened the "new version" notification.
      */
-    fun checkAutomatically() {
+    fun checkAutomatically(ignoreDailyLimit: Boolean = false) {
         if (BuildConfig.DEBUG || checkJob?.isActive == true) return
         checkJob = scope.launch {
             val today = LocalDate.now().toEpochDay()
-            if (settingsRepository.lastUpdateCheckDay() == today) return@launch
+            if (!ignoreDailyLimit && settingsRepository.lastUpdateCheckDay() == today) return@launch
             val release = try {
                 releasesClient.latestRelease()
             } catch (e: UpdateCheckException) {
