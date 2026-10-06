@@ -5,10 +5,17 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -29,7 +36,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
@@ -69,13 +75,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -88,12 +94,12 @@ import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
 import it.emanuelemelini.photocal.data.db.MealType
-import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.ui.appContainer
+import it.emanuelemelini.photocal.ui.components.animatedProgress
+import it.emanuelemelini.photocal.ui.components.countUp
 import it.emanuelemelini.photocal.ui.extrasLabel
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
-import it.emanuelemelini.photocal.ui.formatLiters
 import it.emanuelemelini.photocal.ui.longLabel
 import it.emanuelemelini.photocal.ui.quantityLabel
 import it.emanuelemelini.photocal.ui.relativeLabel
@@ -104,6 +110,7 @@ import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,6 +153,7 @@ fun TodayScreen(
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     var copyRequest by remember { mutableStateOf<CopyRequest?>(null) }
     var copied by remember { mutableStateOf<Pair<LocalDate, Int>?>(null) }
+    var bottleAdded by remember { mutableStateOf<BottleDrink?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -216,6 +224,21 @@ fun TodayScreen(
         }
     }
 
+    // The new day slides in from the side it comes from
+    val dayShift = remember { Animatable(0f) }
+    var shownDate by remember { mutableStateOf(state.date) }
+    LaunchedEffect(state.date) {
+        val previous = shownDate
+        shownDate = state.date
+        if (previous == state.date) return@LaunchedEffect
+        dayShift.snapTo(if (state.date > previous) 1f else -1f)
+        dayShift.animateTo(0f, spring(stiffness = Spring.StiffnessMediumLow))
+    }
+    val dayModifier = Modifier.graphicsLayer {
+        translationX = dayShift.value * size.width * DAY_SHIFT
+        alpha = 1f - abs(dayShift.value)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -278,25 +301,29 @@ fun TodayScreen(
                     onPickDate = { showDatePicker = true },
                 )
             }
-            item {
-                SummaryCard(state = state, onClick = onOpenGoals)
+            item(key = "summary") {
+                SummaryCard(state = state, onClick = onOpenGoals, modifier = dayModifier)
             }
-            item {
+            item(key = "water") {
                 WaterCard(
                     state = state,
                     onAdd = viewModel::addGlass,
                     onRemove = viewModel::removeGlass,
+                    onAddBottle = { viewModel.addBottle()?.let { bottleAdded = it } },
                     onClick = onOpenGoals,
+                    modifier = dayModifier,
                 )
             }
             if (!state.isLoading && state.meals.isEmpty()) {
-                item {
+                item(key = "empty") {
                     Text(
                         text = stringResource(R.string.today_empty),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
+                            .animateItem()
+                            .then(dayModifier)
                             .fillMaxWidth()
                             .padding(32.dp),
                     )
@@ -304,9 +331,13 @@ fun TodayScreen(
             }
             state.meals.forEach { group ->
                 item(key = "meal-${group.mealType}") {
-                    MealHeader(group, onCopy = {
-                        copyRequest = CopyRequest(group.entries, state.date, group.mealType, R.string.copy_meal_title)
-                    })
+                    MealHeader(
+                        group,
+                        onCopy = {
+                            copyRequest = CopyRequest(group.entries, state.date, group.mealType, R.string.copy_meal_title)
+                        },
+                        modifier = Modifier.animateItem().then(dayModifier),
+                    )
                 }
                 items(group.entries, key = { it.id }) { entry ->
                     EntryRow(
@@ -316,6 +347,8 @@ fun TodayScreen(
                         onCopy = {
                             copyRequest = CopyRequest(listOf(entry), entry.date, entry.mealType, R.string.copy_entry_title)
                         },
+                        // New entries slide in, deleted ones close up
+                        modifier = Modifier.animateItem().then(dayModifier),
                     )
                 }
             }
@@ -343,6 +376,19 @@ fun TodayScreen(
             scope.launch {
                 val result = snackbarHostState.showSnackbar(message, actionLabel = go, duration = SnackbarDuration.Short)
                 if (result == SnackbarResult.ActionPerformed) viewModel.selectDate(date)
+            }
+        }
+    }
+
+    // Snackbar after a whole bottle: a big amount, so it can be undone
+    bottleAdded?.let { drink ->
+        val message = stringResource(R.string.water_bottle_added, drink.ml)
+        val undo = stringResource(R.string.action_undo)
+        LaunchedEffect(drink) {
+            bottleAdded = null
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(message, actionLabel = undo, duration = SnackbarDuration.Short)
+                if (result == SnackbarResult.ActionPerformed) viewModel.undoBottle(drink)
             }
         }
     }
@@ -417,23 +463,28 @@ private fun DateSelector(
 }
 
 @Composable
-private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
+private fun SummaryCard(state: TodayUiState, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val totals = state.totals
     val kcalGoal = state.kcalGoal
-    val progress = if (kcalGoal > 0) (totals.kcal / kcalGoal).toFloat() else 0f
+    val progress = animatedProgress(if (kcalGoal > 0) (totals.kcal / kcalGoal).toFloat() else 0f, label = "kcal_progress")
+    val kcal = countUp(totals.kcal, label = "kcal")
     val remaining = kcalGoal - totals.kcal
     val overGoal = remaining < 0
+    val barColor by animateColorAsState(
+        if (overGoal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+        label = "kcal_color",
+    )
 
     Card(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = totals.kcal.formatKcal(),
+                    text = kcal.formatKcal(),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -446,8 +497,8 @@ private fun SummaryCard(state: TodayUiState, onClick: () -> Unit) {
             }
             Spacer(Modifier.height(12.dp))
             LinearProgressIndicator(
-                progress = { progress.coerceIn(0f, 1f) },
-                color = if (overGoal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                progress = { progress },
+                color = barColor,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(10.dp),
@@ -508,61 +559,10 @@ private fun activityLabel(state: TodayUiState): String? {
     return if (state.burnedKcalAdded > 0) stringResource(R.string.today_goal_with_burned, line, state.baseKcalGoal, state.burnedKcalAdded) else line
 }
 
-/** Glasses of water of the day, with − / + buttons; tapping the card opens the goals. */
 @Composable
-private fun WaterCard(state: TodayUiState, onAdd: () -> Unit, onRemove: () -> Unit, onClick: () -> Unit) {
-    val drunk = WaterCalculator.glasses(state.waterMl, state.glassMl)
-    val goal = WaterCalculator.goalGlasses(state.waterGoalMl, state.glassMl)
-    val glassesLabel = pluralStringResource(R.plurals.water_glasses_of_goal, goal, drunk.formatAmount(), goal)
-
-    Card(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
-        ) {
-            Icon(
-                painterResource(R.drawable.ic_water_drop),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-            )
-            Column(
-                Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp)
-                    // One announcement for title and progress
-                    .semantics(mergeDescendants = true) {},
-            ) {
-                Text(stringResource(R.string.water_title), style = MaterialTheme.typography.labelLarge)
-                Text(glassesLabel, style = MaterialTheme.typography.titleMedium)
-                LinearProgressIndicator(
-                    progress = { (state.waterMl.toFloat() / (goal * state.glassMl)).coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp),
-                )
-                Text(
-                    stringResource(R.string.water_liters, formatLiters(state.waterMl), formatLiters(goal * state.glassMl)),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            FilledTonalIconButton(onClick = onRemove, enabled = state.waterMl > 0) {
-                Icon(painterResource(R.drawable.ic_remove), contentDescription = stringResource(R.string.water_remove_glass))
-            }
-            FilledTonalIconButton(onClick = onAdd) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.water_add_glass))
-            }
-        }
-    }
-}
-
-@Composable
-private fun MacroItem(label: String, grams: Double, goal: Int?) {
+private fun MacroItem(label: String, target: Double, goal: Int?) {
+    val grams = countUp(target, label = label)
+    val progress = animatedProgress(if (goal != null && goal > 0) (target / goal).toFloat() else 0f, label = label)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         // With a goal: "45 / 120 g" and a small progress bar
         Text(
@@ -571,7 +571,7 @@ private fun MacroItem(label: String, grams: Double, goal: Int?) {
         )
         if (goal != null && goal > 0) {
             LinearProgressIndicator(
-                progress = { (grams / goal).toFloat().coerceIn(0f, 1f) },
+                progress = { progress },
                 modifier = Modifier
                     .padding(vertical = 4.dp)
                     .width(72.dp),
@@ -586,10 +586,10 @@ private fun MacroItem(label: String, grams: Double, goal: Int?) {
 }
 
 @Composable
-private fun MealHeader(group: MealGroup, onCopy: () -> Unit) {
+private fun MealHeader(group: MealGroup, onCopy: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 4.dp, top = 8.dp),
     ) {
@@ -618,7 +618,13 @@ private fun MealHeader(group: MealGroup, onCopy: () -> Unit) {
 /** Tap to edit; long press for duplicate and copy. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun EntryRow(entry: FoodEntry, onClick: () -> Unit, onDuplicate: () -> Unit, onCopy: () -> Unit) {
+private fun EntryRow(
+    entry: FoodEntry,
+    onClick: () -> Unit,
+    onDuplicate: () -> Unit,
+    onCopy: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var menuOpen by remember { mutableStateOf(false) }
     val details = listOfNotNull(
         entry.quantityLabel(),
@@ -627,7 +633,7 @@ private fun EntryRow(entry: FoodEntry, onClick: () -> Unit, onDuplicate: () -> U
         entry.fatG?.let { stringResource(R.string.macro_short_fat, it.formatAmount()) },
     ).joinToString(" · ")
 
-    Box {
+    Box(modifier) {
         ListItem(
             headlineContent = { Text(entry.name) },
             leadingContent = entry.photoPath?.let { path ->
@@ -673,7 +679,10 @@ private fun EntryRow(entry: FoodEntry, onClick: () -> Unit, onDuplicate: () -> U
     }
 }
 
-/** "+" FAB that expands into the add actions. */
+/**
+ * "+" FAB that expands into the add actions: the + turns into a ×, the actions rise one after
+ * the other starting from the closest one.
+ */
 @Composable
 private fun AddFab(
     expanded: Boolean,
@@ -683,38 +692,49 @@ private fun AddFab(
     onManual: () -> Unit,
     onRecent: () -> Unit,
 ) {
+    val actions = listOf(
+        Triple(stringResource(R.string.fab_photo), painterResource(R.drawable.ic_photo_camera), onPhoto),
+        Triple(stringResource(R.string.fab_barcode), painterResource(R.drawable.ic_barcode), onBarcode),
+        Triple(stringResource(R.string.fab_recent), painterResource(R.drawable.ic_history), onRecent),
+        Triple(stringResource(R.string.fab_manual), rememberVectorPainter(Icons.Default.Edit), onManual),
+    )
+    val rotation by animateFloatAsState(
+        targetValue = if (expanded) 135f else 0f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
+        label = "fab_rotation",
+    )
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        AnimatedVisibility(
-            visible = expanded,
-            enter = fadeIn() + expandVertically(expandFrom = Alignment.Bottom),
-            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Bottom),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(end = 4.dp),
+        actions.forEachIndexed { index, (label, icon, onClick) ->
+            // Steps from the bottom: the action next to the FAB comes first
+            val step = actions.lastIndex - index
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn(tween(160, delayMillis = step * FAB_STAGGER_MILLIS)) +
+                    slideInVertically(tween(220, delayMillis = step * FAB_STAGGER_MILLIS)) { it / 2 } +
+                    scaleIn(tween(220, delayMillis = step * FAB_STAGGER_MILLIS), initialScale = 0.8f),
+                exit = fadeOut(tween(120, delayMillis = index * FAB_STAGGER_MILLIS / 2)) +
+                    slideOutVertically(tween(160, delayMillis = index * FAB_STAGGER_MILLIS / 2)) { it / 2 },
             ) {
-                FabAction(stringResource(R.string.fab_photo), painterResource(R.drawable.ic_photo_camera), onClick = onPhoto)
-                FabAction(stringResource(R.string.fab_barcode), painterResource(R.drawable.ic_barcode), onClick = onBarcode)
-                FabAction(stringResource(R.string.fab_recent), painterResource(R.drawable.ic_history), onClick = onRecent)
-                FabAction(stringResource(R.string.fab_manual), rememberVectorPainter(Icons.Default.Edit), onClick = onManual)
+                FabAction(label, icon, onClick = onClick, modifier = Modifier.padding(end = 4.dp))
             }
         }
         FloatingActionButton(onClick = { onExpandedChange(!expanded) }) {
+            // One + that turns into a × while rotating
             Icon(
-                imageVector = if (expanded) Icons.Default.Close else Icons.Default.Add,
+                imageVector = Icons.Default.Add,
                 contentDescription = stringResource(if (expanded) R.string.action_close else R.string.action_add),
+                modifier = Modifier.graphicsLayer { rotationZ = rotation },
             )
         }
     }
 }
 
 @Composable
-private fun FabAction(label: String, icon: Painter, onClick: () -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+private fun FabAction(label: String, icon: Painter, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         // The label is tappable too, not just the button
         Surface(
             onClick = onClick,
@@ -737,3 +757,8 @@ private fun FabAction(label: String, icon: Painter, onClick: () -> Unit) {
 
 /** Photo requested from outside (a reminder), for [meal] if known. */
 data class PhotoRequest(val meal: MealType?)
+
+private const val FAB_STAGGER_MILLIS = 40
+
+/** Share of the width the new day slides in from. */
+private const val DAY_SHIFT = 0.25f

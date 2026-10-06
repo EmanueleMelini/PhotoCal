@@ -1,5 +1,11 @@
 package it.emanuelemelini.photocal.ui
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +24,8 @@ import it.emanuelemelini.photocal.ui.history.HistoryScreen
 import it.emanuelemelini.photocal.ui.photo.PhotoReviewScreen
 import it.emanuelemelini.photocal.ui.profile.ProfileScreen
 import it.emanuelemelini.photocal.ui.recent.RecentFoodsScreen
+import it.emanuelemelini.photocal.ui.settings.SettingsPage
+import it.emanuelemelini.photocal.ui.settings.SettingsPageScreen
 import it.emanuelemelini.photocal.ui.settings.SettingsScreen
 import it.emanuelemelini.photocal.ui.share.ShareScreen
 import it.emanuelemelini.photocal.ui.share.SharedViewScreen
@@ -52,9 +60,13 @@ object HealthPrivacyRoute
 @Serializable
 data class RecentFoodsRoute(val dateEpochDay: Long)
 
-/** [showAi]: opens Settings already scrolled to the AI section. */
+/** Settings menu. */
 @Serializable
-data class SettingsRoute(val showAi: Boolean = false)
+object SettingsRoute
+
+/** One page of Settings: [page] is a [SettingsPage] name. */
+@Serializable
+data class SettingsPageRoute(val page: String)
 
 /** [meal]: [MealType] name to preselect, e.g. when the photo comes from a reminder. */
 @Serializable
@@ -99,7 +111,15 @@ fun PhotoCalNavHost(
         navController.currentBackStackEntryFlow.collect { entry -> telemetry.logScreen(screenName(entry.destination)) }
     }
 
-    NavHost(navController = navController, startDestination = TodayRoute) {
+    // Material shared axis: the new screen comes in from the right, Back goes the other way
+    NavHost(
+        navController = navController,
+        startDestination = TodayRoute,
+        enterTransition = { slideInHorizontally(navTween()) { it / SLIDE_FRACTION } + fadeIn(navTween()) },
+        exitTransition = { slideOutHorizontally(navTween()) { -it / SLIDE_FRACTION } + fadeOut(navTween()) },
+        popEnterTransition = { slideInHorizontally(navTween()) { -it / SLIDE_FRACTION } + fadeIn(navTween()) },
+        popExitTransition = { slideOutHorizontally(navTween()) { it / SLIDE_FRACTION } + fadeOut(navTween()) },
+    ) {
         composable<TodayRoute> { backStackEntry ->
             val requestedDay by backStackEntry.savedStateHandle
                 .getStateFlow<Long?>(KEY_OPEN_DAY, null)
@@ -118,8 +138,8 @@ fun PhotoCalNavHost(
                 onEditEntry = { entry ->
                     navController.navigate(EntryRoute(entry.date.toEpochDay(), entry.id))
                 },
-                onOpenSettings = { navController.navigate(SettingsRoute()) },
-                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
+                onOpenSettings = { navController.navigate(SettingsRoute) },
+                onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
                 onPhotoTaken = { path, date, meal ->
                     navController.navigate(PhotoReviewRoute(path, date.toEpochDay(), meal?.name))
                 },
@@ -155,13 +175,13 @@ fun PhotoCalNavHost(
         composable<PhotoReviewRoute> {
             PhotoReviewScreen(
                 onDone = { navController.popBackStack() },
-                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
+                onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
             )
         }
         composable<EntryRoute> {
             EntryScreen(
                 onDone = { navController.popBackStack() },
-                onOpenAiSettings = { navController.navigate(SettingsRoute(showAi = true)) },
+                onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
             )
         }
         composable<HistoryRoute> {
@@ -174,11 +194,18 @@ fun PhotoCalNavHost(
                 onOpenWeight = { navController.navigate(WeightRoute) },
             )
         }
-        composable<SettingsRoute> { backStackEntry ->
+        composable<SettingsRoute> {
             SettingsScreen(
-                showAi = backStackEntry.toRoute<SettingsRoute>().showAi,
                 onBack = { navController.popBackStack() },
                 onOpenProfile = { navController.navigate(ProfileRoute) },
+                onOpenPage = { page -> navController.navigate(SettingsPageRoute(page.name)) },
+            )
+        }
+        composable<SettingsPageRoute> { backStackEntry ->
+            val page = backStackEntry.toRoute<SettingsPageRoute>().page
+            SettingsPageScreen(
+                page = SettingsPage.entries.find { it.name == page } ?: SettingsPage.APPEARANCE,
+                onBack = { navController.popBackStack() },
                 onOpenHealthPrivacy = { navController.navigate(HealthPrivacyRoute) },
             )
         }
@@ -189,6 +216,7 @@ fun PhotoCalNavHost(
             ProfileScreen(
                 onBack = { navController.popBackStack() },
                 onOpenWeightLog = { navController.navigate(WeightRoute) },
+                onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
             )
         }
         composable<WeightRoute> {
@@ -234,6 +262,7 @@ private fun screenName(destination: NavDestination): String = when {
     destination.hasRoute<HealthPrivacyRoute>() -> "health_privacy"
     destination.hasRoute<RecentFoodsRoute>() -> "recent_foods"
     destination.hasRoute<SettingsRoute>() -> "settings"
+    destination.hasRoute<SettingsPageRoute>() -> "settings_page"
     destination.hasRoute<PhotoReviewRoute>() -> "photo_review"
     destination.hasRoute<BarcodeRoute>() -> "barcode"
     destination.hasRoute<HistoryRoute>() -> "history"
@@ -243,3 +272,8 @@ private fun screenName(destination: NavDestination): String = when {
     destination.hasRoute<SharedViewRoute>() -> "shared_view"
     else -> "other"
 }
+
+private fun <T> navTween() = tween<T>(durationMillis = 300, easing = FastOutSlowInEasing)
+
+/** The screens move by a fifth of the width, while fading. */
+private const val SLIDE_FRACTION = 5

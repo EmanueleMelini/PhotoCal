@@ -80,6 +80,7 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
             saltPer100 = saltPer100(nutriments?.double("salt_100g"), nutriments?.double("sodium_100g")),
             servingQuantity = servingQuantity,
             packageQuantity = double("product_quantity")?.takeIf { it > 0 },
+            quantityText = quantityText.takeIf { it.isNotBlank() },
             servingPieces = ServingSize.parse(string("serving_size"), servingQuantity),
             isLiquid = quantityUnit == "ml" || LIQUID_QUANTITY.containsMatchIn(quantityText),
             imageUrl = string("image_front_small_url"),

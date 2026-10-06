@@ -12,6 +12,7 @@ import it.emanuelemelini.photocal.data.db.ServingUnit
 import it.emanuelemelini.photocal.data.db.Source
 import it.emanuelemelini.photocal.data.db.WeightEntry
 import it.emanuelemelini.photocal.data.nutrition.ActivityLevel
+import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.nutrition.Profile
 import it.emanuelemelini.photocal.data.prefs.Settings
 import it.emanuelemelini.photocal.data.prefs.ThemeMode
@@ -105,6 +106,18 @@ class BackupCodecTest {
     }
 
     @Test
+    fun bottleIsRestored() {
+        val settings = Settings(bottle = Bottle("Borraccia Stanley", 750))
+        assertEquals(Bottle("Borraccia Stanley", 750), settings.toBackup().toSettings(Settings()).bottle)
+    }
+
+    @Test
+    fun backupWithoutBottleKeepsTheCurrentOne() {
+        val current = Settings(bottle = Bottle("", 500))
+        assertEquals(current.bottle, Settings().toBackup().toSettings(current).bottle)
+    }
+
+    @Test
     fun otherFilesAreRejected() {
         for (text in listOf("", "{}", "[]", "not json", """{"format":"other","version":1}""", """{"format":"photocal-backup"}""")) {
             assertEquals(text, Result.Invalid, BackupCodec.decode(text))
@@ -127,6 +140,7 @@ class BackupCodecTest {
             backup.copy(entries = listOf(entry.copy(name = " "))),
             backup.copy(weights = listOf(backup.weights.single().copy(weightKg = 5.0))),
             backup.copy(settings = backup.settings!!.copy(glassMl = 5)),
+            backup.copy(settings = backup.settings!!.copy(bottleMl = 20_000)),
         )
         for (item in bad) assertEquals(Result.Invalid, BackupCodec.decode(BackupCodec.encode(item)))
         assertEquals(Result.Invalid, BackupCodec.decode(BackupCodec.encode(backup).replace("113.0", "NaN")))

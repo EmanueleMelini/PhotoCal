@@ -80,6 +80,9 @@ data class BackupSettings(
     val fatGoalG: Int? = null,
     val waterGoalMl: Int,
     val glassMl: Int,
+    /** Water bottle (since 1.7.0): without [bottleMl] the current bottle is kept. */
+    val bottleMl: Int? = null,
+    val bottleName: String = "",
     val name: String = "",
     val sex: String? = null,
     val birthYear: Int? = null,

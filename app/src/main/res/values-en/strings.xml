@@ -54,6 +54,7 @@
     <string name="action_ok">OK</string>
     <string name="action_close">Close</string>
     <string name="action_add">Add</string>
+    <string name="action_undo">Undo</string>
     <string name="today_photo_needs_key">Photo analysis needs an AI and its API key</string>
     <string name="today_no_camera">No camera app available</string>
     <string name="today_history">History</string>
@@ -188,7 +189,17 @@
     <string name="history_open_day">Open day</string>
     <string name="settings_connection_ok">Connection successful: %1$s</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_goal_section">Goal</string>
+    <string name="settings_summary_reminders_none">No reminders on</string>
+    <plurals name="settings_summary_reminders">
+        <item quantity="one">%1$d reminder on</item>
+        <item quantity="other">%1$d reminders on</item>
+    </plurals>
+    <string name="settings_summary_ai_missing">%1$s · to set up</string>
+    <string name="settings_summary_health_off">Not connected</string>
+    <string name="settings_summary_data">Backup, restore and diary export</string>
+    <string name="settings_summary_appearance">Theme: %1$s · Language: %2$s</string>
+    <string name="settings_summary_privacy">Usage statistics and crash reports</string>
+    <string name="settings_summary_bottle">Bottle %1$d ml</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_language">Language</string>
     <string name="settings_language_system">System</string>
@@ -213,7 +224,7 @@
     <string name="settings_use_crea">Use CREA tables</string>
     <string name="settings_use_crea_hint">The AI recognizes food and grams, the kcal come from the food composition tables when there is a matching food. Source: %1$s.</string>
     <string name="settings_saved">Settings saved</string>
-    <string name="settings_data">Data</string>
+    <string name="settings_data">Backup and data</string>
     <string name="health_title">Health Connect</string>
     <string name="health_intro">With Health Connect, PhotoCal reads your steps and the calories burned by moving, and writes weight and water so other health apps can see them.</string>
     <string name="health_not_supported">Health Connect isn\'t available on this phone.</string>
@@ -441,6 +452,10 @@
     <string name="water_title">Water</string>
     <string name="water_add_glass">Add a glass of water</string>
     <string name="water_remove_glass">Remove a glass of water</string>
+    <string name="water_add_bottle">Add the bottle</string>
+    <string name="water_add_bottle_ml">Add the bottle (%1$d ml)</string>
+    <string name="water_bottle_added">+%1$d ml: bottle finished!</string>
+    <string name="water_goal_reached">Water goal reached!</string>
     <string name="water_liters">%1$s of %2$s</string>
     <plurals name="water_glasses_of_goal">
         <item quantity="one">%1$s of %2$d glass</item>
@@ -457,9 +472,23 @@
     <string name="shortcut_water_short">+1 water</string>
     <string name="shortcut_water_long">+1 glass of water</string>
     <string name="shortcut_water_added">Glass added: %1$s</string>
+    <string name="shortcut_bottle_short">+1 bottle</string>
+    <string name="shortcut_bottle_long">+1 bottle</string>
+    <string name="shortcut_bottle_added">Bottle added: %1$s</string>
+    <string name="shortcut_bottle_missing">No bottle: set it in your profile.</string>
     <string name="profile_water_goal">Water glasses</string>
     <string name="profile_glass_ml">Glass ml</string>
     <string name="profile_water_goal_liters">Water goal: %1$s a day.</string>
+    <string name="profile_bottle_section">Your water bottle</string>
+    <string name="profile_bottle_hint">When you finish your bottle, add it all with one tap: on the Home screen, in the widget, in the water reminders and in the app icon shortcuts. Leave the capacity empty to not use it.</string>
+    <string name="profile_bottle_name">Name (optional)</string>
+    <string name="profile_bottle_ml">Capacity ml</string>
+    <string name="profile_bottle_scan">Barcode</string>
+    <string name="profile_bottle_photo">AI photo</string>
+    <string name="profile_bottle_found">%1$s: %2$d ml. Check and save.</string>
+    <string name="profile_bottle_found_unnamed">Capacity: %1$d ml. Check and save.</string>
+    <string name="profile_bottle_no_capacity">\"%1$s\" is on Open Food Facts but without a valid capacity: type it in.</string>
+    <string name="profile_bottle_not_recognized">The AI didn\'t recognize a bottle in the photo. Try again or type the capacity.</string>
     <string name="profile_water_suggested">Water to drink</string>
     <plurals name="profile_water_glasses">
         <item quantity="one">%1$d glass</item>
@@ -548,6 +577,12 @@
     <string name="changelog_title">What\'s new</string>
     <string name="changelog_title_version">What\'s new in PhotoCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_7_0">
+        <item>Your water bottle: in Profile and goals type how much it holds, or scan its barcode or take a photo and let the AI recognize it. When you finish it, add it all with one tap: on the Home screen, in the widget, in the water reminders and by long-pressing the app icon.</item>
+        <item>On the Home screen the bottle tilts and pours water into the bar; when you reach your water goal there is a small celebration. Tapped it by mistake? Tap Undo.</item>
+        <item>Tidier Settings: a menu with one entry per topic (Appearance, Reminders, Artificial intelligence, Backup and data…) and what you chose under each entry.</item>
+        <item>More animations: numbers and bars move to their new value, the day slides sideways when you change it, foods enter and leave the list, charts grow, and while the AI looks at a photo you see where the foods will appear. They follow the Android option that removes animations.</item>
+    </string-array>
     <string-array name="changelog_1_6_0">
         <item>PhotoCal news: now and then you get a notification when there is something new, such as a new feature. You can turn them off in Settings → Reminders and news.</item>
         <item>At the first start PhotoCal asks whether you want to send usage statistics and crash reports, to see which features are used and fix errors faster. They start off and stay off if you say no.</item>

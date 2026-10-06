@@ -4,13 +4,15 @@ import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.data.ai.anthropic.AnthropicClient
 import it.emanuelemelini.photocal.data.ai.gemini.GeminiClient
 import it.emanuelemelini.photocal.data.ai.openai.OpenAiClient
+import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.telemetry.Telemetry
 import kotlinx.coroutines.flow.first
+import kotlin.math.roundToInt
 
 /**
- * Meal analysis with the AI chosen in Settings: same prompts and same [FoodAnalysis] for
- * every service, only the REST call changes.
+ * Meal analysis (and water bottle recognition) with the AI chosen in Settings: same prompts
+ * and same [FoodAnalysis] for every service, only the REST call changes.
  */
 class AiService(
     private val settingsRepository: SettingsRepository,
@@ -34,6 +36,17 @@ class AiService(
     /** Estimate from a text description, e.g. "2 fette di pane integrale". */
     suspend fun estimateFromText(description: String, quantity: String?, creaCatalog: String?): FoodAnalysis =
         generate(AiPrompts.textSystem(answerLanguage()), AiPrompts.textUserPrompt(description, quantity), null, creaCatalog)
+
+    /**
+     * Name and capacity of the water bottle in the photo; null when the AI sees none or the
+     * capacity isn't a bottle's. [jpeg] is already resized.
+     */
+    suspend fun recognizeBottle(jpeg: ByteArray): Bottle? {
+        val item = generate(AiPrompts.bottleSystem(answerLanguage()), AiPrompts.BOTTLE_USER_PROMPT, jpeg, null)
+            .items.firstOrNull() ?: return null
+        val ml = item.grams.roundToInt().takeIf { it in Bottle.ML_RANGE } ?: return null
+        return Bottle(item.name.trim(), ml)
+    }
 
     /** Tests the values typed in Settings, even if not saved yet. Returns the model's name. */
     suspend fun testConnection(provider: AiProvider, config: AiConfig): String =

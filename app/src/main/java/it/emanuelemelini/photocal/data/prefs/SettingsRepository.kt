@@ -14,6 +14,7 @@ import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.ai.AiConfig
 import it.emanuelemelini.photocal.data.ai.AiProvider
 import it.emanuelemelini.photocal.data.nutrition.ActivityLevel
+import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.nutrition.DailyGoals
 import it.emanuelemelini.photocal.data.nutrition.Profile
 import it.emanuelemelini.photocal.data.nutrition.Sex
@@ -51,6 +52,8 @@ data class Settings(
     val fatGoalG: Int? = null,
     val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
     val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
+    /** The user's water bottle: null until set, then a whole bottle is one tap away. */
+    val bottle: Bottle? = null,
     val profile: Profile = Profile(),
     /** AI used for photos and text estimates. */
     val aiProvider: AiProvider = AiProvider.GEMINI,
@@ -107,6 +110,7 @@ class SettingsRepository(private val context: Context) {
             fatGoalG = prefs[FAT_GOAL],
             waterGoalMl = prefs[WATER_GOAL] ?: DEFAULT_WATER_GOAL_ML,
             glassMl = prefs[GLASS_ML] ?: DEFAULT_GLASS_ML,
+            bottle = prefs[BOTTLE_ML]?.let { Bottle(prefs[BOTTLE_NAME].orEmpty(), it) },
             profile = Profile(
                 name = prefs[PROFILE_NAME].orEmpty(),
                 sex = prefs[SEX]?.let { name -> Sex.entries.find { it.name == name } },
@@ -181,6 +185,16 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /** null removes the bottle. */
+    suspend fun saveBottle(bottle: Bottle?) {
+        context.dataStore.edit { it.setBottle(bottle) }
+    }
+
+    private fun MutablePreferences.setBottle(bottle: Bottle?) {
+        setOrRemove(BOTTLE_ML, bottle?.ml)
+        setOrRemove(BOTTLE_NAME, bottle?.name?.trim()?.takeIf { it.isNotEmpty() })
+    }
+
     private fun <T> MutablePreferences.setOrRemove(key: Preferences.Key<T>, value: T?) {
         if (value == null) remove(key) else this[key] = value
     }
@@ -250,6 +264,7 @@ class SettingsRepository(private val context: Context) {
             prefs.setOrRemove(FAT_GOAL, settings.fatGoalG)
             prefs[WATER_GOAL] = settings.waterGoalMl
             prefs[GLASS_ML] = settings.glassMl
+            prefs.setBottle(settings.bottle)
             val profile = settings.profile
             prefs.setOrRemove(PROFILE_NAME, profile.name.trim().takeIf { it.isNotEmpty() })
             prefs.setOrRemove(SEX, profile.sex?.name)
@@ -308,6 +323,8 @@ class SettingsRepository(private val context: Context) {
         private val FAT_GOAL = intPreferencesKey("fat_goal_g")
         private val WATER_GOAL = intPreferencesKey("water_goal_ml")
         private val GLASS_ML = intPreferencesKey("glass_ml")
+        private val BOTTLE_ML = intPreferencesKey("bottle_ml")
+        private val BOTTLE_NAME = stringPreferencesKey("bottle_name")
         private val PROFILE_NAME = stringPreferencesKey("profile_name")
         private val SEX = stringPreferencesKey("profile_sex")
         private val BIRTH_YEAR = intPreferencesKey("profile_birth_year")

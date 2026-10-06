@@ -35,9 +35,13 @@ dell'app e il download dell'ultima versione.
   filtri di sicurezza la rifiutano.
 - **Se l'AI non risponde** (errore del servizio, risposta non valida, rifiuto; non per rete o
   impostazioni da correggere) la revisione della foto mostra Riprova, "Cambia modello" e
-  Inserisci a mano, l'inserimento manuale "Cambia modello". Porta alle Impostazioni già sulla
-  sezione AI (`SettingsRoute(showAi = true)`), come il pulsante Impostazioni degli errori di
-  configurazione.
+  Inserisci a mano, l'inserimento manuale "Cambia modello". Porta direttamente alla pagina AI delle
+  Impostazioni (`SettingsPageRoute(SettingsPage.AI)`), come il pulsante Impostazioni degli errori
+  di configurazione.
+- **Impostazioni**: un menu con una voce per argomento (Profilo e obiettivi, Aspetto, Promemoria
+  e novità, Intelligenza artificiale, Salute di Android, Backup e dati, Privacy, Info); sotto ogni
+  voce c'è un riassunto di cosa è impostato. Ogni voce apre una pagina sua
+  (`SettingsPages.kt`); Profilo e obiettivi resta la schermata `ProfileScreen`.
 - **Bevande**: nell'inserimento manuale la quantità si può indicare in tazzine (30 ml), tazze
   (250 ml), bicchieri (200 ml), calici (150 ml) o ml; l'app salva i ml come grammi (1 ml ≈ 1 g).
   Le capienze sono in `ServingUnit.kt`.
@@ -56,7 +60,7 @@ dell'app e il download dell'ultima versione.
   CREA e indica per ogni voce il codice corrispondente; kcal e macro vengono allora dalla
   tabella (valori per 100 g × grammi stimati). Nella revisione foto ogni riga dice da dove
   arrivano i valori e si può passare alla stima dell'AI.
-- **Profilo e obiettivi** (Impostazioni → Obiettivo, oppure toccando il riepilogo in Oggi):
+- **Profilo e obiettivi** (Impostazioni → Profilo e obiettivi, oppure toccando il riepilogo in Oggi):
   sesso, anno di nascita, altezza, peso, attività e obiettivo, più l'obiettivo dell'acqua. L'app stima metabolismo basale
   (formula di Mifflin-St Jeor), fabbisogno giornaliero e calorie suggerite, con un minimo di
   sicurezza durante il dimagrimento (1200/1500 kcal, deficit al massimo del 25%), e propone
@@ -70,14 +74,33 @@ dell'app e il download dell'ultima versione.
   ogni livello di attività, arrotondati per eccesso a bicchieri interi. I bevuti sono salvati in
   ml: cambiando la capienza, i giorni passati mantengono i litri (e possono avere bicchieri con
   decimali).
-- **Widget**: "Bicchieri d'acqua" (3×2) mostra i bicchieri di oggi `X/TOT` tra − e +, e sotto due
-  scorciatoie per il diario di oggi: fotocamera (pasto da foto) e + (inserimento manuale). Toccando
+- **Borraccia**: nel profilo, sotto l'acqua, nome facoltativo e capienza (100–3000 ml). Si
+  trovano anche con il codice a barre (Open Food Facts: la capienza viene dal testo "quantity",
+  es. "6 x 50 cl" → 500 ml, o da `product_quantity` dei liquidi; `BottleCapacity.kt`) o con una
+  foto analizzata dall'AI scelta (stesso JSON dei pasti: una voce con la capienza in "grams";
+  la foto viene cancellata subito dopo). Si salva con Salva, finisce nel backup e senza capienza
+  non c'è borraccia. Con la borraccia impostata, il tasto "borraccia" aggiunge tutti i suoi ml:
+  in Oggi (con Annulla nello snackbar), nel widget, come azione dei promemoria dell'acqua e come
+  scorciatoia "+1 borraccia" dell'icona.
+- **Animazioni**: in Oggi numeri e barre di calorie, macro e acqua vanno verso il nuovo valore,
+  il giorno nuovo scorre dal lato da cui arriva, i cibi entrano ed escono dalla lista, il + del
+  FAB ruota in × e le azioni salgono una alla volta. La borraccia si inclina e versa gocce nella
+  barra (`WaterCard.kt`); raggiungere l'obiettivo d'acqua con un tocco fa partire un piccolo
+  festeggiamento. Le schermate scorrono di lato (asse condiviso Material), le voci del menu
+  Impostazioni entrano in sequenza, i grafici di storico e peso crescono, durante l'analisi foto
+  compaiono segnaposto "shimmer" e i cibi arrivano uno alla volta. Gli aiuti comuni sono in
+  `ui/components/Motion.kt`; Compose segue l'opzione di Android "Rimuovi animazioni".
+- **Widget**: "Bicchieri d'acqua" (3×2) mostra i bicchieri di oggi `X/TOT` tra − e +, e sotto la
+  borraccia (solo se impostata) e due scorciatoie per il diario di oggi: fotocamera (pasto da foto)
+  e + (inserimento manuale). Toccando
   il contatore si apre l'app. È un widget RemoteViews (nessuna libreria): si aggiorna a ogni
   modifica e si azzera entro 10 minuti dopo la mezzanotte (allarme non esatto, senza risvegliare
   il telefono). I colori sono quelli verdi fissi, chiari o scuri secondo il telefono.
-- **Scorciatoie dell'app**: tenendo premuta l'icona compaiono "Foto pasto", "Pasto a mano" e
-  "+1 bicchiere" (si possono anche trascinare sulla home). "+1 bicchiere" aggiunge un bicchiere
-  a oggi senza aprire l'app e mostra il nuovo conteggio in un messaggio. Sono scorciatoie
+- **Scorciatoie dell'app**: tenendo premuta l'icona compaiono "Foto pasto", "Pasto a mano",
+  "+1 bicchiere" e, con la borraccia, "+1 borraccia" (si possono anche trascinare sulla home).
+  "+1 bicchiere" e "+1 borraccia" aggiungono l'acqua a oggi senza aprire l'app e mostrano il nuovo
+  conteggio in un messaggio. Con anche "Condividi oggi" sono cinque: alcuni launcher ne mostrano
+  solo quattro, in ordine di `rank`. Sono scorciatoie
   dinamiche (`AppShortcuts.kt`): seguono la lingua dell'app e vengono spostate sull'alias
   dell'icona scelta.
 - **Profilo e condivisione**: nel profilo si mettono nome e foto facoltativa (galleria o
@@ -98,7 +121,7 @@ dell'app e il download dell'ultima versione.
   Il promemoria di un pasto non arriva se quel pasto è già nel diario di oggi, e sparisce
   appena lo registri. Per l'acqua ci sono "metà obiettivo" (15:00) e "obiettivo" (22:00): non
   arrivano se a quell'ora hai già bevuto abbastanza, dicono quanti bicchieri mancano, hanno il
-  pulsante "+1 bicchiere" e spariscono appena la soglia è raggiunta (da notifica, app o widget). Arrivano entro 10 minuti dall'orario scelto (allarmi non esatti,
+  pulsante "+1 bicchiere" (e "+1 borraccia" se impostata) e spariscono appena la soglia è raggiunta (da notifica, app o widget). Arrivano entro 10 minuti dall'orario scelto (allarmi non esatti,
   nessun permesso speciale) e vengono riprogrammati dopo un riavvio del telefono.
 - **Lingua**: italiano e inglese. Segue la lingua del telefono oppure la scelta in
   Impostazioni → Aspetto → Lingua. I testi sono in `res/values/strings.xml` (italiano,
@@ -149,7 +172,7 @@ dell'app e il download dell'ultima versione.
 - **Fibre, zuccheri e sale**: da Open Food Facts (`fiber_100g`, `sugars_100g`, `salt_100g`, o
   sodio × 2,5), dalle tabelle CREA e, facoltativi, dalla stima AI. Si scrivono anche a mano
   ("Altri valori") e il totale del giorno compare sotto le macro in Oggi. Nessun obiettivo.
-- **Backup** (Impostazioni → Dati): "Esporta backup" scrive un file JSON (`data/backup/`) con
+- **Backup** (Impostazioni → Backup e dati): "Esporta backup" scrive un file JSON (`data/backup/`) con
   diario, peso, acqua, alimenti salvati e impostazioni, senza API key né foto (di ogni foto
   resta il nome del file, ricollegato se la foto è ancora sul telefono). "Ripristina" controlla
   formato, versione e valori, poi chiede: **Sostituisci tutto** (cancella i dati del telefono e
@@ -279,11 +302,11 @@ segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
   Firebase (eventi, proprietà) o i tempi di conservazione impostati nella console.
 - **Screenshot** (`img/`, WebP 540 px, ~430 KB in tutto): presi sull'AVD telefono
   `PhotoCalPhone_API34` con la build release e i dati di prova di
-  `tools/site/demo_backup.py` (Impostazioni → Dati → Ripristina backup → Sostituisci tutto, solo
+  `tools/site/demo_backup.py` (Impostazioni → Backup e dati → Ripristina backup → Sostituisci tutto, solo
   sull'emulatore); quelli della foto del pasto (`photo-*`) vengono da un telefono vero, perché
-  serve una risposta vera dell'AI. Quelli della scelta dell'AI (`ai-*`): Impostazioni con la
-  lingua dell'app su Italiano o English, titolo "Intelligenza artificiale" subito sotto la barra,
-  Claude selezionato e chiave vuota, senza salvare. Senza la barra di stato: `magick in.png -crop 1080x2270+0+130
+  serve una risposta vera dell'AI. Quelli della scelta dell'AI (`ai-*`): pagina Intelligenza
+  artificiale delle Impostazioni con la lingua dell'app su Italiano o English, Claude selezionato e
+  chiave vuota, senza salvare. Senza la barra di stato: `magick in.png -crop 1080x2270+0+130
   +repage out.png`, poi `cwebp -q 78 -m 6 -resize 540 0 -metadata none out.png -o x.webp`.
 - **Pubblicazione**: il progetto Pages è collegato alla repo (cartella `site/`), quindi ogni push
   su `master` pubblica il sito; i commit mostrano il controllo "Cloudflare Pages".

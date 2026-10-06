@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 /**
- * Target of the "+1 glass of water" shortcut: adds the glass to today and closes, without
- * opening the app; a toast shows the new count. Shortcuts can only start activities, hence
+ * Target of the "+1 glass of water" and "+1 bottle" shortcuts: adds the water to today and
+ * closes, without opening the app; a toast shows the new count. Shortcuts can only start activities, hence
  * this invisible one. It stays open until the toast is shown: from the background Android
  * drops the toasts of apps whose notifications are off.
  */
@@ -29,23 +29,36 @@ class AddWaterShortcutActivity : ComponentActivity() {
             return
         }
         val container = (application as PhotoCalApp).container
-        // On the app scope: the glass is saved even if the activity goes away meanwhile
+        val bottle = intent.getBooleanExtra(EXTRA_BOTTLE, false)
+        // On the app scope: the water is saved even if the activity goes away meanwhile
         val message = container.applicationScope.async {
-            // Also redraws the widget
-            container.waterWidget.addGlass()
+            // Also redraws the widget. A pinned bottle shortcut can outlive the bottle
+            val added = if (bottle) {
+                container.waterWidget.addBottle()
+            } else {
+                container.waterWidget.addGlass()
+                true
+            }
             val settings = container.settingsRepository.settings.first()
             val ml = container.waterRepository.mlFor(LocalDate.now())
             val res = AppLocale.localizedContext(applicationContext).resources
             val goal = WaterCalculator.goalGlasses(settings.waterGoalMl, settings.glassMl)
             val drunk = WaterCalculator.glasses(ml, settings.glassMl).formatAmount(res.configuration.locales[0])
-            res.getString(
-                R.string.shortcut_water_added,
-                res.getQuantityString(R.plurals.water_glasses_of_goal, goal, drunk, goal),
-            )
+            val count = res.getQuantityString(R.plurals.water_glasses_of_goal, goal, drunk, goal)
+            when {
+                !added -> res.getString(R.string.shortcut_bottle_missing)
+                bottle -> res.getString(R.string.shortcut_bottle_added, count)
+                else -> res.getString(R.string.shortcut_water_added, count)
+            }
         }
         lifecycleScope.launch {
             Toast.makeText(applicationContext, message.await(), Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+
+    companion object {
+        /** The whole bottle instead of a glass. */
+        const val EXTRA_BOTTLE = "bottle"
     }
 }

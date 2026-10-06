@@ -61,18 +61,27 @@ class PhotoCalApp : Application() {
             container.reminderScheduler.rescheduleAll()
         }
         container.applicationScope.launch {
-            // Widget in line with the water goal and glass size; the first value also redraws
-            // it at every start (e.g. a new day)
+            // Widget in line with the water goal, glass size and bottle; the first value also
+            // redraws it at every start (e.g. a new day)
             container.settingsRepository.settings
-                .map { it.waterGoalMl to it.glassMl }
+                .map { Triple(it.waterGoalMl, it.glassMl, it.bottle) }
                 .distinctUntilChanged()
                 .collect { container.waterWidget.update() }
         }
         container.applicationScope.launch {
-            // "Share today" appears only with a name. drop(1): the start is handled by
-            // MainActivity, and a start in the background (widget, alarm) must not publish
+            // A water reminder already shown gets or loses the bottle button
             container.settingsRepository.settings
-                .map { it.profile.name.isNotBlank() }
+                .map { it.bottle }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { container.reminderNotifier.refreshWater() }
+        }
+        container.applicationScope.launch {
+            // "Share today" appears only with a name, "+1 bottle" only with a bottle. drop(1):
+            // the start is handled by MainActivity, and a start in the background (widget,
+            // alarm) must not publish
+            container.settingsRepository.settings
+                .map { it.profile.name.isNotBlank() to (it.bottle != null) }
                 .distinctUntilChanged()
                 .drop(1)
                 .collect { AppShortcuts.publish(this@PhotoCalApp) }

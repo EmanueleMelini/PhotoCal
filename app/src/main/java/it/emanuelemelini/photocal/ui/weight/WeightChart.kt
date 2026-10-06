@@ -1,17 +1,23 @@
 package it.emanuelemelini.photocal.ui.weight
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -36,10 +42,12 @@ private val TOP_PADDING = 8.dp
 
 /** Room for the dot of the latest weigh-in, which sits on the right edge. */
 private val END_PADDING = 10.dp
+private const val DRAW_MILLIS = 800
 
 /**
  * Weight over time: a single 2dp line with 8dp dots (ringed with the surface color),
  * x proportional to the date within [from]..today. A tap selects the nearest weigh-in.
+ * The line draws itself from left to right whenever the range or the weigh-ins change.
  */
 @Composable
 fun WeightChart(
@@ -56,6 +64,9 @@ fun WeightChart(
     val description = pluralStringResource(R.plurals.weight_chart_description, entries.size, entries.size)
     val locale = AppLocale.current
     val dateFormatter = DateTimeFormatter.ofPattern("d MMM", locale)
+
+    val reveal = remember(entries, from) { Animatable(0f) }
+    LaunchedEffect(entries, from) { reveal.animateTo(1f, tween(DRAW_MILLIS, easing = FastOutSlowInEasing)) }
 
     val today = LocalDate.now()
     val totalDays = ChronoUnit.DAYS.between(from, today).coerceAtLeast(1).toFloat()
@@ -105,20 +116,22 @@ fun WeightChart(
             tick += step
         }
 
-        // Line and dots
+        // Line and dots, uncovered by the reveal
         val points = entries.map { Offset(xOf(it.date), yOf(it.weightKg)) }
-        if (points.size > 1) {
-            val path = Path().apply {
-                moveTo(points.first().x, points.first().y)
-                points.drop(1).forEach { lineTo(it.x, it.y) }
+        clipRect(right = plotLeft + (size.width - plotLeft) * reveal.value) {
+            if (points.size > 1) {
+                val path = Path().apply {
+                    moveTo(points.first().x, points.first().y)
+                    points.drop(1).forEach { lineTo(it.x, it.y) }
+                }
+                drawPath(path, colors.primary, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
             }
-            drawPath(path, colors.primary, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
-        }
-        entries.forEachIndexed { index, entry ->
-            val isSelected = entry == selected
-            val radius = (if (isSelected) 6.dp else 4.dp).toPx()
-            drawCircle(colors.surface, radius = radius + 2.dp.toPx(), center = points[index])
-            drawCircle(colors.primary, radius = radius, center = points[index])
+            entries.forEachIndexed { index, entry ->
+                val isSelected = entry == selected
+                val radius = (if (isSelected) 6.dp else 4.dp).toPx()
+                drawCircle(colors.surface, radius = radius + 2.dp.toPx(), center = points[index])
+                drawCircle(colors.primary, radius = radius, center = points[index])
+            }
         }
 
         // Date labels: start, middle and end of the range

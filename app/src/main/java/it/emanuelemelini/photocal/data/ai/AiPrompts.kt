@@ -51,6 +51,29 @@ internal object AiPrompts {
         - Write short food names and notes in $language. notes: at most two sentences.
     """.trimIndent()
 
+    /**
+     * The water bottle of the user, answered with the meal JSON (the only format every service
+     * is constrained to): one item, with the capacity as grams.
+     */
+    fun bottleSystem(language: String) = """
+        You receive a photo of a water bottle, flask, thermos or similar drinking container
+        and estimate how much it holds when full.
+
+        Rules:
+        - Return exactly one item, for the main container in the photo.
+        - name: a short name for it, with brand or model when readable (e.g. "Borraccia
+          Stanley", "Bottiglia Levissima"), in $language.
+        - grams: its capacity in ml. Use the capacity printed on the container or label when
+          readable; otherwise estimate it from the shape and from common sizes (330, 500,
+          750 ml, 1 or 1.5 L...).
+        - kcal, protein_g, carbs_g and fat_g: 0. crea_code: empty.
+        - confidence: "high" if the capacity is printed and readable, "medium" for a known
+          model, "low" for an estimate from the shape.
+        - If the photo shows no drinking container, return an empty items list and explain
+          why in notes.
+        - notes: at most one sentence, in $language.
+    """.trimIndent()
+
     /** Appended to the system prompt when the CREA tables are enabled. */
     fun creaSection(catalog: String): String = "\n\n" + """
         CREA tables: below is the list of foods in the CREA (Italian) food composition
@@ -71,6 +94,8 @@ internal object AiPrompts {
             append(quantity)
         }
     }
+
+    const val BOTTLE_USER_PROMPT = "How much does this bottle hold?"
 
     fun photoUserPrompt(userNotes: String): String = buildString {
         append("Analyze this meal.")

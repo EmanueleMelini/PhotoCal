@@ -1,11 +1,16 @@
 package it.emanuelemelini.photocal.ui.history
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -40,12 +45,17 @@ private val TOP_PADDING = 8.dp
 private val MAX_BAR_WIDTH = 24.dp
 private val BAR_GAP = 2.dp
 private val BAR_RADIUS = 4.dp
+private const val GROW_MILLIS = 700
+
+/** Share of the animation by which the last column starts after the first. */
+private const val GROW_SPREAD = 0.4f
 
 
 /**
  * Daily kcal columns with the dashed goal line.
  * Columns over the goal are orange (and cross the line).
  * A tap selects the day ([onSelect] with the index in [days]).
+ * The columns grow from the axis, from left to right, whenever the days change.
  */
 @Composable
 fun CalorieChart(
@@ -66,6 +76,9 @@ fun CalorieChart(
 
     val chartDescription = pluralStringResource(R.plurals.history_chart_description, days.size, days.size, kcalGoal)
     val locale = AppLocale.current
+
+    val growth = remember(days) { Animatable(0f) }
+    LaunchedEffect(days) { growth.animateTo(1f, tween(GROW_MILLIS, easing = FastOutSlowInEasing)) }
 
     val maxKcal = days.maxOf { it.kcal }
     val step = niceStep(max(kcalGoal.toDouble(), maxKcal))
@@ -113,7 +126,11 @@ fun CalorieChart(
         days.forEachIndexed { index, day ->
             if (day.kcal <= 0) return@forEachIndexed
             val left = plotLeft + slot * index + (slot - barWidth) / 2
-            val top = yOf(day.kcal)
+            // Each column starts a little after the one on its left
+            val delay = GROW_SPREAD * index / days.size
+            val grown = (growth.value * (1 + GROW_SPREAD) - delay).coerceIn(0f, 1f)
+            if (grown <= 0f) return@forEachIndexed
+            val top = yOf(day.kcal * FastOutSlowInEasing.transform(grown))
             val radius = min(BAR_RADIUS.toPx(), (plotBottom - top) / 2)
             val baseColor = if (day.kcal > kcalGoal) overGoalColor else barColor
             val color = if (selectedIndex == null || selectedIndex == index) baseColor else baseColor.copy(alpha = 0.35f)

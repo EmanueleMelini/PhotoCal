@@ -1,7 +1,11 @@
 package it.emanuelemelini.photocal.ui.photo
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -39,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -59,6 +64,8 @@ import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
+import it.emanuelemelini.photocal.ui.components.shimmer
+import it.emanuelemelini.photocal.ui.components.staggeredEntrance
 import it.emanuelemelini.photocal.ui.formatKcal
 import java.io.File
 
@@ -163,6 +170,21 @@ fun PhotoReviewScreen(
                 )
             }
 
+            // Placeholders of the foods to come while the AI looks at the photo
+            AnimatedVisibility(visible = isAnalyzing && !viewModel.hasAnalyzed, enter = fadeIn(), exit = fadeOut()) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    repeat(SKELETON_ITEMS) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(88.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .shimmer(),
+                        )
+                    }
+                }
+            }
+
             viewModel.aiNotes?.let { notes ->
                 Card(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -191,13 +213,17 @@ fun PhotoReviewScreen(
                     )
                 }
 
-                viewModel.items.forEach { item ->
-                    ReviewItemCard(
-                        item = item,
-                        showErrors = viewModel.showErrors,
-                        onChange = { transform -> viewModel.updateItem(item.key, transform) },
-                        onRemove = { viewModel.removeItem(item.key) },
-                    )
+                viewModel.items.forEachIndexed { index, item ->
+                    // Keyed: each food enters once, one after the other
+                    key(item.key) {
+                        ReviewItemCard(
+                            item = item,
+                            showErrors = viewModel.showErrors,
+                            onChange = { transform -> viewModel.updateItem(item.key, transform) },
+                            onRemove = { viewModel.removeItem(item.key) },
+                            modifier = Modifier.staggeredEntrance(index),
+                        )
+                    }
                 }
 
                 TextButton(onClick = viewModel::addItem) {
@@ -308,8 +334,9 @@ private fun ReviewItemCard(
     showErrors: Boolean,
     onChange: ((ReviewItem) -> ReviewItem) -> Unit,
     onRemove: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    OutlinedCard(Modifier.fillMaxWidth()) {
+    OutlinedCard(modifier.fillMaxWidth()) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(12.dp),
@@ -395,3 +422,5 @@ private fun SmallNumberField(
         modifier = modifier,
     )
 }
+
+private const val SKELETON_ITEMS = 3

@@ -10,6 +10,7 @@ import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.db.Totals
 import it.emanuelemelini.photocal.data.health.DayActivity
 import it.emanuelemelini.photocal.data.health.HealthConnect
+import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,9 @@ data class MealGroup(val mealType: MealType, val entries: List<FoodEntry>) {
     val kcal: Double = entries.sumOf { it.kcal }
 }
 
+/** A bottle added to [date], kept for the undo. */
+data class BottleDrink(val date: LocalDate, val ml: Int)
+
 data class TodayUiState(
     val date: LocalDate = LocalDate.now(),
     val meals: List<MealGroup> = emptyList(),
@@ -48,6 +52,8 @@ data class TodayUiState(
     val waterMl: Int = 0,
     val waterGoalMl: Int = SettingsRepository.DEFAULT_WATER_GOAL_ML,
     val glassMl: Int = SettingsRepository.DEFAULT_GLASS_ML,
+    /** Set in the profile: a whole bottle is one tap away. */
+    val bottle: Bottle? = null,
     val aiConfigured: Boolean = true,
     /** Sharing needs a name in the profile. */
     val canShare: Boolean = false,
@@ -106,6 +112,7 @@ class TodayViewModel(
                     waterMl = waterMl,
                     waterGoalMl = settings.waterGoalMl,
                     glassMl = settings.glassMl,
+                    bottle = settings.bottle,
                     aiConfigured = settings.aiConfigured,
                     canShare = settings.profile.name.isNotBlank(),
                     isLoading = false,
@@ -126,6 +133,19 @@ class TodayViewModel(
     fun removeGlass() {
         val state = uiState.value
         viewModelScope.launch { waterRepository.removeGlass(state.date, state.glassMl) }
+    }
+
+    /** Adds the whole bottle to the day shown; returns what [undoBottle] needs, or null without a bottle. */
+    fun addBottle(): BottleDrink? {
+        val state = uiState.value
+        val bottle = state.bottle ?: return null
+        val drink = BottleDrink(state.date, bottle.ml)
+        viewModelScope.launch { waterRepository.addBottle(drink.date, drink.ml) }
+        return drink
+    }
+
+    fun undoBottle(drink: BottleDrink) {
+        viewModelScope.launch { waterRepository.removeBottle(drink.date, drink.ml) }
     }
 
     /** Same food again, in the same day and meal. */

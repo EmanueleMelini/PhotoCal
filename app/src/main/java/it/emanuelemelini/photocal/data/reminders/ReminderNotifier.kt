@@ -164,7 +164,12 @@ class ReminderNotifier(
         val title = res.getString(if (share < 1.0) R.string.reminder_water_half_title else R.string.reminder_water_goal_title)
         return base(CHANNEL_WATER, title, text)
             .setContentIntent(activity(type, 0, LaunchRequest.OpenToday))
-            .addAction(0, res.getString(R.string.shortcut_water_long), addGlass(type))
+            .addAction(0, res.getString(R.string.shortcut_water_long), waterAction(type, 1, WaterWidgetActionReceiver.ACTION_ADD))
+            .apply {
+                if (settings.bottle != null) {
+                    addAction(0, res.getString(R.string.shortcut_bottle_long), waterAction(type, 2, WaterWidgetActionReceiver.ACTION_ADD_BOTTLE))
+                }
+            }
     }
 
     /**
@@ -189,11 +194,11 @@ class ReminderNotifier(
             .setContentIntent(activity(type, 0, LaunchRequest.ShowUpdate))
     }
 
-    /** The same broadcast as the widget "+": the repository then calls [refreshWater]. */
-    private fun addGlass(type: ReminderType): PendingIntent = PendingIntent.getBroadcast(
+    /** The same broadcasts as the widget "+" and bottle: the repository then calls [refreshWater]. */
+    private fun waterAction(type: ReminderType, index: Int, action: String): PendingIntent = PendingIntent.getBroadcast(
         context,
-        type.ordinal * 10 + 1,
-        Intent(context, WaterWidgetActionReceiver::class.java).setAction(WaterWidgetActionReceiver.ACTION_ADD),
+        type.ordinal * 10 + index,
+        Intent(context, WaterWidgetActionReceiver::class.java).setAction(action),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 

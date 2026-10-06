@@ -123,7 +123,8 @@
             </intent-filter>
         </receiver>
 
-        <!-- "+1 glass of water" app shortcut: adds the glass and closes without showing anything.
+        <!-- "+1 glass of water" and "+1 bottle" app shortcuts: add the water and close without
+             showing anything.
              Own empty task affinity, so it never brings the app to the front. -->
         <activity
             android:name=".ui.shortcuts.AddWaterShortcutActivity"

@@ -16,6 +16,8 @@ data class Product(
     val servingQuantity: Double?,
     /** Package content, in g or ml. */
     val packageQuantity: Double?,
+    /** Package content as printed, e.g. "6 x 50 cl". */
+    val quantityText: String? = null,
     /** Pieces in the manufacturer's serving, when the package says how many. */
     val servingPieces: ServingPieces?,
     val isLiquid: Boolean,

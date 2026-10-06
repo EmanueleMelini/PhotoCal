@@ -24,6 +24,12 @@ class WaterRepository(
 
     suspend fun removeGlass(date: LocalDate, glassMl: Int) = change(date, -glassMl)
 
+    /** A whole water bottle. */
+    suspend fun addBottle(date: LocalDate, bottleMl: Int) = change(date, bottleMl)
+
+    /** Undoes [addBottle]. */
+    suspend fun removeBottle(date: LocalDate, bottleMl: Int) = change(date, -bottleMl)
+
     private suspend fun change(date: LocalDate, deltaMl: Int) {
         dao.add(date, deltaMl, Instant.now())
         onChanged(date)

@@ -39,7 +39,6 @@ fun HealthSection(onOpenPrivacy: () -> Unit) {
         onPauseOrDispose {}
     }
 
-    Text(stringResource(R.string.health_title), style = MaterialTheme.typography.titleMedium)
     Text(
         stringResource(R.string.health_intro),
         style = MaterialTheme.typography.bodySmall,

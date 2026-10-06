@@ -4,7 +4,7 @@ Writes two PhotoCal backups with demo data for the screenshots of the site (site
 photocal-demo-it.json and photocal-demo-en.json, same numbers with food names in Italian or
 English. About 40 days of diary, 4 months of weight, water and saved foods, ending on --today.
 
-Restore one in Settings -> Data -> Restore backup -> Replace everything, on an emulator only:
+Restore one in Settings -> Backup and data -> Restore backup -> Replace everything, on an emulator only:
 it deletes the diary of the phone.
 
 Usage:  python3 tools/site/demo_backup.py [--today 2026-10-01] [--out DIR]
@@ -102,7 +102,8 @@ def backup(today: dt.date, lang: int) -> dict:
                 lastUsedAt=millis(today - dt.timedelta(days=rnd.randint(0, 5)), 12),
             ))
     settings = dict(
-        kcalGoal=1900, proteinGoalG=110, carbsGoalG=220, fatGoalG=60, waterGoalMl=2000, glassMl=200, name="Alex",
+        kcalGoal=1900, proteinGoalG=110, carbsGoalG=220, fatGoalG=60, waterGoalMl=2000, glassMl=200,
+        bottleMl=750, bottleName=("Borraccia", "Bottle")[lang], name="Alex",
         sex="UNSPECIFIED", birthYear=1992, heightCm=172, activity="LIGHT", weightGoal="LOSE_SLOWLY",
         # Fixed greens, as on the site, instead of the wallpaper colours
         themeMode="SYSTEM", dynamicColor=False, useCrea=True, reminders=[], healthWrite=True, healthAddBurned=False,

@@ -50,7 +50,6 @@ fun DataSection(onMessage: (String) -> Unit) {
         }
     }
 
-    Text(stringResource(R.string.settings_data), style = MaterialTheme.typography.titleMedium)
     val enabled = !viewModel.busy
     DataRow(R.string.data_export, R.string.data_export_hint, enabled) { exportLauncher.launch(BackupManager.backupFileName()) }
     // Some file managers don't know the JSON type: other types are accepted and checked on reading

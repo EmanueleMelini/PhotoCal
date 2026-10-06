@@ -55,6 +55,7 @@
     <string name="action_ok">OK</string>
     <string name="action_close">Chiudi</string>
     <string name="action_add">Aggiungi</string>
+    <string name="action_undo">Annulla</string>
     <string name="today_photo_needs_key">Per l\'analisi delle foto scegli l\'AI e inserisci la sua API key</string>
     <string name="today_no_camera">Nessuna app fotocamera disponibile</string>
     <string name="today_history">Storico</string>
@@ -189,7 +190,17 @@
     <string name="history_open_day">Apri giorno</string>
     <string name="settings_connection_ok">Connessione riuscita: %1$s</string>
     <string name="settings_title">Impostazioni</string>
-    <string name="settings_goal_section">Obiettivo</string>
+    <string name="settings_summary_reminders_none">Nessun promemoria attivo</string>
+    <plurals name="settings_summary_reminders">
+        <item quantity="one">%1$d promemoria attivo</item>
+        <item quantity="other">%1$d promemoria attivi</item>
+    </plurals>
+    <string name="settings_summary_ai_missing">%1$s · da configurare</string>
+    <string name="settings_summary_health_off">Non collegato</string>
+    <string name="settings_summary_data">Backup, ripristino ed esportazione del diario</string>
+    <string name="settings_summary_appearance">Tema: %1$s · Lingua: %2$s</string>
+    <string name="settings_summary_privacy">Statistiche d\'uso e segnalazioni di crash</string>
+    <string name="settings_summary_bottle">Borraccia %1$d ml</string>
     <string name="settings_appearance">Aspetto</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_language_system">Sistema</string>
@@ -217,7 +228,7 @@
     <string name="settings_use_crea">Usa tabelle CREA</string>
     <string name="settings_use_crea_hint">L\'AI riconosce alimento e grammi, le kcal arrivano dalle tabelle di composizione degli alimenti quando c\'è la voce corrispondente. Fonte: %1$s.</string>
     <string name="settings_saved">Impostazioni salvate</string>
-    <string name="settings_data">Dati</string>
+    <string name="settings_data">Backup e dati</string>
     <string name="health_title">Salute di Android</string>
     <string name="health_intro">Con Health Connect PhotoCal legge i passi e le calorie bruciate col movimento e scrive peso e acqua, così le altre app di salute li vedono.</string>
     <string name="health_not_supported">Health Connect non è disponibile su questo telefono.</string>
@@ -445,6 +456,10 @@
     <string name="water_title">Acqua</string>
     <string name="water_add_glass">Aggiungi un bicchiere d\'acqua</string>
     <string name="water_remove_glass">Togli un bicchiere d\'acqua</string>
+    <string name="water_add_bottle">Aggiungi la borraccia</string>
+    <string name="water_add_bottle_ml">Aggiungi la borraccia (%1$d ml)</string>
+    <string name="water_bottle_added">+%1$d ml: borraccia finita!</string>
+    <string name="water_goal_reached">Obiettivo d\'acqua raggiunto!</string>
     <string name="water_liters">%1$s di %2$s</string>
     <plurals name="water_glasses_of_goal">
         <item quantity="one">%1$s di %2$d bicchiere</item>
@@ -464,9 +479,23 @@
     <string name="shortcut_water_short">+1 acqua</string>
     <string name="shortcut_water_long">+1 bicchiere</string>
     <string name="shortcut_water_added">Bicchiere aggiunto: %1$s</string>
+    <string name="shortcut_bottle_short">+1 borraccia</string>
+    <string name="shortcut_bottle_long">+1 borraccia</string>
+    <string name="shortcut_bottle_added">Borraccia aggiunta: %1$s</string>
+    <string name="shortcut_bottle_missing">Nessuna borraccia: impostala nel profilo.</string>
     <string name="profile_water_goal">Acqua bicchieri</string>
     <string name="profile_glass_ml">Bicchiere ml</string>
     <string name="profile_water_goal_liters">Obiettivo acqua: %1$s al giorno.</string>
+    <string name="profile_bottle_section">La tua borraccia</string>
+    <string name="profile_bottle_hint">Quando finisci la borraccia la aggiungi tutta con un tasto: in Home, nel widget, nei promemoria dell\'acqua e nelle scorciatoie dell\'icona. Lascia vuota la capienza per non usarla.</string>
+    <string name="profile_bottle_name">Nome (facoltativo)</string>
+    <string name="profile_bottle_ml">Capienza ml</string>
+    <string name="profile_bottle_scan">Codice a barre</string>
+    <string name="profile_bottle_photo">Foto con l\'AI</string>
+    <string name="profile_bottle_found">%1$s: %2$d ml. Controlla e salva.</string>
+    <string name="profile_bottle_found_unnamed">Capienza: %1$d ml. Controlla e salva.</string>
+    <string name="profile_bottle_no_capacity">\"%1$s\" è su Open Food Facts ma senza una capienza valida: inseriscila a mano.</string>
+    <string name="profile_bottle_not_recognized">L\'AI non ha riconosciuto una borraccia nella foto. Riprova o scrivi la capienza a mano.</string>
     <string name="profile_water_suggested">Acqua da bere</string>
     <plurals name="profile_water_glasses">
         <item quantity="one">%1$d bicchiere</item>
@@ -560,6 +589,12 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_7_0">
+        <item>La tua borraccia: in Profilo e obiettivi scrivi quanto tiene, oppure inquadra il codice a barre o falle una foto e la riconosce l\'AI. Quando la finisci la aggiungi tutta con un tasto: in Home, nel widget, nei promemoria dell\'acqua e tenendo premuta l\'icona dell\'app.</item>
+        <item>In Home la borraccia si inclina e versa l\'acqua nella barra; quando raggiungi l\'obiettivo d\'acqua c\'è un piccolo festeggiamento. Se l\'hai premuta per sbaglio, tocca Annulla.</item>
+        <item>Impostazioni più ordinate: un menu con una voce per argomento (Aspetto, Promemoria, Intelligenza artificiale, Backup e dati…) e sotto ogni voce cosa hai scelto.</item>
+        <item>Più animazioni: numeri e barre si muovono verso il nuovo valore, il giorno scorre di lato quando lo cambi, i cibi entrano ed escono dalla lista, i grafici crescono e mentre l\'AI guarda la foto vedi dove arriveranno i cibi. Seguono l\'opzione di Android che toglie le animazioni.</item>
+    </string-array>
     <string-array name="changelog_1_6_0">
         <item>Novità di PhotoCal: ogni tanto ricevi una notifica quando c\'è qualcosa di nuovo, per esempio una nuova funzione. Puoi disattivarle in Impostazioni → Promemoria e novità.</item>
         <item>Alla prima apertura PhotoCal ti chiede se vuoi inviare statistiche d\'uso e report degli arresti anomali, per capire quali funzioni si usano e correggere gli errori più in fretta. All\'inizio sono spente e restano spente se rispondi di no.</item>

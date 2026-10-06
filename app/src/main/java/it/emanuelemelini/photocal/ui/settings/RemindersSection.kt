@@ -64,7 +64,6 @@ fun RemindersSection(
         notificationsAllowed = notificationsAllowed(context)
     }
 
-    Text(stringResource(R.string.settings_reminders), style = MaterialTheme.typography.titleMedium)
     Text(
         stringResource(R.string.settings_reminders_hint),
         style = MaterialTheme.typography.bodySmall,

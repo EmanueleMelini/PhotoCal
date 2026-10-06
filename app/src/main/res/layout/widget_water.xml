@@ -92,6 +92,18 @@
         android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
+        <!-- Hidden until a bottle is set in the profile -->
+        <ImageButton
+            android:id="@+id/water_bottle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/widget_button_pill_primary"
+            android:contentDescription="@string/water_add_bottle"
+            android:src="@drawable/ic_water_bottle"
+            android:tint="@color/widget_on_primary" />
+
         <ImageButton
             android:id="@+id/food_photo"
             android:layout_width="0dp"

@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.RemoteViews
 import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.PhotoCalApp
@@ -24,8 +25,9 @@ import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 /**
- * Home screen widget: today's glasses of water ("3/8") between − and +, and below two
- * shortcuts to add food to today's diary (photo, manual entry).
+ * Home screen widget: today's glasses of water ("3/8") between − and +, and below the whole
+ * water bottle (once set in the profile) and two shortcuts to add food to today's diary
+ * (photo, manual entry).
  * Plain RemoteViews: the widget is tiny and needs no extra library.
  */
 class WaterWidget(
@@ -51,6 +53,13 @@ class WaterWidget(
 
     suspend fun removeGlass() = waterRepository.removeGlass(LocalDate.now(), settingsRepository.settings.first().glassMl)
 
+    /** false when no bottle is set (e.g. removed while a notification still offered it). */
+    suspend fun addBottle(): Boolean {
+        val bottle = settingsRepository.settings.first().bottle ?: return false
+        waterRepository.addBottle(LocalDate.now(), bottle.ml)
+        return true
+    }
+
     fun cancelMidnightRefresh() = alarmManager.cancel(broadcast(WaterWidgetActionReceiver.ACTION_REFRESH))
 
     private suspend fun views(): RemoteViews {
@@ -72,6 +81,12 @@ class WaterWidget(
             )
             setContentDescription(R.id.water_remove, res.getString(R.string.water_remove_glass))
             setContentDescription(R.id.water_add, res.getString(R.string.water_add_glass))
+            val bottle = settings.bottle
+            setViewVisibility(R.id.water_bottle, if (bottle != null) View.VISIBLE else View.GONE)
+            if (bottle != null) {
+                setContentDescription(R.id.water_bottle, res.getString(R.string.water_add_bottle_ml, bottle.ml))
+                setOnClickPendingIntent(R.id.water_bottle, broadcast(WaterWidgetActionReceiver.ACTION_ADD_BOTTLE))
+            }
             setContentDescription(R.id.food_photo, res.getString(R.string.widget_add_photo))
             setContentDescription(R.id.food_manual, res.getString(R.string.widget_add_manual))
             // Nothing to remove: dimmed (a tap does nothing, the count never goes below zero)
@@ -139,7 +154,7 @@ class WaterWidgetProvider : AppWidgetProvider() {
 }
 
 /**
- * − / + buttons (widget and water reminders) and the midnight refresh: explicit intents from
+ * − / + and bottle buttons (widget and water reminders) and the midnight refresh: explicit intents from
  * the widget, the notifications and AlarmManager only.
  */
 class WaterWidgetActionReceiver : BroadcastReceiver() {
@@ -149,6 +164,7 @@ class WaterWidgetActionReceiver : BroadcastReceiver() {
             // The repository redraws the widget after the change
             ACTION_ADD -> runAsync(context) { it.addGlass() }
             ACTION_REMOVE -> runAsync(context) { it.removeGlass() }
+            ACTION_ADD_BOTTLE -> runAsync(context) { it.addBottle() }
             ACTION_REFRESH -> runAsync(context) { it.update() }
         }
     }
@@ -156,6 +172,7 @@ class WaterWidgetActionReceiver : BroadcastReceiver() {
     companion object {
         const val ACTION_ADD = "it.emanuelemelini.photocal.widget.ADD_GLASS"
         const val ACTION_REMOVE = "it.emanuelemelini.photocal.widget.REMOVE_GLASS"
+        const val ACTION_ADD_BOTTLE = "it.emanuelemelini.photocal.widget.ADD_BOTTLE"
         const val ACTION_REFRESH = "it.emanuelemelini.photocal.widget.REFRESH"
     }
 }

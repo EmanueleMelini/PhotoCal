@@ -23,7 +23,6 @@ fun PrivacySection(
     onCrashReportsChange: (Boolean) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
-    Text(stringResource(R.string.privacy_title), style = MaterialTheme.typography.titleMedium)
     Text(
         stringResource(R.string.privacy_never_sent),
         style = MaterialTheme.typography.bodySmall,

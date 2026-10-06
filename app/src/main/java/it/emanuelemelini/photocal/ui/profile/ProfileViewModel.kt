@@ -7,9 +7,13 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.WeightRepository
+import it.emanuelemelini.photocal.data.ai.AiException
+import it.emanuelemelini.photocal.data.ai.AiService
 import it.emanuelemelini.photocal.data.db.WeightEntry
 import it.emanuelemelini.photocal.data.nutrition.ActivityLevel
+import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.nutrition.DailyGoals
 import it.emanuelemelini.photocal.data.nutrition.EnergyCalculator
 import it.emanuelemelini.photocal.data.nutrition.EnergyEstimate
@@ -17,11 +21,18 @@ import it.emanuelemelini.photocal.data.nutrition.Profile
 import it.emanuelemelini.photocal.data.nutrition.Sex
 import it.emanuelemelini.photocal.data.nutrition.WaterCalculator
 import it.emanuelemelini.photocal.data.nutrition.WeightGoal
+import it.emanuelemelini.photocal.data.openfoodfacts.BottleCapacity
+import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
+import it.emanuelemelini.photocal.data.openfoodfacts.ProductLookupException
+import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
 import it.emanuelemelini.photocal.data.share.ShareValidation
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.parseDecimal
+import it.emanuelemelini.photocal.ui.toUiText
+import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -33,6 +44,9 @@ class ProfileViewModel(
     private val settingsRepository: SettingsRepository,
     private val weightRepository: WeightRepository,
     private val profilePhotoStorage: ProfilePhotoStorage,
+    private val photoStorage: PhotoStorage,
+    private val aiService: AiService,
+    private val openFoodFactsClient: OpenFoodFactsClient,
 ) : ViewModel() {
 
     private val currentYear = LocalDate.now().year
@@ -81,6 +95,24 @@ class ProfileViewModel(
     var waterGlasses by mutableStateOf("")
         private set
 
+    var bottleName by mutableStateOf("")
+        private set
+
+    /** Empty: no bottle. */
+    var bottleMl by mutableStateOf("")
+        private set
+
+    /** A barcode lookup or AI photo of the bottle is running. */
+    var bottleBusy by mutableStateOf(false)
+        private set
+
+    /** Outcome of a bottle lookup, shown in a snackbar. */
+    val bottleMessages = Channel<UiText>(Channel.BUFFERED)
+
+    /** The bottle photo needs the AI chosen in Settings. */
+    var aiConfigured by mutableStateOf(true)
+        private set
+
     var latestWeight by mutableStateOf<WeightEntry?>(null)
         private set
     var showErrors by mutableStateOf(false)
@@ -96,6 +128,7 @@ class ProfileViewModel(
     val carbsValid get() = isValidMacro(carbs)
     val fatValid get() = isValidMacro(fat)
     val glassSizeValid get() = validGlassMl != null
+    val bottleMlValid get() = bottleMl.isBlank() || bottleMl.toIntOrNull()?.let { it in Bottle.ML_RANGE } == true
     val waterValid: Boolean
         get() {
             val glasses = waterGlasses.toIntOrNull() ?: return false
@@ -161,6 +194,9 @@ class ProfileViewModel(
             waterGoalMl = settings.waterGoalMl
             glassSize = settings.glassMl.toString()
             waterGlasses = WaterCalculator.goalGlasses(settings.waterGoalMl, settings.glassMl).toString()
+            bottleName = settings.bottle?.name.orEmpty()
+            bottleMl = settings.bottle?.ml?.toString().orEmpty()
+            aiConfigured = settings.aiConfigured
             latestWeight = weightRepository.observeLatest().first()
             weight = latestWeight?.weightKg?.formatAmount().orEmpty()
             initialWeightText = weight
@@ -221,6 +257,58 @@ class ProfileViewModel(
         waterGoalTypedMl?.let { waterGoalMl = it }
     }
 
+    fun onBottleNameChange(value: String) { bottleName = value.take(ShareValidation.MAX_NAME) }
+    fun onBottleMlChange(value: String) { bottleMl = value.filter(Char::isDigit).take(4) }
+
+    /** Name and capacity of the scanned bottle from Open Food Facts; saved with Save. */
+    fun lookupBottle(barcode: String) = bottleLookup {
+        try {
+            val product = openFoodFactsClient.getProduct(barcode)
+            val ml = BottleCapacity.of(product)
+            if (ml == null) uiText(R.string.profile_bottle_no_capacity, product.displayName)
+            else found(Bottle(product.displayName, ml))
+        } catch (e: ProductLookupException) {
+            e.toUiText()
+        }
+    }
+
+    /** The bottle in the photo at [path], recognized by the AI; the photo is then deleted. */
+    fun recognizeBottle(path: String) = bottleLookup {
+        try {
+            aiService.recognizeBottle(photoStorage.shrink(path))?.let(::found)
+                ?: uiText(R.string.profile_bottle_not_recognized)
+        } catch (e: AiException) {
+            e.toUiText()
+        } catch (_: IOException) {
+            uiText(R.string.profile_bottle_not_recognized)
+        } finally {
+            photoStorage.delete(path)
+        }
+    }
+
+    fun onBottleScanFailed(message: UiText) {
+        bottleMessages.trySend(message)
+    }
+
+    private fun bottleLookup(block: suspend () -> UiText) {
+        if (bottleBusy) return
+        bottleBusy = true
+        viewModelScope.launch {
+            try {
+                bottleMessages.send(block())
+            } finally {
+                bottleBusy = false
+            }
+        }
+    }
+
+    private fun found(bottle: Bottle): UiText {
+        bottleMl = bottle.ml.toString()
+        if (bottle.name.isNotBlank()) bottleName = bottle.name.take(ShareValidation.MAX_NAME)
+        return if (bottle.name.isBlank()) uiText(R.string.profile_bottle_found_unnamed, bottle.ml)
+        else uiText(R.string.profile_bottle_found, bottle.name, bottle.ml)
+    }
+
     /** Copies the available suggestions into the goals; they stay editable. */
     fun applySuggestion() {
         estimate?.let { suggestion ->
@@ -240,7 +328,7 @@ class ProfileViewModel(
     /** Returns true if everything was valid and has been saved. */
     suspend fun save(): Boolean {
         val valid = birthYearValid && heightValid && weightValid && kcalValid &&
-            proteinValid && carbsValid && fatValid && glassSizeValid && waterValid
+            proteinValid && carbsValid && fatValid && glassSizeValid && waterValid && bottleMlValid
         val waterMl = waterGoalTypedMl
         if (!valid || waterMl == null) {
             showErrors = true
@@ -258,6 +346,7 @@ class ProfileViewModel(
                 glassMl = glassSize.toInt(),
             )
         )
+        settingsRepository.saveBottle(bottleMl.toIntOrNull()?.let { Bottle(bottleName.trim(), it) })
         // An edited weight here counts as today's weigh-in
         val typedWeight = parseDecimal(weight)
         if (typedWeight != null && weight != initialWeightText) {

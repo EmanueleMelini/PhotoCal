@@ -4,6 +4,21 @@ import android.content.ActivityNotFoundException
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.ui.res.painterResource
+import com.google.mlkit.common.MlKitException
+import it.emanuelemelini.photocal.data.nutrition.Bottle
+import it.emanuelemelini.photocal.ui.UiText
+import it.emanuelemelini.photocal.ui.barcode.scanBarcode
+import it.emanuelemelini.photocal.ui.uiText
+import kotlinx.coroutines.CancellationException
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,10 +95,19 @@ import kotlin.math.abs
 fun ProfileScreen(
     onBack: () -> Unit,
     onOpenWeightLog: () -> Unit,
+    /** Settings page of the AI, for the bottle photo. */
+    onOpenAiSettings: () -> Unit,
 ) {
     val container = appContainer()
     val viewModel: ProfileViewModel = viewModel {
-        ProfileViewModel(container.settingsRepository, container.weightRepository, container.profilePhotoStorage)
+        ProfileViewModel(
+            container.settingsRepository,
+            container.weightRepository,
+            container.profilePhotoStorage,
+            container.photoStorage,
+            container.aiService,
+            container.openFoodFactsClient,
+        )
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -106,6 +130,60 @@ fun ProfileScreen(
     }
     LaunchedEffect(Unit) {
         for (error in viewModel.photoErrors) snackbarHostState.showSnackbar(photoError)
+    }
+    // Bottle photo for the AI: same temporary file as the meal photos, deleted after the analysis
+    var pendingBottlePath by rememberSaveable { mutableStateOf<String?>(null) }
+    val takeBottlePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        val path = pendingBottlePath ?: return@rememberLauncherForActivityResult
+        pendingBottlePath = null
+        if (success) viewModel.recognizeBottle(path) else photoStorage.delete(path)
+    }
+    val bottleNeedsKey = stringResource(R.string.today_photo_needs_key)
+    val settingsLabel = stringResource(R.string.action_settings)
+    fun startBottlePhoto() {
+        if (!viewModel.aiConfigured) {
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(bottleNeedsKey, actionLabel = settingsLabel, duration = SnackbarDuration.Long)
+                if (result == SnackbarResult.ActionPerformed) onOpenAiSettings()
+            }
+            return
+        }
+        val file = photoStorage.newPhotoFile()
+        pendingBottlePath = file.absolutePath
+        try {
+            takeBottlePhoto.launch(photoStorage.uriFor(file))
+        } catch (_: ActivityNotFoundException) {
+            pendingBottlePath = null
+            scope.launch { snackbarHostState.showSnackbar(context.getString(R.string.today_no_camera)) }
+        }
+    }
+    fun startBottleScan() {
+        scope.launch {
+            try {
+                scanBarcode(context)?.let(viewModel::lookupBottle)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: MlKitException) {
+                viewModel.onBottleScanFailed(
+                    uiText(
+                        if (e.errorCode == MlKitException.UNAVAILABLE) R.string.barcode_scanner_downloading
+                        else R.string.barcode_scanner_unavailable
+                    )
+                )
+            }
+        }
+    }
+    // Resolved here, in the current language, then shown
+    var bottleMessage by remember { mutableStateOf<UiText?>(null) }
+    LaunchedEffect(Unit) {
+        for (message in viewModel.bottleMessages) bottleMessage = message
+    }
+    bottleMessage?.let { message ->
+        val text = message.asString()
+        LaunchedEffect(message) {
+            bottleMessage = null
+            scope.launch { snackbarHostState.showSnackbar(text, duration = SnackbarDuration.Long) }
+        }
     }
 
     Scaffold(
@@ -335,6 +413,13 @@ fun ProfileScreen(
                 )
             }
 
+            BottleSection(
+                viewModel = viewModel,
+                showErrors = showErrors,
+                onScan = ::startBottleScan,
+                onPhoto = ::startBottlePhoto,
+            )
+
             Button(
                 onClick = { scope.launch { if (viewModel.save()) snackbarHostState.showSnackbar(savedMessage) } },
                 modifier = Modifier.fillMaxWidth(),
@@ -346,6 +431,59 @@ fun ProfileScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+    }
+}
+
+/** Name and capacity of the water bottle, typed or found with a barcode or an AI photo. */
+@Composable
+private fun BottleSection(viewModel: ProfileViewModel, showErrors: Boolean, onScan: () -> Unit, onPhoto: () -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painterResource(R.drawable.ic_water_bottle),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(end = 8.dp),
+        )
+        Text(stringResource(R.string.profile_bottle_section), style = MaterialTheme.typography.titleSmall)
+    }
+    Text(
+        stringResource(R.string.profile_bottle_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        OutlinedTextField(
+            value = viewModel.bottleName,
+            onValueChange = viewModel::onBottleNameChange,
+            label = { Text(stringResource(R.string.profile_bottle_name), maxLines = 1) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Next),
+            modifier = Modifier.weight(1.4f),
+        )
+        IntField(
+            value = viewModel.bottleMl,
+            onValueChange = viewModel::onBottleMlChange,
+            label = stringResource(R.string.profile_bottle_ml),
+            isError = showErrors && !viewModel.bottleMlValid,
+            error = stringResource(R.string.profile_range_error, Bottle.ML_RANGE.first, Bottle.ML_RANGE.last),
+            modifier = Modifier.weight(1f),
+        )
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        val busy = viewModel.bottleBusy
+        OutlinedButton(onClick = onScan, enabled = !busy, modifier = Modifier.weight(1f)) {
+            Icon(painterResource(R.drawable.ic_barcode), contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.profile_bottle_scan), maxLines = 1)
+        }
+        OutlinedButton(onClick = onPhoto, enabled = !busy, modifier = Modifier.weight(1f)) {
+            Icon(painterResource(R.drawable.ic_photo_camera), contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.profile_bottle_photo), maxLines = 1)
+        }
+    }
+    AnimatedVisibility(visible = viewModel.bottleBusy) {
+        LinearProgressIndicator(Modifier.fillMaxWidth())
     }
 }
 
