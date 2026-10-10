@@ -24,6 +24,7 @@
     <string name="day_tomorrow">Tomorrow</string>
     <string name="action_back">Back</string>
     <string name="action_save">Save</string>
+    <string name="action_save_kcal">Save · %1$s kcal</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
     <string name="action_retry">Retry</string>
@@ -56,9 +57,11 @@
     <string name="action_add">Add</string>
     <string name="action_undo">Undo</string>
     <string name="today_photo_needs_key">Photo analysis needs an AI and its API key</string>
+    <string name="today_describe_needs_key">Describing your meals needs an AI and its API key</string>
+    <string name="today_add_to_meal">Add to %1$s</string>
     <string name="today_no_camera">No camera app available</string>
     <string name="today_history">History</string>
-    <string name="today_empty">No entries for this day.\nTap + to add a food.</string>
+    <string name="today_empty">No entries for this day.\nTap + next to a meal or at the bottom to add a food.</string>
     <string name="today_go_to_today">Go to today</string>
     <string name="today_previous_day">Previous day</string>
     <string name="today_next_day">Next day</string>
@@ -74,6 +77,19 @@
     <string name="fab_barcode">Barcode</string>
     <string name="fab_manual">Manual</string>
     <string name="fab_recent">Recent</string>
+    <string name="fab_describe">Describe</string>
+
+    <string name="describe_title">Describe your meals</string>
+    <string name="describe_title_meal">Describe: %1$s</string>
+    <string name="describe_intro">Type or dictate what you ate, even over several meals: the AI recognizes the foods, estimates the amounts and splits them into meals. You can check everything before saving.</string>
+    <string name="describe_intro_meal">Type or dictate what you ate: the AI recognizes the foods and estimates the amounts. You can check everything before saving.</string>
+    <string name="describe_label">What you ate</string>
+    <string name="describe_placeholder">E.g. cappuccino and a croissant for breakfast, 80 g of pasta with tomato sauce and a salad for lunch, a margherita pizza for dinner</string>
+    <string name="describe_placeholder_meal">E.g. 80 g of pasta with tomato sauce, a salad and an apple</string>
+    <string name="describe_dictate">Dictate</string>
+    <string name="describe_speak_prompt">Say what you ate</string>
+    <string name="describe_text_first">First type or dictate what you ate</string>
+    <string name="describe_meal_of_food">Meal: %1$s</string>
     <string name="today_burned">%1$s kcal burned</string>
     <string name="today_goal_with_burned">%1$s (goal %2$d + %3$d)</string>
     <string name="copy_action">Copy</string>
@@ -226,7 +242,7 @@
     <string name="settings_saved">Settings saved</string>
     <string name="settings_data">Backup and data</string>
     <string name="health_title">Health Connect</string>
-    <string name="health_intro">With Health Connect, PhotoCal reads your steps and the calories burned by moving, and writes weight and water so other health apps can see them.</string>
+    <string name="health_intro">With Health Connect, PhotoKCal reads your steps and the calories burned by moving, and writes weight and water so other health apps can see them.</string>
     <string name="health_not_supported">Health Connect isn\'t available on this phone.</string>
     <string name="health_install">Install Health Connect</string>
     <string name="health_connect">Connect</string>
@@ -239,9 +255,9 @@
     <string name="health_add_burned">Add burned calories to the goal</string>
     <string name="health_add_burned_hint">On the days you move more you can eat more. Set the profile activity to \"Sedentary\", otherwise exercise is counted twice.</string>
     <string name="health_privacy_title">Health data and privacy</string>
-    <string name="health_privacy_read">Reading: PhotoCal reads the steps and active calories of the day shown in Today from Health Connect, only to show them and, if you choose so, to add the calories to the goal.</string>
-    <string name="health_privacy_write">Writing: if the option is on, PhotoCal writes the recorded weight and the water of each day to Health Connect.</string>
-    <string name="health_privacy_storage">This data stays on the phone: PhotoCal doesn\'t send it to any server and doesn\'t include it in the backup. You can remove the permissions at any time from Health Connect or with \"Disconnect\" in Settings.</string>
+    <string name="health_privacy_read">Reading: PhotoKCal reads the steps and active calories of the day shown in Today from Health Connect, only to show them and, if you choose so, to add the calories to the goal.</string>
+    <string name="health_privacy_write">Writing: if the option is on, PhotoKCal writes the recorded weight and the water of each day to Health Connect.</string>
+    <string name="health_privacy_storage">This data stays on the phone: PhotoKCal doesn\'t send it to any server and doesn\'t include it in the backup. You can remove the permissions at any time from Health Connect or with \"Disconnect\" in Settings.</string>
     <string name="data_export">Export backup</string>
     <string name="data_export_hint">Diary, weight, water, saved foods and settings in a JSON file. It doesn\'t contain the API key or the photos.</string>
     <string name="data_restore">Restore backup</string>
@@ -251,8 +267,8 @@
     <string name="data_export_done">Backup saved</string>
     <string name="data_csv_done">Diary exported</string>
     <string name="data_error_write">The file couldn\'t be written.</string>
-    <string name="data_error_invalid">The file isn\'t a PhotoCal backup or it is damaged.</string>
-    <string name="data_error_newer">The backup was made with a newer version of PhotoCal: update the app to restore it.</string>
+    <string name="data_error_invalid">The file isn\'t a PhotoKCal backup or it is damaged.</string>
+    <string name="data_error_newer">The backup was made with a newer version of PhotoKCal: update the app to restore it.</string>
     <string name="data_restore_title">Restore backup</string>
     <string name="data_restore_empty">Backup of %1$s without diary entries.</string>
     <string name="data_restore_replace">Replace everything</string>
@@ -339,7 +355,7 @@
     <string name="reminder_water_goal_hint">If you haven\'t reached it yet</string>
     <string name="reminder_update">New version</string>
     <string name="reminder_update_hint">Checks GitHub for an update (needs a connection)</string>
-    <string name="reminder_update_title">PhotoCal %1$s is available</string>
+    <string name="reminder_update_title">PhotoKCal %1$s is available</string>
     <string name="reminder_update_text">Tap to see what\'s new and update.</string>
     <string name="channel_water_reminders">Water reminders</string>
     <string name="channel_updates">Updates</string>
@@ -371,19 +387,19 @@
     <string name="reminder_weekly_text">Average %1$s kcal a day · within goal: %2$d/%3$d</string>
     <string name="settings_reminders">Reminders and news</string>
     <string name="settings_reminders_hint">Notifications from the phone itself, even offline (except the new version one, which asks GitHub). Meal reminders are skipped if the meal is already logged, water ones if you have already drunk enough.</string>
-    <string name="settings_notifications_off">PhotoCal notifications are turned off.</string>
+    <string name="settings_notifications_off">PhotoKCal notifications are turned off.</string>
     <string name="settings_notifications_enable">Turn on</string>
     <string name="settings_reminder_time">Time</string>
     <!-- News (push) and privacy (Firebase) -->
-    <string name="settings_news">PhotoCal news</string>
+    <string name="settings_news">PhotoKCal news</string>
     <string name="settings_news_hint">A notification when there is something new worth knowing, such as a new feature. They\'re rare.</string>
-    <string name="channel_news">PhotoCal news</string>
+    <string name="channel_news">PhotoKCal news</string>
     <string name="privacy_title">Privacy</string>
-    <string name="privacy_consent_title">Help improve PhotoCal</string>
+    <string name="privacy_consent_title">Help improve PhotoKCal</string>
     <string name="privacy_consent_text">Would you like to send usage statistics and crash reports? They show which features are used and help fix errors. They go through Google Firebase and are tied to a random code of this install, not to your name or account.</string>
     <string name="privacy_never_sent">Your meals, amounts, weight, photos and other health data are never sent.</string>
     <string name="privacy_consent_change">You can change your mind at any time in Settings → Privacy.</string>
-    <string name="privacy_consent_notifications">Right after, Android asks for permission to show notifications: they are needed for the reminders you turn on and for PhotoCal news.</string>
+    <string name="privacy_consent_notifications">Right after, Android asks for permission to show notifications: they are needed for the reminders you turn on and for PhotoKCal news.</string>
     <string name="privacy_consent_allow">Allow</string>
     <string name="privacy_consent_deny">No thanks</string>
     <string name="privacy_policy">Privacy policy</string>
@@ -514,9 +530,9 @@
     <string name="share_goals">Goals</string>
     <string name="share_nothing">Choose at least one thing to show.</string>
     <string name="share_preview">Preview</string>
-    <string name="share_preview_hint">This is what people opening the link with PhotoCal will see.</string>
-    <string name="share_text_day">My day on PhotoCal (%1$s):</string>
-    <string name="share_text_week">My week on PhotoCal (%1$s – %2$s):</string>
+    <string name="share_preview_hint">This is what people opening the link with PhotoKCal will see.</string>
+    <string name="share_text_day">My day on PhotoKCal (%1$s):</string>
+    <string name="share_text_week">My week on PhotoKCal (%1$s – %2$s):</string>
 
     <string name="shared_title_day">Shared day</string>
     <string name="shared_title_week">Shared week</string>
@@ -544,9 +560,9 @@
     </plurals>
     <string name="shared_days">Day by day</string>
     <string name="shared_selected_day">%1$s: %2$s kcal</string>
-    <string name="shared_footer">Shared with PhotoCal on %1$s · read only, not saved to your diary.</string>
+    <string name="shared_footer">Shared with PhotoKCal on %1$s · read only, not saved to your diary.</string>
     <string name="shared_invalid">This link isn\'t valid: it is incomplete or has been edited.</string>
-    <string name="shared_newer_version">This link was made with a newer version of PhotoCal: update the app to open it.</string>
+    <string name="shared_newer_version">This link was made with a newer version of PhotoKCal: update the app to open it.</string>
     <plurals name="shared_water_glasses">
         <item quantity="one">%1$s glass</item>
         <item quantity="other">%1$s glasses</item>
@@ -559,24 +575,32 @@
     <string name="settings_up_to_date">You already have the latest version.</string>
     <string name="settings_check_failed">Check failed: check your connection and try again.</string>
     <string name="update_available_title">Update available</string>
-    <string name="update_available_text">PhotoCal %1$s is available (you have %2$s).</string>
+    <string name="update_available_text">PhotoKCal %1$s is available (you have %2$s).</string>
     <string name="update_available_whats_new">What\'s new:</string>
     <string name="update_action_install">Update</string>
     <string name="update_action_later">Later</string>
     <string name="update_action_allow">Allow</string>
     <string name="update_action_browser">Download in the browser</string>
     <string name="update_permission_title">Install permission</string>
-    <string name="update_permission_text">To install the update, PhotoCal needs to be allowed to install apps. On the next screen turn on \"Allow from this source\" and go back. If you prefer, you can download it in the browser.</string>
-    <string name="update_permission_denied">Without the permission PhotoCal can\'t install the update. You can download it in the browser and open it from your downloads.</string>
-    <string name="update_downloading_title">Downloading PhotoCal %1$s</string>
+    <string name="update_permission_text">To install the update, PhotoKCal needs to be allowed to install apps. On the next screen turn on \"Allow from this source\" and go back. If you prefer, you can download it in the browser.</string>
+    <string name="update_permission_denied">Without the permission PhotoKCal can\'t install the update. You can download it in the browser and open it from your downloads.</string>
+    <string name="update_downloading_title">Downloading PhotoKCal %1$s</string>
     <string name="update_failed_title">Update failed</string>
     <string name="update_error_download">The download failed. Try again later or download it in the browser.</string>
     <string name="update_error_signature">The update is signed differently from the installed app (for example a development build), so Android won\'t install it over it.</string>
     <string name="update_error_storage">There isn\'t enough space to install the update.</string>
     <string name="update_error_install">Android didn\'t install the update. You can download it in the browser.</string>
     <string name="changelog_title">What\'s new</string>
-    <string name="changelog_title_version">What\'s new in PhotoCal %1$s</string>
+    <string name="changelog_title_version">What\'s new in PhotoKCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_8_0">
+        <item>PhotoCal is now called PhotoKCal: same app, same data, with the K of kcal in its name.</item>
+        <item>Describe your meals: type or dictate with the microphone what you ate, even the whole day (\"cappuccino and a croissant for breakfast, pasta with tomato sauce for lunch…\"). The AI recognizes the foods, estimates the amounts and splits them into meals; you check and fix everything before saving.</item>
+        <item>On the Home screen Breakfast, Lunch, Dinner and Snack are always shown, even when empty. The + next to each meal opens the same choices as the + at the bottom (photo, description, barcode, recent, manual) with that meal already selected.</item>
+        <item>The Save button is always at the bottom of the screen, above the keyboard, and with several foods it shows the total kcal: no more scrolling to the end.</item>
+        <item>Fixed: when editing a food and changing it into another one, the AI estimate kept the grams of the old one. Now the grams stay only if you typed them or the food is the same.</item>
+        <item>Gemini 3.6 Flash among the suggested models in the AI settings.</item>
+    </string-array>
     <string-array name="changelog_1_7_0">
         <item>Your water bottle: in Profile and goals type how much it holds, or scan its barcode or take a photo and let the AI recognize it. When you finish it, add it all with one tap: on the Home screen, in the widget, in the water reminders and by long-pressing the app icon.</item>
         <item>On the Home screen the bottle tilts and pours water into the bar; when you reach your water goal there is a small celebration. Tapped it by mistake? Tap Undo.</item>
@@ -584,8 +608,8 @@
         <item>More animations: numbers and bars move to their new value, the day slides sideways when you change it, foods enter and leave the list, charts grow, and while the AI looks at a photo you see where the foods will appear. They follow the Android option that removes animations.</item>
     </string-array>
     <string-array name="changelog_1_6_0">
-        <item>PhotoCal news: now and then you get a notification when there is something new, such as a new feature. You can turn them off in Settings → Reminders and news.</item>
-        <item>At the first start PhotoCal asks whether you want to send usage statistics and crash reports, to see which features are used and fix errors faster. They start off and stay off if you say no.</item>
+        <item>PhotoKCal news: now and then you get a notification when there is something new, such as a new feature. You can turn them off in Settings → Reminders and news.</item>
+        <item>At the first start PhotoKCal asks whether you want to send usage statistics and crash reports, to see which features are used and fix errors faster. They start off and stay off if you say no.</item>
         <item>Your meals, amounts, weight, photos and other health data are never sent. You can change your mind in Settings → Privacy, where you\'ll also find the privacy policy.</item>
     </string-array>
     <string-array name="changelog_1_5_0">
@@ -594,7 +618,7 @@
         <item>Each AI keeps its own key and model: if you switch AI and then go back, you find them again. The Gemini key you already entered stays where it was.</item>
         <item>When the AI doesn\'t answer or gives an invalid answer, besides Retry and Enter manually you find \"Change model\", which opens Settings right at the AI section.</item>
         <item>The backup remembers the chosen AI and the models; the API keys stay on the phone only.</item>
-        <item>New \"New version\" reminder: in Settings → Reminders pick the time and PhotoCal checks GitHub every day for an update. It tells you only once per version; tapping the notification shows what\'s new and lets you update.</item>
+        <item>New \"New version\" reminder: in Settings → Reminders pick the time and PhotoKCal checks GitHub every day for an update. It tells you only once per version; tapping the notification shows what\'s new and lets you update.</item>
     </string-array>
     <string-array name="changelog_1_4_0">
         <item>Barcode: you can now count pieces, for example 3 biscuits instead of 25 g. Choose \"pieces\" as the unit: the grams of one piece are already filled in when the package on Open Food Facts gives them, otherwise you type them.</item>
@@ -604,10 +628,10 @@
         <item>Copy: press and hold an entry to duplicate it or copy it to another day; the icon next to a meal copies the whole meal, the one at the top the whole day.</item>
         <item>Fiber, sugars and salt: they come from Open Food Facts, the CREA tables and the AI estimate, you can type them by hand and the day total shows up in Today.</item>
         <item>Backup: in Settings → Data you export everything to a file and restore it, choosing whether to replace the data or merge it with the one on the phone. You can also export the diary as CSV for Excel.</item>
-        <item>Health Connect: connect PhotoCal in Settings to see steps and burned calories in Today, write weight and water and, if you want, add the burned calories to the goal of the day.</item>
+        <item>Health Connect: connect PhotoKCal in Settings to see steps and burned calories in Today, write weight and water and, if you want, add the burned calories to the goal of the day.</item>
     </string-array>
     <string-array name="changelog_1_3_0">
-        <item>PhotoCal checks GitHub for a new version (at startup, at most once a day, or from Settings → About) and shows you what\'s new in it before you update.</item>
+        <item>PhotoKCal checks GitHub for a new version (at startup, at most once a day, or from Settings → About) and shows you what\'s new in it before you update.</item>
         <item>The update is downloaded and installed from the app (with the permission to install apps), or in the browser.</item>
         <item>The first time you open the app after an update, it shows what\'s new; you can read it again in Settings → About.</item>
     </string-array>
@@ -617,7 +641,7 @@
         <item>Icon shortcuts: meal photo, manual meal, +1 glass and share today.</item>
         <item>Water reminders at half and at the full goal.</item>
         <item>Name and photo in the profile.</item>
-        <item>Share a day or a week with a link that opens in PhotoCal.</item>
+        <item>Share a day or a week with a link that opens in PhotoKCal.</item>
     </string-array>
     <string-array name="changelog_1_1_0">
         <item>Profile and goals: an estimate of your needs with suggested calories and macros, which you can always type by hand.</item>

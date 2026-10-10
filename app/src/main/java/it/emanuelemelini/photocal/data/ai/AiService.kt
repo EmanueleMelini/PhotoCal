@@ -38,6 +38,13 @@ class AiService(
         generate(AiPrompts.textSystem(answerLanguage()), AiPrompts.textUserPrompt(description, quantity), null, creaCatalog)
 
     /**
+     * Foods of a day described in [text] (typed or dictated), each with its meal when
+     * [splitMeals]; otherwise all of one meal, chosen by the user.
+     */
+    suspend fun describeDay(text: String, splitMeals: Boolean, creaCatalog: String?): FoodAnalysis =
+        generate(AiPrompts.daySystem(answerLanguage(), splitMeals), AiPrompts.dayUserPrompt(text), null, creaCatalog)
+
+    /**
      * Name and capacity of the water bottle in the photo; null when the AI sees none or the
      * capacity isn't a bottle's. [jpeg] is already resized.
      */

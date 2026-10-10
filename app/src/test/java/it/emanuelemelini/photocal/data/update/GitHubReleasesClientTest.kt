@@ -13,7 +13,7 @@ class GitHubReleasesClientTest {
           "html_url": "https://github.com/EmanueleMelini/PhotoCal/releases/tag/v1.3.0",
           "assets": [
             {"name": "notes.txt", "browser_download_url": "https://github.com/x/notes.txt", "size": 10},
-            {"name": "PhotoCal-1.3.0.apk", "browser_download_url": "https://github.com/EmanueleMelini/PhotoCal/releases/download/v1.3.0/PhotoCal-1.3.0.apk", "size": 3340348}
+            {"name": "PhotoKCal-1.3.0.apk", "browser_download_url": "https://github.com/EmanueleMelini/PhotoCal/releases/download/v1.3.0/PhotoKCal-1.3.0.apk", "size": 3340348}
           ]
         }
     """.trimIndent()
@@ -23,7 +23,7 @@ class GitHubReleasesClientTest {
         val release = requireNotNull(GitHubReleasesClient.parseRelease(latest))
         assertEquals(AppVersion.parse("1.3.0"), release.version)
         assertEquals("https://github.com/EmanueleMelini/PhotoCal/releases/tag/v1.3.0", release.pageUrl)
-        assertEquals("https://github.com/EmanueleMelini/PhotoCal/releases/download/v1.3.0/PhotoCal-1.3.0.apk", release.apkUrl)
+        assertEquals("https://github.com/EmanueleMelini/PhotoCal/releases/download/v1.3.0/PhotoKCal-1.3.0.apk", release.apkUrl)
         assertEquals(3_340_348L, release.apkSize)
     }
 
@@ -44,7 +44,7 @@ class GitHubReleasesClientTest {
 
     /** Same layout as .github/scripts/release_notes.py, with the CRLF of a body edited on GitHub. */
     private val body = listOf(
-        "## What's new in PhotoCal 1.3.0",
+        "## What's new in PhotoKCal 1.3.0",
         "",
         "- Checks for updates.",
         "- Shows what's new.",

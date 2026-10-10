@@ -59,7 +59,8 @@ class BarcodeViewModel(
     private val openFoodFactsClient: OpenFoodFactsClient,
 ) : ViewModel() {
 
-    private val date = LocalDate.ofEpochDay(savedStateHandle.toRoute<BarcodeRoute>().dateEpochDay)
+    private val route = savedStateHandle.toRoute<BarcodeRoute>()
+    private val date = LocalDate.ofEpochDay(route.dateEpochDay)
     private var lookupJob: Job? = null
 
     /** The scanner opens by itself only once, when entering the screen. */
@@ -79,7 +80,7 @@ class BarcodeViewModel(
     /** Grams of one piece, for [ServingUnit.PIECE]. */
     var pieceGrams by mutableStateOf("")
         private set
-    var mealType by mutableStateOf(MealType.suggestedFor())
+    var mealType by mutableStateOf(MealType.entries.find { it.name == route.meal } ?: MealType.suggestedFor())
         private set
     var showErrors by mutableStateOf(false)
         private set

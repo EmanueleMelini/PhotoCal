@@ -51,7 +51,7 @@ def main() -> None:
     if len(sys.argv) != 2:
         sys.exit("usage: release_notes.py <version>")
     version = sys.argv[1].removeprefix("v")
-    print(f"## What's new in PhotoCal {version}\n")
+    print(f"## What's new in PhotoKCal {version}\n")
     for item in notes(ENGLISH, version):
         print(f"- {item}")
     for tag, strings in HIDDEN.items():

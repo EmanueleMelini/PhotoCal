@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -60,6 +61,7 @@ import it.emanuelemelini.photocal.data.openfoodfacts.Product
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.components.QuantityRow
+import it.emanuelemelini.photocal.ui.components.SaveBar
 import it.emanuelemelini.photocal.ui.components.errorText
 import it.emanuelemelini.photocal.ui.extrasLabel
 import it.emanuelemelini.photocal.ui.formatAmount
@@ -125,11 +127,15 @@ fun BarcodeScreen(
                 },
             )
         },
+        bottomBar = {
+            if (status is BarcodeStatus.Found) SaveBar(onClick = viewModel::save, kcal = viewModel.nutrition?.kcal)
+        },
     ) { padding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .padding(padding)
+                .consumeWindowInsets(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
@@ -375,7 +381,6 @@ private fun ProductForm(
 
     MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)
 
-    Button(onClick = viewModel::save, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.action_save)) }
     TextButton(onClick = onScanAgain, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.barcode_scan_another)) }
 }
 

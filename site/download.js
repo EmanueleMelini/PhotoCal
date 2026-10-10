@@ -9,7 +9,7 @@
 
   const TEXT = {
     it: {
-      version: "PhotoCal {0}",
+      version: "PhotoKCal {0}",
       released: "Pubblicata il {0}",
       download: "Scarica APK ({0})",
       downloadThis: "Scarica la {0} ({1})",
@@ -19,7 +19,7 @@
       oldWarning: "Le versioni vecchie non hanno le ultime correzioni. Per tornare a una versione precedente bisogna disinstallare l'app, perdendo i dati: prima fai un backup.",
     },
     en: {
-      version: "PhotoCal {0}",
+      version: "PhotoKCal {0}",
       released: "Released on {0}",
       download: "Download APK ({0})",
       downloadThis: "Download {0} ({1})",

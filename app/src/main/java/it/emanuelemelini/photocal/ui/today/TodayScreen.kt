@@ -1,6 +1,7 @@
 package it.emanuelemelini.photocal.ui.today
 
 import android.content.ActivityNotFoundException
+import androidx.annotation.StringRes
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -121,14 +122,16 @@ fun TodayScreen(
     onRequestedPhotoHandled: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenGoals: () -> Unit,
-    onAddManual: (LocalDate) -> Unit,
+    onAddManual: (LocalDate, MealType?) -> Unit,
     onEditEntry: (FoodEntry) -> Unit,
     onOpenSettings: () -> Unit,
     /** Settings scrolled to the AI section. */
     onOpenAiSettings: () -> Unit,
     onPhotoTaken: (photoPath: String, date: LocalDate, meal: MealType?) -> Unit,
-    onScanBarcode: (LocalDate) -> Unit,
-    onOpenRecent: (LocalDate) -> Unit,
+    onScanBarcode: (LocalDate, MealType?) -> Unit,
+    onOpenRecent: (LocalDate, MealType?) -> Unit,
+    /** Foods described with a text or by voice, all for [MealType] if given. */
+    onDescribe: (LocalDate, MealType?) -> Unit,
     onShare: (LocalDate) -> Unit,
 ) {
     val container = appContainer()
@@ -185,22 +188,27 @@ fun TodayScreen(
     }
 
     val photoNeedsKey = stringResource(R.string.today_photo_needs_key)
+    val describeNeedsKey = stringResource(R.string.today_describe_needs_key)
     val settingsLabel = stringResource(R.string.action_settings)
     val noCamera = stringResource(R.string.today_no_camera)
 
+    /** false (with a shortcut to Settings) when the AI can't be called yet. */
+    fun aiReady(message: String): Boolean {
+        if (state.aiConfigured) return true
+        scope.launch {
+            val result = snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = settingsLabel,
+                duration = SnackbarDuration.Long,
+            )
+            if (result == SnackbarResult.ActionPerformed) onOpenAiSettings()
+        }
+        return false
+    }
+
     fun startPhoto(meal: MealType? = null, date: LocalDate = state.date) {
         fabExpanded = false
-        if (!state.aiConfigured) {
-            scope.launch {
-                val result = snackbarHostState.showSnackbar(
-                    message = photoNeedsKey,
-                    actionLabel = settingsLabel,
-                    duration = SnackbarDuration.Long,
-                )
-                if (result == SnackbarResult.ActionPerformed) onOpenAiSettings()
-            }
-            return
-        }
+        if (!aiReady(photoNeedsKey)) return
         val file = photoStorage.newPhotoFile()
         pendingPhotoPath = file.absolutePath
         pendingPhotoDay = date.toEpochDay()
@@ -212,6 +220,18 @@ fun TodayScreen(
             pendingPhotoDay = null
             pendingPhotoMeal = null
             scope.launch { snackbarHostState.showSnackbar(noCamera) }
+        }
+    }
+
+    /** From the FAB ([meal] null: the screens pick it from the time) or from a meal's +. */
+    fun add(action: AddAction, meal: MealType?) {
+        fabExpanded = false
+        when (action) {
+            AddAction.PHOTO -> startPhoto(meal)
+            AddAction.DESCRIBE -> if (aiReady(describeNeedsKey)) onDescribe(state.date, meal)
+            AddAction.BARCODE -> onScanBarcode(state.date, meal)
+            AddAction.RECENT -> onOpenRecent(state.date, meal)
+            AddAction.MANUAL -> onAddManual(state.date, meal)
         }
     }
 
@@ -270,19 +290,7 @@ fun TodayScreen(
             AddFab(
                 expanded = fabExpanded,
                 onExpandedChange = { fabExpanded = it },
-                onPhoto = { startPhoto() },
-                onBarcode = {
-                    fabExpanded = false
-                    onScanBarcode(state.date)
-                },
-                onManual = {
-                    fabExpanded = false
-                    onAddManual(state.date)
-                },
-                onRecent = {
-                    fabExpanded = false
-                    onOpenRecent(state.date)
-                },
+                onAction = { add(it, null) },
             )
         },
     ) { padding ->
@@ -329,13 +337,18 @@ fun TodayScreen(
                     )
                 }
             }
-            state.meals.forEach { group ->
+            // Every meal has its header, empty ones too: their + adds straight to them
+            val groups = MealType.entries.map { meal ->
+                state.meals.find { it.mealType == meal } ?: MealGroup(meal, emptyList())
+            }
+            groups.forEach { group ->
                 item(key = "meal-${group.mealType}") {
                     MealHeader(
                         group,
                         onCopy = {
                             copyRequest = CopyRequest(group.entries, state.date, group.mealType, R.string.copy_meal_title)
                         },
+                        onAdd = { action -> add(action, group.mealType) },
                         modifier = Modifier.animateItem().then(dayModifier),
                     )
                 }
@@ -585,8 +598,17 @@ private fun MacroItem(label: String, target: Double, goal: Int?) {
     }
 }
 
+/** Name and kcal of a meal, with copy (when it has entries) and + to add to it. */
 @Composable
-private fun MealHeader(group: MealGroup, onCopy: () -> Unit, modifier: Modifier = Modifier) {
+private fun MealHeader(
+    group: MealGroup,
+    onCopy: () -> Unit,
+    onAdd: (AddAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val mealName = stringResource(group.mealType.labelRes)
+    val empty = group.entries.isEmpty()
+    var menuOpen by remember { mutableStateOf(false) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -594,23 +616,46 @@ private fun MealHeader(group: MealGroup, onCopy: () -> Unit, modifier: Modifier 
             .padding(start = 16.dp, end = 4.dp, top = 8.dp),
     ) {
         Text(
-            text = stringResource(group.mealType.labelRes),
+            text = mealName,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = if (empty) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f),
         )
-        Text(
-            text = "${group.kcal.formatKcal()} kcal",
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        IconButton(onClick = onCopy) {
-            Icon(
-                painterResource(R.drawable.ic_content_copy),
-                contentDescription = stringResource(R.string.copy_meal),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
+        if (!empty) {
+            Text(
+                text = "${group.kcal.formatKcal()} kcal",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
             )
+            IconButton(onClick = onCopy) {
+                Icon(
+                    painterResource(R.drawable.ic_content_copy),
+                    contentDescription = stringResource(R.string.copy_meal),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+        Box {
+            IconButton(onClick = { menuOpen = true }) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = stringResource(R.string.today_add_to_meal, mealName),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+            DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                AddAction.entries.forEach { action ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(action.labelRes)) },
+                        leadingIcon = { Icon(action.icon(), contentDescription = null) },
+                        onClick = {
+                            menuOpen = false
+                            onAdd(action)
+                        },
+                    )
+                }
+            }
         }
     }
 }
@@ -679,6 +724,24 @@ private fun EntryRow(
     }
 }
 
+/** Ways to add food, in the FAB and in the + of each meal. */
+private enum class AddAction(@StringRes val labelRes: Int) {
+    PHOTO(R.string.fab_photo),
+    DESCRIBE(R.string.fab_describe),
+    BARCODE(R.string.fab_barcode),
+    RECENT(R.string.fab_recent),
+    MANUAL(R.string.fab_manual);
+
+    @Composable
+    fun icon(): Painter = when (this) {
+        PHOTO -> painterResource(R.drawable.ic_photo_camera)
+        DESCRIBE -> painterResource(R.drawable.ic_mic)
+        BARCODE -> painterResource(R.drawable.ic_barcode)
+        RECENT -> painterResource(R.drawable.ic_history)
+        MANUAL -> rememberVectorPainter(Icons.Default.Edit)
+    }
+}
+
 /**
  * "+" FAB that expands into the add actions: the + turns into a ×, the actions rise one after
  * the other starting from the closest one.
@@ -687,17 +750,11 @@ private fun EntryRow(
 private fun AddFab(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
-    onPhoto: () -> Unit,
-    onBarcode: () -> Unit,
-    onManual: () -> Unit,
-    onRecent: () -> Unit,
+    onAction: (AddAction) -> Unit,
 ) {
-    val actions = listOf(
-        Triple(stringResource(R.string.fab_photo), painterResource(R.drawable.ic_photo_camera), onPhoto),
-        Triple(stringResource(R.string.fab_barcode), painterResource(R.drawable.ic_barcode), onBarcode),
-        Triple(stringResource(R.string.fab_recent), painterResource(R.drawable.ic_history), onRecent),
-        Triple(stringResource(R.string.fab_manual), rememberVectorPainter(Icons.Default.Edit), onManual),
-    )
+    val actions = AddAction.entries.map { action ->
+        Triple(stringResource(action.labelRes), action.icon()) { onAction(action) }
+    }
     val rotation by animateFloatAsState(
         targetValue = if (expanded) 135f else 0f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),

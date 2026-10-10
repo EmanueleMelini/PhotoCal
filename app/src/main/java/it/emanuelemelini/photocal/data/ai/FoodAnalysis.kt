@@ -33,7 +33,12 @@ data class AnalyzedFood(
     val confidence: String? = null,
     /** Code of the matching CREA food (empty if none or if the tables are disabled). */
     @SerialName("crea_code") val creaCode: String? = null,
+    /** One of [MEALS], only for the description of a day; null when the text doesn't say. */
+    val meal: String? = null,
 )
+
+/** Values of [AnalyzedFood.meal]: language-neutral, like the confidence. */
+internal val MEALS = listOf("breakfast", "lunch", "dinner", "snack")
 
 /** responseSchema (the OpenAPI subset used by Gemini) that constrains the response to [FoodAnalysis]. */
 internal val GEMINI_FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
@@ -62,10 +67,16 @@ internal val GEMINI_FOOD_ANALYSIS_SCHEMA: JsonObject = buildJsonObject {
                             add("low")
                         }
                     }
+                    putJsonObject("meal") {
+                        put("type", "STRING")
+                        put("nullable", true)
+                        put("description", "Meal of the food, only when describing a day")
+                        putJsonArray("enum") { MEALS.forEach { add(it) } }
+                    }
                 }
                 val fields = listOf("name", "grams", "kcal", "protein_g", "carbs_g", "fat_g", "confidence", "crea_code")
                 // Fiber, sugars and salt are optional: the model leaves them out when unsure
-                val optional = listOf("fiber_g", "sugars_g", "salt_g")
+                val optional = listOf("fiber_g", "sugars_g", "salt_g", "meal")
                 putJsonArray("required") { fields.forEach { add(it) } }
                 putJsonArray("propertyOrdering") { (fields + optional).forEach { add(it) } }
             }
@@ -119,11 +130,23 @@ internal val FOOD_ANALYSIS_JSON_SCHEMA: JsonObject = buildJsonObject {
                             add("low")
                         }
                     }
+                    putJsonObject("meal") {
+                        putJsonArray("anyOf") {
+                            add(
+                                buildJsonObject {
+                                    put("type", "string")
+                                    putJsonArray("enum") { MEALS.forEach { add(it) } }
+                                }
+                            )
+                            add(buildJsonObject { put("type", "null") })
+                        }
+                        put("description", "Meal of the food, only when describing a day; null otherwise")
+                    }
                 }
                 putJsonArray("required") {
                     listOf(
                         "name", "grams", "kcal", "protein_g", "carbs_g", "fat_g",
-                        "fiber_g", "sugars_g", "salt_g", "crea_code", "confidence",
+                        "fiber_g", "sugars_g", "salt_g", "crea_code", "confidence", "meal",
                     ).forEach { add(it) }
                 }
                 put("additionalProperties", false)

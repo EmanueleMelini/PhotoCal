@@ -16,10 +16,10 @@ enum class AiProvider(
     val keyUrl: String?,
     @StringRes val keyLinkRes: Int?,
 ) {
-    /** Latest stable Flash model with a free tier (checked on ai.google.dev, September 2026). */
+    /** Latest stable Flash model with a free tier (checked on ai.google.dev, October 2026). */
     GEMINI(
         R.string.ai_provider_gemini, "gemini", "gemini-3.8-flash",
-        listOf("gemini-3.8-flash", "gemini-3.5-flash-lite"),
+        listOf("gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"),
         "https://aistudio.google.com/apikey", R.string.settings_get_api_key_gemini,
     ),
 

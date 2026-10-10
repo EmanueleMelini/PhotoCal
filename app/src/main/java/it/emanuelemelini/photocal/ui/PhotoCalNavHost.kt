@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.ui.barcode.BarcodeScreen
+import it.emanuelemelini.photocal.ui.describe.DescribeScreen
 import it.emanuelemelini.photocal.ui.entry.EntryScreen
 import it.emanuelemelini.photocal.ui.health.HealthPrivacyScreen
 import it.emanuelemelini.photocal.ui.history.HistoryScreen
@@ -56,9 +57,9 @@ data class EntryRoute(
 @Serializable
 object HealthPrivacyRoute
 
-/** Recent and favorite foods, to add one to day [dateEpochDay]. */
+/** Recent and favorite foods, to add one to day [dateEpochDay] ([meal]: [MealType] name to preselect). */
 @Serializable
-data class RecentFoodsRoute(val dateEpochDay: Long)
+data class RecentFoodsRoute(val dateEpochDay: Long, val meal: String? = null)
 
 /** Settings menu. */
 @Serializable
@@ -72,8 +73,16 @@ data class SettingsPageRoute(val page: String)
 @Serializable
 data class PhotoReviewRoute(val photoPath: String, val dateEpochDay: Long, val meal: String? = null)
 
+/** [meal]: [MealType] name to preselect, e.g. from the + of a meal in Today. */
 @Serializable
-data class BarcodeRoute(val dateEpochDay: Long)
+data class BarcodeRoute(val dateEpochDay: Long, val meal: String? = null)
+
+/**
+ * Foods described with a text or by voice, for day [dateEpochDay]. With [meal] ([MealType]
+ * name) they all go to that meal; without it the AI splits them into meals.
+ */
+@Serializable
+data class DescribeRoute(val dateEpochDay: Long, val meal: String? = null)
 
 @Serializable
 object HistoryRoute
@@ -134,7 +143,7 @@ fun PhotoCalNavHost(
                 onRequestedPhotoHandled = { backStackEntry.savedStateHandle[KEY_TAKE_PHOTO] = null },
                 onOpenHistory = { navController.navigate(HistoryRoute) },
                 onOpenGoals = { navController.navigate(ProfileRoute) },
-                onAddManual = { date -> navController.navigate(EntryRoute(date.toEpochDay())) },
+                onAddManual = { date, meal -> navController.navigate(EntryRoute(date.toEpochDay(), meal = meal?.name)) },
                 onEditEntry = { entry ->
                     navController.navigate(EntryRoute(entry.date.toEpochDay(), entry.id))
                 },
@@ -143,8 +152,9 @@ fun PhotoCalNavHost(
                 onPhotoTaken = { path, date, meal ->
                     navController.navigate(PhotoReviewRoute(path, date.toEpochDay(), meal?.name))
                 },
-                onScanBarcode = { date -> navController.navigate(BarcodeRoute(date.toEpochDay())) },
-                onOpenRecent = { date -> navController.navigate(RecentFoodsRoute(date.toEpochDay())) },
+                onScanBarcode = { date, meal -> navController.navigate(BarcodeRoute(date.toEpochDay(), meal?.name)) },
+                onOpenRecent = { date, meal -> navController.navigate(RecentFoodsRoute(date.toEpochDay(), meal?.name)) },
+                onDescribe = { date, meal -> navController.navigate(DescribeRoute(date.toEpochDay(), meal?.name)) },
                 onShare = { date -> navController.navigate(ShareRoute(date.toEpochDay())) },
             )
         }
@@ -154,7 +164,7 @@ fun PhotoCalNavHost(
                 onDone = { navController.popBackStack() },
                 onManualEntry = { name ->
                     // Replaces the barcode screen: Back returns to Today
-                    navController.navigate(EntryRoute(route.dateEpochDay, prefillName = name)) {
+                    navController.navigate(EntryRoute(route.dateEpochDay, prefillName = name, meal = route.meal)) {
                         popUpTo<BarcodeRoute> { inclusive = true }
                     }
                 },
@@ -166,7 +176,7 @@ fun PhotoCalNavHost(
                 onBack = { navController.popBackStack() },
                 onPick = { food ->
                     // Replaces the list: Back from the form returns to Today
-                    navController.navigate(EntryRoute(route.dateEpochDay, savedFoodId = food.id)) {
+                    navController.navigate(EntryRoute(route.dateEpochDay, meal = route.meal, savedFoodId = food.id)) {
                         popUpTo<RecentFoodsRoute> { inclusive = true }
                     }
                 },
@@ -174,6 +184,12 @@ fun PhotoCalNavHost(
         }
         composable<PhotoReviewRoute> {
             PhotoReviewScreen(
+                onDone = { navController.popBackStack() },
+                onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
+            )
+        }
+        composable<DescribeRoute> {
+            DescribeScreen(
                 onDone = { navController.popBackStack() },
                 onOpenAiSettings = { navController.navigate(SettingsPageRoute(SettingsPage.AI.name)) },
             )
@@ -265,6 +281,7 @@ private fun screenName(destination: NavDestination): String = when {
     destination.hasRoute<SettingsPageRoute>() -> "settings_page"
     destination.hasRoute<PhotoReviewRoute>() -> "photo_review"
     destination.hasRoute<BarcodeRoute>() -> "barcode"
+    destination.hasRoute<DescribeRoute>() -> "describe"
     destination.hasRoute<HistoryRoute>() -> "history"
     destination.hasRoute<ProfileRoute>() -> "profile"
     destination.hasRoute<WeightRoute>() -> "weight"

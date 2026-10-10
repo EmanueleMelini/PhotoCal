@@ -83,7 +83,11 @@ class NewsMessagingService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, builder.build())
     }
 
-    /** Topics don't need the token: nothing to send anywhere. */
+    /**
+     * Topics don't need the token: nothing to send anywhere. Kept (although deprecated in the
+     * SDK) because lint asks every messaging service to handle token refreshes.
+     */
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onNewToken(token: String) = Unit
 
     companion object {

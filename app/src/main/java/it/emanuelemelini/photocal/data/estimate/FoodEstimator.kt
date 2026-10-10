@@ -5,6 +5,7 @@ import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.data.ai.AiService
 import it.emanuelemelini.photocal.data.ai.AnalyzedFood
 import it.emanuelemelini.photocal.data.ai.FoodAnalysis
+import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import kotlinx.coroutines.flow.first
 
@@ -34,6 +35,8 @@ data class EstimatedFood(
     val aiSaltG: Double?,
     val aiPerGram: PerGram?,
     val crea: CreaFood?,
+    /** Meal the AI put the food in, only for the description of a day. */
+    val meal: MealType? = null,
 ) {
     val creaPerGram: PerGram?
         get() = crea?.let {
@@ -64,6 +67,9 @@ class FoodEstimator(
     suspend fun estimateFromText(description: String, quantity: String?): FoodEstimate =
         resolve(aiService.estimateFromText(description, quantity, creaCatalog()))
 
+    suspend fun describeDay(text: String, splitMeals: Boolean): FoodEstimate =
+        resolve(aiService.describeDay(text, splitMeals, creaCatalog()))
+
     private suspend fun creaCatalog(): String? =
         if (settingsRepository.settings.first().useCrea) creaTable.catalog() else null
 
@@ -90,6 +96,13 @@ class FoodEstimator(
             },
             // The code picked by the AI counts only if it really exists in the table
             crea = creaCode?.takeIf { it.isNotBlank() }?.let { creaTable.get(it) },
+            meal = when (meal) {
+                "breakfast" -> MealType.BREAKFAST
+                "lunch" -> MealType.LUNCH
+                "dinner" -> MealType.DINNER
+                "snack" -> MealType.SNACK
+                else -> null
+            },
         )
     }
 }

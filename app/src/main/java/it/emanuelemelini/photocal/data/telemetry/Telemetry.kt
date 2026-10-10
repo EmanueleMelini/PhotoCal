@@ -1,7 +1,7 @@
 package it.emanuelemelini.photocal.data.telemetry
 
 import android.content.Context
-import androidx.core.os.bundleOf
+import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.ConsentStatus
 import com.google.firebase.analytics.FirebaseAnalytics.ConsentType
@@ -79,24 +79,27 @@ class Telemetry(context: Context) {
     fun logScreen(name: String) {
         analytics.logEvent(
             FirebaseAnalytics.Event.SCREEN_VIEW,
-            bundleOf(FirebaseAnalytics.Param.SCREEN_NAME to name, FirebaseAnalytics.Param.SCREEN_CLASS to name),
+            Bundle().apply {
+                putString(FirebaseAnalytics.Param.SCREEN_NAME, name)
+                putString(FirebaseAnalytics.Param.SCREEN_CLASS, name)
+            },
         )
     }
 
     /** A new diary entry: only how it was added. */
     fun logFoodAdded(source: Source) {
-        analytics.logEvent(EVENT_FOOD_ADDED, bundleOf(PARAM_SOURCE to source.name.lowercase()))
+        analytics.logEvent(EVENT_FOOD_ADDED, Bundle().apply { putString(PARAM_SOURCE, source.name.lowercase()) })
     }
 
     /** One meal analysis by the AI ([photo] or text) and how it ended; [error] null = success. */
     fun logAiRequest(provider: AiProvider, photo: Boolean, error: AiException?) {
         analytics.logEvent(
             EVENT_AI_REQUEST,
-            bundleOf(
-                PARAM_PROVIDER to provider.prefKey,
-                PARAM_KIND to if (photo) "photo" else "text",
-                PARAM_OUTCOME to (error?.let(::outcome) ?: "success"),
-            ),
+            Bundle().apply {
+                putString(PARAM_PROVIDER, provider.prefKey)
+                putString(PARAM_KIND, if (photo) "photo" else "text")
+                putString(PARAM_OUTCOME, error?.let(::outcome) ?: "success")
+            },
         )
     }
 

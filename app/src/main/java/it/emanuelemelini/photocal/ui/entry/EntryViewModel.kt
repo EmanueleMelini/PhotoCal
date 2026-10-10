@@ -68,6 +68,20 @@ data class EntryForm(
     /** Grams (= ml for liquids) matching the quantity in the chosen unit. */
     val grams: Double? get() = parseDecimal(quantity)?.let { unit.grams(it, parseDecimal(pieceGrams)) }
 
+    fun sameQuantityAs(other: EntryForm?) =
+        other != null && quantity == other.quantity && unit == other.unit && pieceGrams == other.pieceGrams
+
+    /**
+     * The quantity counts as the user's (and the AI estimate keeps it) when typed or changed
+     * by them, or when the food is still the one of [source], the form it came from (entry
+     * being edited, saved food, AI estimate; null if typed by the user). A different food
+     * with an untouched quantity gets the grams estimated by the AI.
+     */
+    fun quantityIsTheUsers(source: EntryForm?): Boolean {
+        if (source == null) return true
+        return !sameQuantityAs(source) || name.trim().equals(source.name.trim(), ignoreCase = true)
+    }
+
     private fun isValidOptional(text: String) =
         text.isBlank() || parseDecimal(text)?.let { it >= 0 } == true
 }
@@ -129,6 +143,12 @@ class EntryViewModel(
      */
     private var perGram: PerGram? = null
 
+    /**
+     * Form whose quantity wasn't typed by the user: the entry being edited, the saved food or
+     * the last AI estimate. null when the user typed the quantity themselves.
+     */
+    private var quantitySource: EntryForm? = null
+
     /** true if kcal and macros update by themselves when the quantity changes. */
     val autoScales: Boolean get() = perGram != null
 
@@ -141,6 +161,7 @@ class EntryViewModel(
                 original?.let {
                     form = it.toForm()
                     loadedForm = form
+                    quantitySource = form
                     if (it.servingUnit == ServingUnit.PIECE) units = ServingUnit.entries
                     photoPath = it.photoPath
                     perGram = it.grams?.takeIf { g -> g > 0 }?.let { g ->
@@ -179,6 +200,7 @@ class EntryViewModel(
         sourceFood = food
         suggestions = emptyList()
         form = food.toForm(form.mealType)
+        quantitySource = form
         perGram = PerGram(
             food.kcalPer100 / 100, food.proteinPer100?.div(100), food.carbsPer100?.div(100), food.fatPer100?.div(100),
             food.fiberPer100?.div(100), food.sugarsPer100?.div(100), food.saltPer100?.div(100),
@@ -213,7 +235,7 @@ class EntryViewModel(
         }
         if (aiEstimate == AiEstimate.Running) return
         aiEstimate = AiEstimate.Running
-        val userGrams = current.grams?.takeIf { current.quantityValid }
+        val userGrams = current.grams?.takeIf { current.quantityValid && current.quantityIsTheUsers(quantitySource) }
         val quantityText = userGrams?.let { describeQuantity(current, it) }
 
         viewModelScope.launch {
@@ -245,8 +267,8 @@ class EntryViewModel(
                     form = if (userGrams != null) {
                         form.scaledTo(userGrams, ratios)
                     } else {
-                        form.copy(quantity = totalGrams.formatAmount(), unit = ServingUnit.GRAMS)
-                            .scaledTo(totalGrams, ratios)
+                        form.copy(quantity = totalGrams.formatAmount(), unit = ServingUnit.GRAMS, pieceGrams = "", pieceLabel = null)
+                            .scaledTo(totalGrams, ratios).also { quantitySource = it }
                     }
                     AiEstimate.Done(
                         notes = result.notes.ifBlank { null },
@@ -338,8 +360,6 @@ class EntryViewModel(
         }
     }
 
-    private fun EntryForm.sameQuantityAs(other: EntryForm?) =
-        other != null && quantity == other.quantity && unit == other.unit && pieceGrams == other.pieceGrams
 
     private fun EntryForm.scaledTo(grams: Double, ratios: PerGram) = copy(
         kcal = (ratios.kcal * grams).formatAmount(),

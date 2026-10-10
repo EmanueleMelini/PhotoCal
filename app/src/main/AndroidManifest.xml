@@ -16,9 +16,13 @@
     <uses-permission android:name="android.permission.health.WRITE_WEIGHT" />
     <uses-permission android:name="android.permission.health.WRITE_HYDRATION" />
 
-    <!-- Health Connect app on Android 13 and lower -->
     <queries>
+        <!-- Health Connect app on Android 13 and lower -->
         <package android:name="com.google.android.apps.healthdata" />
+        <!-- Voice typing of the meals: the microphone shows only if a recognizer exists -->
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
     </queries>
 
     <application

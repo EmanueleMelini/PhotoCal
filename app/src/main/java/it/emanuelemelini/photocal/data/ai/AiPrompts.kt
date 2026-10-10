@@ -27,6 +27,7 @@ internal object AiPrompts {
           and the portion.
         - If the photo contains no food or drinks, return an empty items list and explain why
           in notes.
+        - meal: null.
         - Write short food names and notes in $language. notes: at most two sentences.
     """.trimIndent()
 
@@ -48,8 +49,50 @@ internal object AiPrompts {
           in notes.
         - If the description isn't about food or drinks, return an empty items list and
           explain why in notes.
+        - meal: null.
         - Write short food names and notes in $language. notes: at most two sentences.
     """.trimIndent()
+
+    /**
+     * What the user ate in a day, or in one meal when [splitMeals] is false: the text is
+     * often dictated, so it can lack punctuation and have transcription errors.
+     */
+    fun daySystem(language: String, splitMeals: Boolean): String {
+        val what = if (splitMeals) "during a day, possibly over several meals" else "in one meal"
+        val mealRule = if (splitMeals) {
+            """
+            - meal: "breakfast", "lunch", "dinner" or "snack" (mid-morning or afternoon snacks,
+              aperitif, after dinner), as the text says or clearly implies (e.g. "this
+              morning", "tonight"). Foods listed after a meal belong to it until another one
+              is named. null when the text doesn't say.
+            """.trimIndent()
+        } else {
+            "- meal: null."
+        }
+        return """
+            |You are a nutritionist with deep knowledge of Italian cuisine. You receive a text,
+            |often dictated by voice, where the user lists what they ate or drank $what.
+            |It can be in any language, lack punctuation or contain speech recognition errors:
+            |read it as the user meant it.
+            |
+            |Rules:
+            |- One item for each distinct food or drink. A food eaten in two meals is two items.
+            |- If a quantity is given (grams, ml, pieces, slices, spoons, cups, glasses...) use it;
+            |  otherwise use a standard Italian portion.
+            |- grams: weight of the portion in grams (for drinks, ml).
+            |- Compute kcal, protein, carbohydrates and fat (in grams) with standard nutrition
+            |  values (CREA or USDA tables), for the food as eaten.
+            |- When the tables give them, also add fiber, sugars and salt (in grams); leave them
+            |  out if unknown.
+            |- Plain water: leave it out, it is tracked elsewhere.
+            |$mealRule
+            |- If the description is ambiguous, pick the most common interpretation and say so
+            |  in notes.
+            |- If the text isn't about food or drinks, return an empty items list and explain why
+            |  in notes.
+            |- Write short food names and notes in $language. notes: at most two sentences.
+        """.trimMargin()
+    }
 
     /**
      * The water bottle of the user, answered with the meal JSON (the only format every service
@@ -66,7 +109,7 @@ internal object AiPrompts {
         - grams: its capacity in ml. Use the capacity printed on the container or label when
           readable; otherwise estimate it from the shape and from common sizes (330, 500,
           750 ml, 1 or 1.5 L...).
-        - kcal, protein_g, carbs_g and fat_g: 0. crea_code: empty.
+        - kcal, protein_g, carbs_g and fat_g: 0. crea_code: empty. meal: null.
         - confidence: "high" if the capacity is printed and readable, "medium" for a known
           model, "low" for an estimate from the shape.
         - If the photo shows no drinking container, return an empty items list and explain
@@ -94,6 +137,8 @@ internal object AiPrompts {
             append(quantity)
         }
     }
+
+    fun dayUserPrompt(text: String): String = "What I ate: ${text.trim()}"
 
     const val BOTTLE_USER_PROMPT = "How much does this bottle hold?"
 

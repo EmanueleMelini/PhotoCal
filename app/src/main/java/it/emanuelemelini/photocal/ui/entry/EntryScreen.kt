@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,6 +60,7 @@ import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
 import it.emanuelemelini.photocal.ui.components.NumberField
 import it.emanuelemelini.photocal.ui.components.QuantityRow
+import it.emanuelemelini.photocal.ui.components.SaveBar
 import it.emanuelemelini.photocal.ui.components.errorText
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.quantityLabel
@@ -101,6 +102,9 @@ fun EntryScreen(
                 },
             )
         },
+        bottomBar = {
+            if (!viewModel.isLoading) SaveBar(onClick = viewModel::save)
+        },
     ) { padding ->
         if (viewModel.isLoading) {
             Box(
@@ -116,6 +120,7 @@ fun EntryScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .padding(padding)
+                .consumeWindowInsets(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
@@ -242,13 +247,6 @@ fun EntryScreen(
                     modifier = Modifier.weight(1f),
                 )
             }
-
-            Button(
-                onClick = viewModel::save,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-            ) { Text(stringResource(R.string.action_save)) }
         }
     }
 

@@ -63,12 +63,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          apk="PhotoCal-$VERSION.apk"
+          apk="PhotoKCal-$VERSION.apk"
           cp app/build/outputs/apk/release/app-release.apk "$apk"
-          gh release create "$GITHUB_REF_NAME" "$apk" --title "PhotoCal $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+          gh release create "$GITHUB_REF_NAME" "$apk" --title "PhotoKCal $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
 
       # Push notification to the app users, in their language. "[no-push]" in the tag message
-      # (git tag -a vX.Y.Z -m "PhotoCal X.Y.Z [no-push]") skips it, e.g. for a small fix.
+      # (git tag -a vX.Y.Z -m "PhotoKCal X.Y.Z [no-push]") skips it, e.g. for a small fix.
       # actions/checkout keeps only the commit: the annotated tag is fetched to read its message.
       - name: Check whether to announce the release
         id: announce

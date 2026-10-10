@@ -1,12 +1,17 @@
-# PhotoCal
+# PhotoKCal
 
 App Android personale per contare le calorie giornaliere: diario manuale, riconoscimento
-dei pasti da foto con l'AI che scegli (Gemini, OpenAI, Claude o un servizio compatibile
-OpenAI), scansione barcode con Open Food Facts. Diario solo sul telefono, nessun backend;
+dei pasti da foto o da una descrizione scritta o dettata con l'AI che scegli (Gemini, OpenAI,
+Claude o un servizio compatibile OpenAI), scansione barcode con Open Food Facts. Diario solo sul telefono, nessun backend;
 Firebase per le notifiche con le novità e, solo con il consenso, statistiche e report dei crash. Il piano completo è in [PLAN.md](PLAN.md).
 
 Sito: **[photocal.emanuelemelini.dev](https://photocal.emanuelemelini.dev)**, con la presentazione
 dell'app e il download dell'ultima versione.
+
+**Nome**: dalla 1.8.0 l'app si chiama PhotoKCal in tutto ciò che vede l'utente (nome dell'app,
+testi, sito, Release e APK `PhotoKCal-X.Y.Z.apk`). Package `it.emanuelemelini.photocal`,
+repository, dominio, nomi delle classi e chiavi restano "photocal": cambiarli romperebbe gli
+aggiornamenti, i link e le impostazioni salvate.
 
 ## Stato
 
@@ -47,7 +52,24 @@ dell'app e il download dell'ultima versione.
   Le capienze sono in `ServingUnit.kt`.
 - **Stima AI da testo**: nell'inserimento manuale "Stima con AI" usa nome e quantità
   (es. "2 fette di pane integrale"). Dopo la stima, cambiando la quantità kcal e macro si
-  ricalcolano; se li modifichi a mano, comandano i tuoi valori.
+  ricalcolano; se li modifichi a mano, comandano i tuoi valori. La quantità va all'AI (e resta)
+  solo se è dell'utente: scritta o cambiata da lui, oppure con lo stesso alimento da cui veniva
+  (voce modificata, alimento salvato, stima precedente). Se cambi alimento senza toccare la
+  quantità, i grammi li stima l'AI (`EntryForm.quantityIsTheUsers`).
+- **Descrivi i pasti** (`ui/describe`): dal + in basso o dal + di un pasto, si scrive o si detta
+  cosa si è mangiato. La dettatura usa `RecognizerIntent` (il riconoscimento vocale di sistema,
+  nessun permesso del microfono; il pulsante compare solo se c'è un riconoscitore, vedi `<queries>`
+  nel manifest) e aggiunge il testo nel campo. L'AI (`AiPrompts.daySystem`) restituisce un
+  alimento per voce con il campo `meal` (breakfast/lunch/dinner/snack o null) nello stesso JSON
+  delle altre analisi; senza pasto nel testo si usa quello dell'ora. Dal + di un pasto tutto va
+  in quel pasto e all'AI non si chiede di dividerli. La revisione riusa le schede della foto
+  (`ReviewItemCard`), raggruppate per pasto, con il pasto di ogni alimento modificabile; le voci
+  si salvano con `Source.MANUAL`.
+- **Home**: Colazione, Pranzo, Cena e Spuntino sono sempre visibili; il + accanto al titolo apre
+  le stesse azioni del + in basso (`AddAction`) con il pasto già scelto, passato nelle route
+  (`EntryRoute`, `BarcodeRoute`, `RecentFoodsRoute`, `DescribeRoute`, `PhotoReviewRoute`).
+- **Tasto Salva**: nelle schermate di inserimento (manuale, foto, barcode, descrizione) è una
+  barra fissa in basso (`SaveBar`) che sale sopra la tastiera e mostra il totale delle kcal.
 - **Storico**: grafico 7/30 giorni (Canvas), media, giorni registrati ed entro l'obiettivo,
   calcolati sui giorni conclusi. I colori del grafico sono fissi e verificati per il daltonismo.
 - **Tema**: Sistema / Chiaro / Scuro / Viola / Viola scuro in Impostazioni. I primi tre usano
@@ -108,7 +130,7 @@ dell'app e il download dell'ultima versione.
   scorciatoia dell'icona): si condivide il giorno mostrato o i 7 giorni che finiscono lì,
   scegliendo cosa nascondere (foto, obiettivi, calorie, macro, acqua, pasti, peso; di default
   si vede tutto) con l'anteprima esatta di ciò che vedrà chi riceve. Il link
-  `https://photocal.emanuelemelini.dev/d#…` apre PhotoCal in una schermata di sola lettura;
+  `https://photocal.emanuelemelini.dev/d#…` apre PhotoKCal in una schermata di sola lettura;
   nulla viene salvato nel diario di chi lo apre. I dati stanno dopo il `#` (il browser non li
   manda al server), come JSON compresso in base64url con una firma HMAC-SHA256: un link
   modificato o troncato viene rifiutato. La firma protegge dalle modifiche a mano, non da chi
@@ -128,11 +150,11 @@ dell'app e il download dell'ultima versione.
   predefinito) e `res/values-en/strings.xml`; dettagli in
   [docs/LOCALIZATION_PLAN.md](docs/LOCALIZATION_PLAN.md).
 - **Aggiornamenti**: all'avvio (solo nelle build release, al massimo una volta al giorno)
-  PhotoCal legge l'ultima Release dall'API pubblica di GitHub (senza token) e, se la versione è
+  PhotoKCal legge l'ultima Release dall'API pubblica di GitHub (senza token) e, se la versione è
   più nuova di quella installata, propone "Aggiorna" o "Più tardi" (che vuol dire: ne riparliamo
   domani). Il controllo si può lanciare anche da Impostazioni → Info, in ogni build. "Aggiorna"
   scarica l'APK dentro una sessione di `PackageInstaller` e Android chiede la conferma; serve il
-  permesso "Installa app sconosciute" per PhotoCal, chiesto solo allora. Senza il permesso, o se
+  permesso "Installa app sconosciute" per PhotoKCal, chiesto solo allora. Senza il permesso, o se
   qualcosa va storto, resta il link per scaricare l'APK dal browser. Android rifiuta un APK con
   una firma diversa da quella dell'app installata, quindi sopra una build debug l'aggiornamento
   non si installa.
@@ -249,7 +271,7 @@ push su `news-it` e `news-en` con gli stessi testi del promemoria "Nuova version
 (`reminder_update_title` / `reminder_update_text`, letti da `.github/scripts/notify_update.py`);
 il tocco apre il dialogo dell'aggiornamento (`launch_action=show_update`). Per non mandarla, ad
 esempio per una piccola correzione, scrivi `[no-push]` nel messaggio del tag:
-`git tag -a v1.6.1 -m "PhotoCal 1.6.1 [no-push]"`. Il workflow **Notify update** (Actions → Run
+`git tag -a v1.6.1 -m "PhotoKCal 1.6.1 [no-push]"`. Il workflow **Notify update** (Actions → Run
 workflow, solo da `master`) la manda a mano: `debug` su `news-debug` (solo build debug) per
 provarla, `users` agli utenti. Anteprima dei messaggi: `python3 .github/scripts/notify_update.py 1.7.0 --dry-run`.
 

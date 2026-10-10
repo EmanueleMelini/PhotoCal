@@ -4,6 +4,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -52,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -64,9 +66,9 @@ import it.emanuelemelini.photocal.data.crea.CreaTable
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.MealSelector
+import it.emanuelemelini.photocal.ui.components.SaveBar
 import it.emanuelemelini.photocal.ui.components.shimmer
 import it.emanuelemelini.photocal.ui.components.staggeredEntrance
-import it.emanuelemelini.photocal.ui.formatKcal
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,11 +110,22 @@ fun PhotoReviewScreen(
                 },
             )
         },
+        bottomBar = {
+            // Shown with the first food, from the AI or added by hand
+            AnimatedVisibility(
+                visible = viewModel.items.isNotEmpty(),
+                enter = slideInVertically { it } + fadeIn(),
+                exit = slideOutVertically { it } + fadeOut(),
+            ) {
+                SaveBar(onClick = viewModel::save, enabled = !isAnalyzing, kcal = viewModel.totalKcal)
+            }
+        },
     ) { padding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .padding(padding)
+                .consumeWindowInsets(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
@@ -235,15 +248,6 @@ fun PhotoReviewScreen(
                 if (viewModel.items.isNotEmpty()) {
                     MealSelector(selected = viewModel.mealType, onSelect = viewModel::onMealTypeChange)
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.label_total), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                        Text(
-                            "${viewModel.totalKcal.formatKcal()} kcal",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-
                     if (viewModel.usesCrea) {
                         Text(
                             stringResource(R.string.photo_nutrition_source, CreaTable.SOURCE),
@@ -251,12 +255,6 @@ fun PhotoReviewScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-
-                    Button(
-                        onClick = viewModel::save,
-                        enabled = !isAnalyzing,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) { Text(stringResource(R.string.action_save)) }
                 }
             }
         }
@@ -281,7 +279,7 @@ fun PhotoReviewScreen(
 }
 
 @Composable
-private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
+fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
     if (isAnalyzing) {
         CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(12.dp))
@@ -291,9 +289,10 @@ private fun AnalyzeButtonContent(isAnalyzing: Boolean, label: String) {
     }
 }
 
+/** AI error, with retry / settings / another model and manual entry. Also used by the description of a day. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ErrorCard(
+fun ErrorCard(
     message: UiText,
     needsSettings: Boolean,
     canRetry: Boolean,
@@ -328,13 +327,16 @@ private fun ErrorCard(
     }
 }
 
+/** One food to review, also used by the description of a day. */
 @Composable
-private fun ReviewItemCard(
+fun ReviewItemCard(
     item: ReviewItem,
     showErrors: Boolean,
     onChange: ((ReviewItem) -> ReviewItem) -> Unit,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
+    /** Shown at the bottom, e.g. the meal of the food. */
+    footer: (@Composable () -> Unit)? = null,
 ) {
     OutlinedCard(modifier.fillMaxWidth()) {
         Column(
@@ -385,6 +387,7 @@ private fun ReviewItemCard(
                 SmallNumberField(item.fat, { t -> onChange { it.withFat(t) } }, stringResource(R.string.entry_fat_g),
                     showErrors && !item.fatValid, Modifier.weight(1f))
             }
+            footer?.invoke()
         }
     }
 }

@@ -196,7 +196,7 @@ class PhotoReviewViewModel(
         viewModelScope.launch {
             status = try {
                 val result = foodEstimator.analyzePhoto(image, notes)
-                items = result.items.map { it.toReviewItem() }
+                items = result.items.map { it.toReviewItem(nextKey++) }
                 aiNotes = result.notes.ifBlank { null }
                 hasAnalyzed = true
                 showErrors = false
@@ -265,24 +265,25 @@ class PhotoReviewViewModel(
         // Analysis abandoned: the photo is no longer needed
         if (!saved) photoStorage.delete(photoPath)
     }
+}
 
-    private fun EstimatedFood.toReviewItem(): ReviewItem {
-        val g = grams.takeIf { it > 0 }
-        val base = ReviewItem(
-            key = nextKey++,
-            name = name,
-            grams = g?.formatAmount().orEmpty(),
-            kcal = aiKcal.formatAmount(),
-            protein = aiProteinG?.formatAmount().orEmpty(),
-            carbs = aiCarbsG?.formatAmount().orEmpty(),
-            fat = aiFatG?.formatAmount().orEmpty(),
-            confidence = confidence,
-            perGram = aiPerGram,
-            aiPerGram = aiPerGram,
-            creaPerGram = creaPerGram,
-            creaName = crea?.name,
-        )
-        // If there is a CREA food, start from its values
-        return if (creaPerGram != null) base.withCrea(true) else base
-    }
+/** Row to review for an AI estimate, starting from the CREA values when there are some. */
+fun EstimatedFood.toReviewItem(key: Long): ReviewItem {
+    val g = grams.takeIf { it > 0 }
+    val base = ReviewItem(
+        key = key,
+        name = name,
+        grams = g?.formatAmount().orEmpty(),
+        kcal = aiKcal.formatAmount(),
+        protein = aiProteinG?.formatAmount().orEmpty(),
+        carbs = aiCarbsG?.formatAmount().orEmpty(),
+        fat = aiFatG?.formatAmount().orEmpty(),
+        confidence = confidence,
+        perGram = aiPerGram,
+        aiPerGram = aiPerGram,
+        creaPerGram = creaPerGram,
+        creaName = crea?.name,
+    )
+    // If there is a CREA food, start from its values
+    return if (creaPerGram != null) base.withCrea(true) else base
 }
