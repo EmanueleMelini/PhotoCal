@@ -160,6 +160,22 @@ private val PurpleChart = ChartColors(withinGoal = Color(0xFF1E9BD7), overGoal =
 
 val LocalChartColors = staticCompositionLocalOf { GreenLightChart }
 
+/**
+ * Quality score bands, poor -> excellent. Fixed in every theme, like status colors: checked for
+ * color blindness with the dataviz validator on the light and dark surfaces, and always shown
+ * with the score number and the band name. The text on each fill keeps at least 4.5:1.
+ */
+object QualityColors {
+    val poor = Color(0xFFC53634)
+    val mediocre = Color(0xFFB97F2B)
+    val good = Color(0xFF05A388)
+    val excellent = Color(0xFF0A7520)
+    /** Text on [poor] and [excellent]. */
+    val onDeepFill = Color.White
+    /** Text on [mediocre] and [good]. */
+    val onBrightFill = Color(0xFF1A1C18)
+}
+
 @Composable
 fun PhotoCalTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,

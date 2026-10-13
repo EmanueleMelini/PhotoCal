@@ -190,6 +190,93 @@
     <string name="label_salt_g">Salt g</string>
     <string name="entry_extras_optional">Other values (optional)</string>
     <string name="barcode_scan_another">Scan another product</string>
+    <!-- Quality score of the scanned products -->
+    <string name="quality_title">Quality score</string>
+    <string name="quality_details">Details</string>
+    <string name="quality_band_poor">Poor</string>
+    <string name="quality_band_mediocre">Mediocre</string>
+    <string name="quality_band_good">Good</string>
+    <string name="quality_band_excellent">Excellent</string>
+    <plurals name="quality_badge_description">
+        <item quantity="one">Quality score %1$d out of 100, %2$s</item>
+        <item quantity="other">Quality score %1$d out of 100, %2$s</item>
+    </plurals>
+    <string name="quality_header">%1$s · %2$d/100</string>
+    <string name="quality_points">%1$d/%2$d</string>
+    <string name="quality_unrated_not_applicable">No score for this kind of product (for example coffee, tea, spices or alcohol).</string>
+    <string name="quality_unrated_missing_nutrition">No score: Open Food Facts lacks the nutrition facts or the category of the product.</string>
+    <string name="quality_unrated_missing_ingredients">No score: Open Food Facts lacks the ingredient list, so the additives are unknown.</string>
+    <string name="quality_capped">The product contains a high-risk additive, so the score can\'t go above %1$d.</string>
+    <string name="quality_section_nutrition">Nutrition</string>
+    <string name="quality_section_additives">Additives</string>
+    <string name="quality_section_organic">Organic</string>
+    <string name="quality_section_processing">Processing</string>
+    <string name="quality_per_100g">Values per 100 g</string>
+    <string name="quality_per_100ml">Values per 100 ml</string>
+    <string name="quality_water">Water: full marks for nutrition.</string>
+    <string name="quality_no_nutrition">Nutrition facts not available.</string>
+    <string name="quality_no_ingredients">Ingredients not available.</string>
+    <string name="quality_no_additives">No additives.</string>
+    <string name="quality_sweeteners">Contains sweeteners</string>
+    <string name="quality_risk_high">High risk</string>
+    <string name="quality_risk_moderate">Moderate risk</string>
+    <string name="quality_risk_none">No risk reported</string>
+    <string name="quality_risk_explanation">The risk is that some population groups exceed the acceptable daily intake, according to the EFSA re-evaluations.</string>
+    <string name="quality_organic_yes">Organic product</string>
+    <string name="quality_organic_no">Not organic</string>
+    <string name="quality_nova">%1$s (NOVA %2$d)</string>
+    <string name="quality_nova_note">Extra information: it doesn\'t count in the score.</string>
+    <string name="quality_method_title">How it is computed</string>
+    <string name="quality_method">Nutrition, 60 points: the Nutri-Score 2023 algorithm on the values per 100 g or 100 ml. Additives, 30 points: −15 for each high-risk additive and −8 for each moderate-risk additive according to EFSA; with a high-risk additive the score can\'t go above 49. Organic, 10 points. Bands: 0–24 poor, 25–49 mediocre, 50–74 good, 75–100 excellent.</string>
+    <string name="quality_disclaimer">This is an indicative, independent rating by PhotoKCal, based on the available data: it isn\'t approved by health authorities and isn\'t medical advice. Diet is only one part of a healthy lifestyle, together with exercise, sleep and other factors.</string>
+    <string name="quality_source">Data: Open Food Facts (ODbL license) and EFSA re-evaluations of food additives.</string>
+    <string name="quality_open_off">View on Open Food Facts</string>
+    <string name="quality_day_title">Quality of packaged products</string>
+    <plurals name="quality_day_products">
+        <item quantity="one">%1$d product rated</item>
+        <item quantity="other">average of %1$d products, weighted by calories</item>
+    </plurals>
+    <string-array name="quality_energy">
+        <item>Low in calories</item>
+        <item>Average calories</item>
+        <item>High in calories</item>
+    </string-array>
+    <string-array name="quality_sugars">
+        <item>Low in sugar</item>
+        <item>Average sugar</item>
+        <item>High in sugar</item>
+    </string-array>
+    <string-array name="quality_saturated_fat">
+        <item>Low in saturated fat</item>
+        <item>Average saturated fat</item>
+        <item>High in saturated fat</item>
+    </string-array>
+    <string-array name="quality_salt">
+        <item>Low in salt</item>
+        <item>Average salt</item>
+        <item>High in salt</item>
+    </string-array>
+    <string-array name="quality_proteins">
+        <item>Little protein</item>
+        <item>Good amount of protein</item>
+        <item>High in protein</item>
+    </string-array>
+    <string-array name="quality_fiber">
+        <item>Little fiber</item>
+        <item>Good amount of fiber</item>
+        <item>High in fiber</item>
+    </string-array>
+    <string-array name="quality_fruits_vegetables">
+        <item>Little fruit, vegetables and legumes</item>
+        <item>Some fruit, vegetables or legumes</item>
+        <item>Rich in fruit, vegetables or legumes</item>
+    </string-array>
+    <string-array name="quality_nova">
+        <item>Unprocessed or minimally processed</item>
+        <item>Processed culinary ingredient</item>
+        <item>Processed food</item>
+        <item>Ultra-processed food</item>
+    </string-array>
     <string name="history_title">History</string>
     <string name="history_average">Daily average</string>
     <string name="history_logged_days">Days logged</string>
@@ -308,6 +395,7 @@
         <item>Sugars g</item>
         <item>Salt g</item>
         <item>Source</item>
+        <item>Barcode</item>
     </string-array>
     <plurals name="today_steps">
         <item quantity="one">%1$s step</item>
@@ -593,6 +681,12 @@
     <string name="changelog_title">What\'s new</string>
     <string name="changelog_title_version">What\'s new in PhotoKCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_9_0">
+        <item>Quality score of packaged products: when you scan a barcode you see a score from 0 to 100 (poor, mediocre, good, excellent). It counts nutritional quality (60 points), risky additives according to EFSA (30 points) and organic (10 points); a high-risk additive stops it at 49.</item>
+        <item>Tap the score for the details: nutritional strengths and weaknesses (sugars, salt, saturated fat, fiber, protein…), the list of additives with their risk, organic and how processed the product is, with the sources and how it is computed.</item>
+        <item>On the Home screen the score is shown next to the scanned products, together with the day\'s average quality of packaged products, weighted by calories. The score is also in Recent and favorites.</item>
+        <item>Products scanned before this version get their score too: the app looks it up on Open Food Facts in the background, one product at a time.</item>
+    </string-array>
     <string-array name="changelog_1_8_0">
         <item>PhotoCal is now called PhotoKCal: same app, same data, with the K of kcal in its name.</item>
         <item>Describe your meals: type or dictate with the microphone what you ate, even the whole day (\"cappuccino and a croissant for breakfast, pasta with tomato sauce for lunch…\"). The AI recognizes the foods, estimates the amounts and splits them into meals; you check and fix everything before saving.</item>

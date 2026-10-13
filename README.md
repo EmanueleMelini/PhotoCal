@@ -2,7 +2,8 @@
 
 App Android personale per contare le calorie giornaliere: diario manuale, riconoscimento
 dei pasti da foto o da una descrizione scritta o dettata con l'AI che scegli (Gemini, OpenAI,
-Claude o un servizio compatibile OpenAI), scansione barcode con Open Food Facts. Diario solo sul telefono, nessun backend;
+Claude o un servizio compatibile OpenAI), scansione barcode con Open Food Facts e punteggio qualità
+dei prodotti. Diario solo sul telefono, nessun backend;
 Firebase per le notifiche con le novità e, solo con il consenso, statistiche e report dei crash. Il piano completo è in [PLAN.md](PLAN.md).
 
 Sito: **[photocal.emanuelemelini.dev](https://photocal.emanuelemelini.dev)**, con la presentazione
@@ -173,6 +174,26 @@ aggiornamenti, i link e le impostazioni salvate.
 - **Barcode**: lo scanner è quello di Google Play services (nessun permesso fotocamera); il
   modulo viene scaricato all'installazione. I valori nutrizionali arrivano da
   [Open Food Facts](https://world.openfoodfacts.org) (API v3). Il codice si può anche digitare.
+  Come chiede Open Food Facts, lo User-Agent è `PhotoKCal/<versione> (photokcal@emanuelemelini.dev)`:
+  l'indirizzo, scritto anche nell'informativa privacy, è un inoltro di Cloudflare Email Routing
+  (dominio `emanuelemelini.dev`) verso la casella personale, che così non finisce nel codice.
+- **Punteggio qualità (barcode)**: ogni prodotto scansionato ha un voto da 0 a 100, con le fasce
+  scarso (0–24), mediocre, buono ed eccellente (75–100), simile a quello di app come Yuka ma con
+  dati aperti. Nutrizione 60 punti: i punti del Nutri-Score 2023 calcolati da Open Food Facts
+  (`nutriscore_score`), messi in modo continuo dentro la fascia della lettera, con le soglie
+  proprie di bevande e grassi (`QualityRater.kt`); la lettera non si mostra mai, perché in Italia
+  il Nutri-Score è contestato. Additivi 30 punti: −15 per additivo a rischio alto e −8 per
+  moderato secondo il rischio di superare la dose giornaliera ammissibile delle rivalutazioni
+  EFSA, riportato da Open Food Facts; con un rischio alto il voto non supera 49. Biologico
+  10 punti (`en:organic`). NOVA solo come informazione. Senza Nutri-Score o senza ingredienti il
+  prodotto non ha voto e il dettaglio dice perché. Il dettaglio (tocco sul voto) mostra pregi e
+  difetti dai punti di ogni nutriente, gli additivi, le fonti e le avvertenze chieste a Yuka
+  dall'Antitrust nel 2022 (metodo indipendente, non un consiglio medico). In Oggi c'è anche la
+  media del giorno pesata sulle kcal. I dati grezzi stanno in `product_quality` e il voto si
+  calcola alla lettura: cambiare la formula vale anche per il passato. I prodotti senza dati
+  (scansionati prima della 1.9.0 o arrivati da un backup) si cercano in background, una
+  richiesta ogni 6 secondi (Open Food Facts permette 15 letture al minuto). Colori delle fasce
+  fissi in `QualityColors`, verificati per il daltonismo, sempre con il numero.
 - **Pezzi (barcode)**: oltre a grammi e ml, la quantità si può dare in pezzi (es. 3 biscotti).
   Scegliendo "pezzi" compare "Grammi per pezzo", sempre modificabile: è già compilato quando il
   testo della porzione su Open Food Facts (`serving_size`) dice quanti pezzi sono, per esempio
@@ -200,8 +221,10 @@ aggiornamenti, i link e le impostazioni salvate.
   formato, versione e valori, poi chiede: **Sostituisci tutto** (cancella i dati del telefono e
   ripristina anche le impostazioni) o **Unisci** (aggiunge le voci che mancano, confrontando
   giorno, pasto, nome e kcal; peso e acqua solo dei giorni vuoti; impostazioni invariate).
-  "Esporta diario (CSV)" scrive una riga per voce: in italiano `;` e virgola decimale, in
-  inglese `,` e punto, UTF-8 con BOM. Si usa il selettore file di Android (nessun permesso).
+  "Esporta diario (CSV)" scrive una riga per voce, con il codice a barre in fondo: in italiano
+  `;` e virgola decimale, in inglese `,` e punto, UTF-8 con BOM. Le voci hanno il loro codice a
+  barre dalla 1.9.0; i dati del punteggio qualità non sono nel backup e si ricercano dopo il
+  ripristino. Si usa il selettore file di Android (nessun permesso).
 - **Salute di Android** (Health Connect, Impostazioni): "Collega" chiede i permessi di lettura di
   passi e calorie attive e di scrittura di peso e acqua. Oggi mostra passi e kcal bruciate del
   giorno; con "Aggiungi le calorie bruciate all'obiettivo" (spento di default) l'obiettivo del
@@ -249,6 +272,20 @@ sale (dal sodio in mg × 2,5 / 1000). Con la cache già scaricata la rigenerazio
 
 Fonte dei dati: CREA – Centro di ricerca Alimenti e Nutrizione, *Tabelle di composizione
 degli alimenti*. Le condizioni d'uso del sito chiedono di citare la fonte.
+
+## Additivi (punteggio qualità)
+
+`app/src/main/assets/off_additives.tsv` è generato da `tools/off/build_additives_table.py` dalla
+[tassonomia degli additivi](https://static.openfoodfacts.org/data/taxonomies/additives.json) di
+Open Food Facts: codice E, famiglia (`e322` per `e322i`), rischio EFSA di sovraesposizione
+(`efsa_evaluation_overexposure_risk`: high, moderate, no; chi non ne ha prende quello della
+famiglia) e nome in italiano e inglese. Per seguire gli aggiornamenti della tassonomia:
+
+```bash
+python3 tools/off/build_additives_table.py
+```
+
+Dati Open Food Facts con licenza ODbL: l'app cita la fonte nel dettaglio del punteggio.
 
 ## Rilasci
 
@@ -322,7 +359,7 @@ segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
 - **`/privacy`** (`privacy.html`): l'informativa, aperta dal dialogo del primo avvio e da
   Impostazioni → Privacy (`PRIVACY_POLICY_URL`). Va aggiornata se cambiano i dati inviati a
   Firebase (eventi, proprietà) o i tempi di conservazione impostati nella console.
-- **Screenshot** (`img/`, WebP 540 px, ~430 KB in tutto): presi sull'AVD telefono
+- **Screenshot** (`img/`, WebP 540 px, ~670 KB in tutto): presi sull'AVD telefono
   `PhotoCalPhone_API34` con la build release e i dati di prova di
   `tools/site/demo_backup.py` (Impostazioni → Backup e dati → Ripristina backup → Sostituisci tutto, solo
   sull'emulatore); quelli della foto del pasto (`photo-*`) vengono da un telefono vero, perché
@@ -355,7 +392,9 @@ segue il browser e si cambia con IT/EN (`site.js`, scelta salvata nel browser).
 Gli schemi di Room sono esportati in `app/schemas/` (versionati). Dalla 1.0.0 l'app è
 installata con dati veri: ogni modifica allo schema richiede una migrazione in
 `AppDatabase.kt` (v1 → v2 aggiunge il registro del peso, v2 → v3 il contatore dell'acqua,
-v3 → v4 nome dei pezzi, fibre, zuccheri e sale delle voci e la tabella degli alimenti salvati).
+v3 → v4 nome dei pezzi, fibre, zuccheri e sale delle voci e la tabella degli alimenti salvati,
+v4 → v5 il codice a barre delle voci, recuperato dagli alimenti salvati con lo stesso nome, e la
+tabella `product_quality` del punteggio qualità).
 
 ## Build e installazione
 
@@ -387,7 +426,8 @@ app/src/main/java/it/emanuelemelini/photocal/
 │   ├── crea/             tabelle CREA (da assets/crea_foods.tsv)
 │   ├── estimate/         stima AI + sostituzione con i valori CREA
 │   ├── nutrition/        profilo, formula del fabbisogno, macro
-│   ├── openfoodfacts/    client API v3, prodotti
+│   ├── openfoodfacts/    client API v3, prodotti, campi del punteggio qualità
+│   ├── quality/          punteggio qualità: additivi EFSA, calcolo, ricerca in background
 │   ├── http/             utilità OkHttp condivise
 │   ├── photo/            file delle foto, ridimensionamento
 │   ├── reminders/        promemoria: orari, allarmi, notifiche
@@ -403,6 +443,7 @@ app/src/main/java/it/emanuelemelini/photocal/
     ├── photo/            revisione dell'analisi foto
     ├── barcode/          scansione e prodotto da Open Food Facts
     ├── recent/           alimenti recenti e preferiti
+    ├── quality/          voto, dettaglio del punteggio qualità, media del giorno
     ├── health/           privacy dei dati di salute
     ├── privacy/          consenso al primo avvio
     ├── history/          storico e grafico

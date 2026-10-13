@@ -38,10 +38,10 @@ class FoodRepository(
 
     suspend fun entriesOf(date: LocalDate): List<FoodEntry> = dao.getByDate(date)
 
-    /** Adds a new entry and saves its food among the recent ones ([barcode] for scanned products). */
-    suspend fun add(entry: FoodEntry, barcode: String? = null): Long =
+    /** Adds a new entry and saves its food among the recent ones. */
+    suspend fun add(entry: FoodEntry): Long =
         dao.insert(entry).also {
-            savedFoods.recordUse(entry, barcode)
+            savedFoods.recordUse(entry)
             onEntryAdded(entry)
             onMealLogged(entry.date, entry.mealType)
         }

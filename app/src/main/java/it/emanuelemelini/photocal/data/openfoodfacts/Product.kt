@@ -1,5 +1,7 @@
 package it.emanuelemelini.photocal.data.openfoodfacts
 
+import it.emanuelemelini.photocal.data.db.ProductQuality
+
 /** Packaged product from Open Food Facts. Values are per 100 g (or 100 ml for liquids). */
 data class Product(
     val barcode: String,
@@ -22,6 +24,8 @@ data class Product(
     val servingPieces: ServingPieces?,
     val isLiquid: Boolean,
     val imageUrl: String?,
+    /** Data for the quality score; null for a product rebuilt from the saved foods. */
+    val quality: ProductQuality? = null,
 ) {
     val hasNutrition: Boolean get() = kcalPer100 != null
 

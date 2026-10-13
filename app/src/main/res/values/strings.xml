@@ -191,6 +191,93 @@
     <string name="label_salt_g">Sale g</string>
     <string name="entry_extras_optional">Altri valori (facoltativi)</string>
     <string name="barcode_scan_another">Scansiona un altro prodotto</string>
+    <!-- Quality score of the scanned products -->
+    <string name="quality_title">Punteggio qualità</string>
+    <string name="quality_details">Dettagli</string>
+    <string name="quality_band_poor">Scarso</string>
+    <string name="quality_band_mediocre">Mediocre</string>
+    <string name="quality_band_good">Buono</string>
+    <string name="quality_band_excellent">Eccellente</string>
+    <plurals name="quality_badge_description">
+        <item quantity="one">Punteggio qualità %1$d su 100, %2$s</item>
+        <item quantity="other">Punteggio qualità %1$d su 100, %2$s</item>
+    </plurals>
+    <string name="quality_header">%1$s · %2$d/100</string>
+    <string name="quality_points">%1$d/%2$d</string>
+    <string name="quality_unrated_not_applicable">Nessun punteggio per questo tipo di prodotto (per esempio caffè, tè, spezie o alcolici).</string>
+    <string name="quality_unrated_missing_nutrition">Nessun punteggio: su Open Food Facts mancano i valori nutrizionali o la categoria del prodotto.</string>
+    <string name="quality_unrated_missing_ingredients">Nessun punteggio: su Open Food Facts manca l\'elenco degli ingredienti, quindi gli additivi non sono noti.</string>
+    <string name="quality_capped">Il prodotto contiene un additivo a rischio alto, quindi il punteggio non supera %1$d.</string>
+    <string name="quality_section_nutrition">Nutrizione</string>
+    <string name="quality_section_additives">Additivi</string>
+    <string name="quality_section_organic">Biologico</string>
+    <string name="quality_section_processing">Trasformazione</string>
+    <string name="quality_per_100g">Valori per 100 g</string>
+    <string name="quality_per_100ml">Valori per 100 ml</string>
+    <string name="quality_water">Acqua: il massimo dei punti per la nutrizione.</string>
+    <string name="quality_no_nutrition">Valori nutrizionali non disponibili.</string>
+    <string name="quality_no_ingredients">Ingredienti non disponibili.</string>
+    <string name="quality_no_additives">Nessun additivo.</string>
+    <string name="quality_sweeteners">Contiene edulcoranti</string>
+    <string name="quality_risk_high">Rischio alto</string>
+    <string name="quality_risk_moderate">Rischio moderato</string>
+    <string name="quality_risk_none">Nessun rischio segnalato</string>
+    <string name="quality_risk_explanation">Il rischio è quello che alcune fasce di popolazione superino la dose giornaliera ammissibile, secondo le rivalutazioni dell\'EFSA.</string>
+    <string name="quality_organic_yes">Prodotto biologico</string>
+    <string name="quality_organic_no">Non biologico</string>
+    <string name="quality_nova">%1$s (NOVA %2$d)</string>
+    <string name="quality_nova_note">Informazione in più: non conta nel punteggio.</string>
+    <string name="quality_method_title">Come è calcolato</string>
+    <string name="quality_method">Nutrizione, 60 punti: algoritmo del Nutri-Score 2023 sui valori per 100 g o 100 ml. Additivi, 30 punti: −15 per ogni additivo a rischio alto e −8 per ogni additivo a rischio moderato secondo l\'EFSA; con un additivo a rischio alto il punteggio non supera 49. Biologico, 10 punti. Fasce: 0–24 scarso, 25–49 mediocre, 50–74 buono, 75–100 eccellente.</string>
+    <string name="quality_disclaimer">È una valutazione indicativa e indipendente di PhotoKCal, basata sui dati disponibili: non è approvata da autorità sanitarie e non è un consiglio medico. L\'alimentazione è solo una parte di uno stile di vita sano, insieme ad attività fisica, sonno e altri fattori.</string>
+    <string name="quality_source">Dati: Open Food Facts (licenza ODbL) e rivalutazioni EFSA degli additivi.</string>
+    <string name="quality_open_off">Vedi su Open Food Facts</string>
+    <string name="quality_day_title">Qualità dei prodotti confezionati</string>
+    <plurals name="quality_day_products">
+        <item quantity="one">%1$d prodotto valutato</item>
+        <item quantity="other">media di %1$d prodotti, pesata sulle calorie</item>
+    </plurals>
+    <string-array name="quality_energy">
+        <item>Poche calorie</item>
+        <item>Calorie nella media</item>
+        <item>Molte calorie</item>
+    </string-array>
+    <string-array name="quality_sugars">
+        <item>Pochi zuccheri</item>
+        <item>Zuccheri nella media</item>
+        <item>Molti zuccheri</item>
+    </string-array>
+    <string-array name="quality_saturated_fat">
+        <item>Pochi grassi saturi</item>
+        <item>Grassi saturi nella media</item>
+        <item>Molti grassi saturi</item>
+    </string-array>
+    <string-array name="quality_salt">
+        <item>Poco sale</item>
+        <item>Sale nella media</item>
+        <item>Molto sale</item>
+    </string-array>
+    <string-array name="quality_proteins">
+        <item>Poche proteine</item>
+        <item>Buona quantità di proteine</item>
+        <item>Molte proteine</item>
+    </string-array>
+    <string-array name="quality_fiber">
+        <item>Poche fibre</item>
+        <item>Buona quantità di fibre</item>
+        <item>Molte fibre</item>
+    </string-array>
+    <string-array name="quality_fruits_vegetables">
+        <item>Poca frutta, verdura e legumi</item>
+        <item>Un po\' di frutta, verdura o legumi</item>
+        <item>Molta frutta, verdura o legumi</item>
+    </string-array>
+    <string-array name="quality_nova">
+        <item>Non trasformato o minimamente trasformato</item>
+        <item>Ingrediente culinario trasformato</item>
+        <item>Alimento trasformato</item>
+        <item>Alimento ultra-trasformato</item>
+    </string-array>
     <string name="history_title">Storico</string>
     <string name="history_average">Media giornaliera</string>
     <string name="history_logged_days">Giorni registrati</string>
@@ -312,6 +399,7 @@
         <item>Zuccheri g</item>
         <item>Sale g</item>
         <item>Fonte</item>
+        <item>Codice a barre</item>
     </string-array>
     <plurals name="today_steps">
         <item quantity="one">%1$s passo</item>
@@ -605,6 +693,12 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoKCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_9_0">
+        <item>Punteggio qualità dei prodotti confezionati: quando scansioni un codice a barre vedi un voto da 0 a 100 (scarso, mediocre, buono, eccellente). Conta la qualità nutrizionale (60 punti), gli additivi a rischio secondo l\'EFSA (30 punti) e il biologico (10 punti); un additivo a rischio alto lo ferma a 49.</item>
+        <item>Tocca il voto per i dettagli: pregi e difetti nutrizionali (zuccheri, sale, grassi saturi, fibre, proteine…), l\'elenco degli additivi col loro rischio, il biologico e quanto è trasformato il prodotto, con le fonti e come è calcolato.</item>
+        <item>In Home il voto compare accanto ai prodotti scansionati, insieme alla qualità media dei prodotti confezionati del giorno, pesata sulle calorie. Il voto è anche nei Recenti e preferiti.</item>
+        <item>Anche i prodotti scansionati prima di questa versione ricevono il voto: l\'app lo recupera da Open Food Facts in background, un prodotto alla volta.</item>
+    </string-array>
     <string-array name="changelog_1_8_0">
         <item>PhotoCal ora si chiama PhotoKCal: stessa app, stessi dati, con la K delle kcal nel nome.</item>
         <item>Descrivi i pasti: scrivi o detta col microfono cosa hai mangiato, anche tutta la giornata (\"a colazione cappuccino e cornetto, a pranzo pasta al pomodoro…\"). L\'AI riconosce gli alimenti, stima le quantità e li divide per pasto; prima di salvare controlli e correggi tutto.</item>

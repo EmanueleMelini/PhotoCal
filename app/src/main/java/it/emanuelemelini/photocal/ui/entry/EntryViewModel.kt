@@ -344,8 +344,8 @@ class EntryViewModel(
                         fiberG = fiber,
                         sugarsG = sugars,
                         saltG = salt,
+                        barcode = barcode,
                     ),
-                    barcode,
                 )
             }
             isDone = true

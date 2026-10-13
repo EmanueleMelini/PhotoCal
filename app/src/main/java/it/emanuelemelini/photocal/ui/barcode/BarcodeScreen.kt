@@ -37,7 +37,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,6 +71,9 @@ import it.emanuelemelini.photocal.ui.extrasLabel
 import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.pieceName
+import it.emanuelemelini.photocal.ui.quality.ProductQualityRow
+import it.emanuelemelini.photocal.ui.quality.QualitySheet
+import it.emanuelemelini.photocal.ui.quality.QualitySheetData
 import it.emanuelemelini.photocal.ui.uiText
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -79,7 +86,13 @@ fun BarcodeScreen(
 ) {
     val container = appContainer()
     val viewModel: BarcodeViewModel = viewModel {
-        BarcodeViewModel(createSavedStateHandle(), container.foodRepository, container.savedFoodRepository, container.openFoodFactsClient)
+        BarcodeViewModel(
+            createSavedStateHandle(),
+            container.foodRepository,
+            container.savedFoodRepository,
+            container.openFoodFactsClient,
+            container.qualityRepository,
+        )
     }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -266,6 +279,7 @@ private fun ProductForm(
         )
     }
 
+    var qualitySheet by remember { mutableStateOf<QualitySheetData?>(null) }
     OutlinedCard(Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -294,7 +308,16 @@ private fun ProductForm(
                 )
             }
         }
+        viewModel.rating?.let { rating ->
+            HorizontalDivider()
+            ProductQualityRow(
+                rating = rating,
+                onClick = { qualitySheet = QualitySheetData(product.displayName, product.barcode, rating) },
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+            )
+        }
     }
+    qualitySheet?.let { QualitySheet(it, onDismiss = { qualitySheet = null }) }
 
     OutlinedTextField(
         value = viewModel.name,

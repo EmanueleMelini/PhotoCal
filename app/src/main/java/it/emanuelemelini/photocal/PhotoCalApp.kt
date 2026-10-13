@@ -19,6 +19,8 @@ import it.emanuelemelini.photocal.data.photo.PhotoStorage
 import it.emanuelemelini.photocal.data.photo.ProfilePhotoStorage
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
 import it.emanuelemelini.photocal.data.push.NewsTopics
+import it.emanuelemelini.photocal.data.quality.AdditiveTable
+import it.emanuelemelini.photocal.data.quality.QualityRepository
 import it.emanuelemelini.photocal.data.reminders.ReminderNotifier
 import it.emanuelemelini.photocal.data.reminders.ReminderScheduler
 import it.emanuelemelini.photocal.data.share.ShareBuilder
@@ -131,6 +133,7 @@ class AppContainer(context: Context) {
     val aiService = AiService(settingsRepository, AiHttp(httpClient), telemetry)
     val foodEstimator = FoodEstimator(aiService, CreaTable(context), settingsRepository)
     val openFoodFactsClient = OpenFoodFactsClient(httpClient)
+    val qualityRepository = QualityRepository(database.productQualityDao(), AdditiveTable(context), openFoodFactsClient, applicationScope)
     val shareBuilder = ShareBuilder(foodRepository, waterRepository, weightRepository, settingsRepository, profilePhotoStorage)
     val appUpdater = AppUpdater(
         releasesClient,

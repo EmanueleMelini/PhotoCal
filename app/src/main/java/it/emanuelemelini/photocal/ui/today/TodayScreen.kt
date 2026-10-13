@@ -94,6 +94,7 @@ import coil3.compose.AsyncImage
 import it.emanuelemelini.photocal.AppLocale
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.FoodEntry
+import it.emanuelemelini.photocal.data.quality.QualityRating
 import it.emanuelemelini.photocal.data.db.MealType
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.components.animatedProgress
@@ -103,6 +104,10 @@ import it.emanuelemelini.photocal.ui.formatAmount
 import it.emanuelemelini.photocal.ui.formatKcal
 import it.emanuelemelini.photocal.ui.longLabel
 import it.emanuelemelini.photocal.ui.quantityLabel
+import it.emanuelemelini.photocal.ui.quality.DayQualityRow
+import it.emanuelemelini.photocal.ui.quality.QualityBadge
+import it.emanuelemelini.photocal.ui.quality.QualitySheet
+import it.emanuelemelini.photocal.ui.quality.QualitySheetData
 import it.emanuelemelini.photocal.ui.relativeLabel
 import it.emanuelemelini.photocal.ui.shortLabel
 import kotlinx.coroutines.launch
@@ -143,11 +148,13 @@ fun TodayScreen(
             container.waterRepository,
             container.settingsRepository,
             container.healthConnect,
+            container.qualityRepository,
         )
     }
     // Steps and calories change during the day: read them again when coming back
     LifecycleResumeEffect(Unit) {
         viewModel.refreshActivity()
+        viewModel.fetchMissingQuality()
         onPauseOrDispose {}
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -155,6 +162,7 @@ fun TodayScreen(
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     var copyRequest by remember { mutableStateOf<CopyRequest?>(null) }
+    var qualitySheet by remember { mutableStateOf<QualitySheetData?>(null) }
     var copied by remember { mutableStateOf<Pair<LocalDate, Int>?>(null) }
     var bottleAdded by remember { mutableStateOf<BottleDrink?>(null) }
 
@@ -322,6 +330,23 @@ fun TodayScreen(
                     modifier = dayModifier,
                 )
             }
+            state.dayQuality?.let { quality ->
+                item(key = "quality") {
+                    Card(
+                        modifier = Modifier
+                            .animateItem()
+                            .then(dayModifier)
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    ) {
+                        DayQualityRow(
+                            score = quality.score,
+                            count = quality.count,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                        )
+                    }
+                }
+            }
             if (!state.isLoading && state.meals.isEmpty()) {
                 item(key = "empty") {
                     Text(
@@ -353,8 +378,11 @@ fun TodayScreen(
                     )
                 }
                 items(group.entries, key = { it.id }) { entry ->
+                    val sheet = entry.barcode?.let { barcode -> state.ratings[barcode]?.let { QualitySheetData(entry.name, barcode, it) } }
                     EntryRow(
                         entry = entry,
+                        rating = sheet?.rating,
+                        onRatingClick = { qualitySheet = sheet },
                         onClick = { onEditEntry(entry) },
                         onDuplicate = { viewModel.duplicate(entry) },
                         onCopy = {
@@ -367,6 +395,8 @@ fun TodayScreen(
             }
         }
     }
+
+    qualitySheet?.let { QualitySheet(it, onDismiss = { qualitySheet = null }) }
 
     copyRequest?.let { request ->
         CopyDialog(
@@ -665,6 +695,9 @@ private fun MealHeader(
 @Composable
 private fun EntryRow(
     entry: FoodEntry,
+    /** Quality score of the scanned product, shown instead of a photo. */
+    rating: QualityRating?,
+    onRatingClick: () -> Unit,
     onClick: () -> Unit,
     onDuplicate: () -> Unit,
     onCopy: () -> Unit,
@@ -692,6 +725,8 @@ private fun EntryRow(
                             .clip(MaterialTheme.shapes.small),
                     )
                 }
+            } ?: rating?.score?.let { score ->
+                { QualityBadge(score, size = 44.dp, onClick = onRatingClick) }
             },
             supportingContent = if (details.isNotEmpty()) {
                 { Text(details) }

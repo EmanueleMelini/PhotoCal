@@ -87,6 +87,7 @@ object BackupCodec {
         unit = servingUnit?.name,
         servings = servings,
         pieceLabel = servingLabel,
+        barcode = barcode,
     )
 
     fun WeightEntry.toBackup() = BackupWeight(date.toEpochDay(), weightKg, createdAt.toEpochMilli())
@@ -162,6 +163,7 @@ object BackupCodec {
         fiberG = fiberG,
         sugarsG = sugarsG,
         saltG = saltG,
+        barcode = barcode,
     )
 
     fun BackupWeight.toEntry() = WeightEntry(date = LocalDate.ofEpochDay(date), weightKg = weightKg, createdAt = Instant.ofEpochMilli(createdAt))
@@ -267,6 +269,8 @@ internal object BackupValidation {
     const val MAX_NAME = 200
     private const val MAX_MODEL = 200
     private const val MAX_URL = 500
+    /** EAN-13, UPC and the other product codes are at most 14 digits; some margin. */
+    private const val MAX_BARCODE = 20
     const val MAX_ROWS = 200_000
 
     fun isValid(backup: Backup): Boolean {
@@ -284,7 +288,7 @@ internal object BackupValidation {
             listOf(entry.proteinG, entry.carbsG, entry.fatG, entry.fiberG, entry.sugarsG, entry.saltG).all { inRange(it, 0.0..5_000.0) } &&
             (entry.unit == null || ServingUnit.entries.any { it.name == entry.unit }) &&
             inRange(entry.servings, 0.0..1_000.0) && (entry.pieceLabel?.length ?: 0) <= MAX_NAME &&
-            (entry.photo?.length ?: 0) <= MAX_NAME
+            (entry.photo?.length ?: 0) <= MAX_NAME && (entry.barcode?.length ?: 0) <= MAX_BARCODE
 
     private fun isValid(weight: BackupWeight): Boolean = weight.date in EPOCH_DAY_RANGE && weight.weightKg in 20.0..400.0
 
@@ -297,7 +301,7 @@ internal object BackupValidation {
                 .all { inRange(it, 0.0..1_000.0) } &&
             (food.unit == null || ServingUnit.entries.any { it.name == food.unit }) &&
             inRange(food.servings, 0.0..1_000.0) && inRange(food.pieceGrams, 0.0..20_000.0) &&
-            (food.barcode?.length ?: 0) <= 20 && (food.pieceLabel?.length ?: 0) <= MAX_NAME && food.useCount >= 0
+            (food.barcode?.length ?: 0) <= MAX_BARCODE && (food.pieceLabel?.length ?: 0) <= MAX_NAME && food.useCount >= 0
 
     private fun isValid(settings: BackupSettings): Boolean =
         settings.kcalGoal in 500..10_000 && listOf(settings.proteinGoalG, settings.carbsGoalG, settings.fatGoalG).all { it == null || it in 0..1_000 } &&

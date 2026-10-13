@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import it.emanuelemelini.photocal.data.SavedFoodRepository
 import it.emanuelemelini.photocal.data.db.SavedFood
+import it.emanuelemelini.photocal.data.quality.QualityRating
+import it.emanuelemelini.photocal.data.quality.QualityRepository
 import it.emanuelemelini.photocal.ui.RecentFoodsRoute
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,12 +27,15 @@ data class RecentFoodsUiState(
     val favorites: List<SavedFood> = emptyList(),
     val recent: List<SavedFood> = emptyList(),
     val results: List<SavedFood>? = null,
+    /** Quality score of the scanned products, by barcode. */
+    val ratings: Map<String, QualityRating> = emptyMap(),
     val isLoading: Boolean = true,
 )
 
 class RecentFoodsViewModel(
     savedStateHandle: SavedStateHandle,
     private val savedFoods: SavedFoodRepository,
+    qualityRepository: QualityRepository,
 ) : ViewModel() {
 
     val route = savedStateHandle.toRoute<RecentFoodsRoute>()
@@ -46,8 +51,9 @@ class RecentFoodsViewModel(
         snapshotFlow { query.trim() }.flatMapLatest { text ->
             if (text.isEmpty()) flowOf(null) else savedFoods.observeSearch(text, SEARCH_LIMIT)
         },
-    ) { favorites, recent, results ->
-        RecentFoodsUiState(favorites = favorites, recent = recent, results = results, isLoading = false)
+        qualityRepository.observeRatings(),
+    ) { favorites, recent, results, ratings ->
+        RecentFoodsUiState(favorites = favorites, recent = recent, results = results, ratings = ratings, isLoading = false)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RecentFoodsUiState())
 
     fun onQueryChange(value: String) {

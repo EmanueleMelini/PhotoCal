@@ -42,6 +42,8 @@ data class BackupEntry(
     val unit: String? = null,
     val servings: Double? = null,
     val pieceLabel: String? = null,
+    /** From 1.9.0; the quality data of the product is looked up again after a restore. */
+    val barcode: String? = null,
 )
 
 @Serializable

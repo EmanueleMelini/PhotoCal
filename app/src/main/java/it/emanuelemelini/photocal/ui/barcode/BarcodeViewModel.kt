@@ -19,6 +19,8 @@ import it.emanuelemelini.photocal.data.openfoodfacts.OpenFoodFactsClient
 import it.emanuelemelini.photocal.data.openfoodfacts.Product
 import it.emanuelemelini.photocal.data.openfoodfacts.ProductLookupException
 import it.emanuelemelini.photocal.data.openfoodfacts.ServingPieces
+import it.emanuelemelini.photocal.data.quality.QualityRating
+import it.emanuelemelini.photocal.data.quality.QualityRepository
 import it.emanuelemelini.photocal.ui.BarcodeRoute
 import it.emanuelemelini.photocal.ui.UiText
 import it.emanuelemelini.photocal.ui.formatAmount
@@ -57,6 +59,7 @@ class BarcodeViewModel(
     private val foodRepository: FoodRepository,
     private val savedFoods: SavedFoodRepository,
     private val openFoodFactsClient: OpenFoodFactsClient,
+    private val qualityRepository: QualityRepository,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<BarcodeRoute>()
@@ -81,6 +84,9 @@ class BarcodeViewModel(
     var pieceGrams by mutableStateOf("")
         private set
     var mealType by mutableStateOf(MealType.entries.find { it.name == route.meal } ?: MealType.suggestedFor())
+        private set
+    /** Quality score of the product found; offline, the one saved at the last lookup. */
+    var rating by mutableStateOf<QualityRating?>(null)
         private set
     var showErrors by mutableStateOf(false)
         private set
@@ -161,10 +167,15 @@ class BarcodeViewModel(
         if (code.isEmpty()) return
         lookupJob?.cancel()
         status = BarcodeStatus.Loading(code)
+        rating = null
         lookupJob = viewModelScope.launch {
             val saved = savedFoods.getByBarcode(code)
             status = try {
                 val product = openFoodFactsClient.getProduct(code)
+                product.quality?.let {
+                    qualityRepository.save(it)
+                    rating = qualityRepository.rate(it)
+                }
                 // The name and the grams of a piece chosen last time win over the package ones
                 name = saved?.name ?: product.displayName
                 unit = if (product.isLiquid) ServingUnit.MILLILITERS else ServingUnit.GRAMS
@@ -179,8 +190,12 @@ class BarcodeViewModel(
             } catch (_: ProductLookupException.NotFound) {
                 BarcodeStatus.NotFound(code)
             } catch (e: ProductLookupException) {
-                if (e is ProductLookupException.Network && saved != null) useOffline(saved, code)
-                else BarcodeStatus.Error(e.toUiText(), barcode = code)
+                if (e is ProductLookupException.Network && saved != null) {
+                    rating = qualityRepository.rating(code)
+                    useOffline(saved, code)
+                } else {
+                    BarcodeStatus.Error(e.toUiText(), barcode = code)
+                }
             }
         }
     }
@@ -240,8 +255,8 @@ class BarcodeViewModel(
                     servingUnit = servingUnit,
                     servings = if (servingUnit != null) parseDecimal(quantity) else null,
                     servingLabel = product.servingPieces?.label?.takeIf { servingUnit == ServingUnit.PIECE },
+                    barcode = product.barcode,
                 ),
-                barcode = product.barcode,
             )
             isDone = true
         }

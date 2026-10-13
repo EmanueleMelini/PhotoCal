@@ -1,6 +1,9 @@
 package it.emanuelemelini.photocal.data.db
 
 import androidx.room.TypeConverter
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import java.time.Instant
 import java.time.LocalDate
 
@@ -20,4 +23,20 @@ class Converters {
 
     @TypeConverter fun servingUnitToString(unit: ServingUnit?): String? = unit?.name
     @TypeConverter fun stringToServingUnit(value: String?): ServingUnit? = value?.let(ServingUnit::valueOf)
+
+    @TypeConverter fun nutritionCategoryToString(category: NutritionCategory): String = category.name
+    @TypeConverter fun stringToNutritionCategory(value: String): NutritionCategory = NutritionCategory.valueOf(value)
+
+    @TypeConverter fun nutrientsToString(nutrients: List<NutrientComponent>): String = json.encodeToString(nutrientsSerializer, nutrients)
+    @TypeConverter fun stringToNutrients(value: String): List<NutrientComponent> = json.decodeFromString(nutrientsSerializer, value)
+
+    // Additive codes contain no commas; null (ingredients unknown) differs from an empty list
+    @TypeConverter fun codesToString(codes: List<String>?): String? = codes?.joinToString(",")
+    @TypeConverter fun stringToCodes(value: String?): List<String>? = value?.split(',')?.filter { it.isNotEmpty() }
+
+    // Explicit types: KSP (Room) runs before the serialization plugin generates serializer()
+    private companion object {
+        val json: Json = Json { ignoreUnknownKeys = true }
+        val nutrientsSerializer: KSerializer<List<NutrientComponent>> = ListSerializer(NutrientComponent.serializer())
+    }
 }

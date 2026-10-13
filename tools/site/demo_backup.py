@@ -42,6 +42,8 @@ FOODS = {
     ],
 }
 FAVORITES = {"Yogurt greco 0%", "Fiocchi d'avena", "Mandorle"}
+# Real Open Food Facts products, so the app finds their quality score (looked up after the restore)
+BARCODES = {"Yogurt greco 0%": "5201054017128", "Frollini al cacao": "8076809569323"}
 HOURS = {"BREAKFAST": 8, "LUNCH": 13, "SNACK": 17, "DINNER": 20}
 ZONE = dt.timezone(dt.timedelta(hours=2))
 EPOCH = dt.date(1970, 1, 1)
@@ -78,6 +80,7 @@ def backup(today: dt.date, lang: int) -> dict:
                     fiberG=round(fibre * r, 1), sugarsG=round(sugars * r, 1), saltG=round(salt * r, 2),
                     source=source, createdAt=millis(day, HOURS[meal], rnd.randint(0, 40)),
                     unit=unit, servings=servings, pieceLabel=label[lang] if label else None,
+                    barcode=BARCODES.get(names[0]),
                 ))
     weights = []
     for back in range(0, 120, 3):
@@ -94,7 +97,7 @@ def backup(today: dt.date, lang: int) -> dict:
         for food in foods:
             *names, grams, kcal, protein, carbs, fat, fibre, sugars, salt, source, unit, servings, label = food
             saved.append(dict(
-                name=names[lang], barcode=f"80{10000000000 + len(saved) * 7919}" if source == "BARCODE" else None,
+                name=names[lang], barcode=BARCODES.get(names[0]),
                 source=source, kcalPer100=kcal, proteinPer100=protein, carbsPer100=carbs, fatPer100=fat,
                 fiberPer100=fibre, sugarsPer100=sugars, saltPer100=salt, grams=grams, unit=unit, servings=servings,
                 pieceGrams=grams / servings if unit == "PIECE" else None, pieceLabel=label[lang] if label else None,

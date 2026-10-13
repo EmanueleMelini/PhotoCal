@@ -32,4 +32,6 @@ data class FoodEntry(
     val fiberG: Double? = null,
     val sugarsG: Double? = null,
     val saltG: Double? = null,
+    /** Product scanned with the barcode, for its quality score (null for the other foods). */
+    val barcode: String? = null,
 )

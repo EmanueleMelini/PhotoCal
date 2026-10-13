@@ -22,9 +22,9 @@ class SavedFoodRepository(private val dao: SavedFoodDao) {
     suspend fun getByBarcode(barcode: String): SavedFood? = dao.getByKey(SavedFood.keyFor("", barcode))
 
     /** Saves the food of a new entry (or updates it), for the recent foods. */
-    suspend fun recordUse(entry: FoodEntry, barcode: String? = null) {
-        val existing = dao.getByKey(SavedFood.keyFor(entry.name, barcode))
-        SavedFood.from(entry, barcode, existing, Instant.now())?.let { dao.upsert(it) }
+    suspend fun recordUse(entry: FoodEntry) {
+        val existing = dao.getByKey(SavedFood.keyFor(entry.name, entry.barcode))
+        SavedFood.from(entry, entry.barcode, existing, Instant.now())?.let { dao.upsert(it) }
     }
 
     suspend fun setFavorite(id: Long, favorite: Boolean) = dao.setFavorite(id, favorite)

@@ -12,7 +12,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * Schemas are exported to app/schemas. From 1.0.0 the app is installed with real data:
  * every schema change needs a migration.
  */
-@Database(entities = [FoodEntry::class, WeightEntry::class, WaterIntake::class, SavedFood::class], version = 4, exportSchema = true)
+@Database(
+    entities = [FoodEntry::class, WeightEntry::class, WaterIntake::class, SavedFood::class, ProductQuality::class],
+    version = 5,
+    exportSchema = true,
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -24,10 +28,12 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun savedFoodDao(): SavedFoodDao
 
+    abstract fun productQualityDao(): ProductQualityDao
+
     companion object {
         fun build(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, "photocal.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                 .build()
 
         /** v2 (app 1.1.0): weight log. SQL copied from the exported schema 2.json. */
@@ -70,6 +76,28 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_saved_foods_foodKey` ON `saved_foods` (`foodKey`)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS `index_saved_foods_lastUsedAt` ON `saved_foods` (`lastUsedAt`)")
+            }
+        }
+
+        /**
+         * v5 (app 1.9.0): barcode of the entries and quality data of the products. SQL copied from
+         * the exported schema 5.json. The entries scanned before get their barcode back from the
+         * saved food with the same name, when there is one.
+         */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `food_entries` ADD COLUMN `barcode` TEXT")
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `product_quality` (`barcode` TEXT NOT NULL, `nutritionGrade` TEXT, " +
+                        "`nutritionPoints` INTEGER, `nutritionCategory` TEXT NOT NULL, `nutrients` TEXT NOT NULL, " +
+                        "`additives` TEXT, `organic` INTEGER NOT NULL, `novaGroup` INTEGER, `updatedAt` INTEGER NOT NULL, " +
+                        "PRIMARY KEY(`barcode`))"
+                )
+                db.execSQL(
+                    "UPDATE `food_entries` SET `barcode` = (SELECT `barcode` FROM `saved_foods` " +
+                        "WHERE `saved_foods`.`barcode` IS NOT NULL AND `saved_foods`.`name` = `food_entries`.`name` COLLATE NOCASE " +
+                        "ORDER BY `lastUsedAt` DESC LIMIT 1) WHERE `source` = 'BARCODE'"
+                )
             }
         }
     }

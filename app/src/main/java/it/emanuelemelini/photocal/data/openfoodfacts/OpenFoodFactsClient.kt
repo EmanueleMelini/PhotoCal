@@ -10,11 +10,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.time.Instant
 
 /** Open Food Facts errors; the UI shows a translated text chosen from the type. */
 sealed class ProductLookupException(message: String) : Exception(message) {
@@ -84,23 +84,20 @@ class OpenFoodFactsClient(private val httpClient: OkHttpClient) {
             servingPieces = ServingSize.parse(string("serving_size"), servingQuantity),
             isLiquid = quantityUnit == "ml" || LIQUID_QUANTITY.containsMatchIn(quantityText),
             imageUrl = string("image_front_small_url"),
+            quality = toProductQuality(barcode, Instant.now()),
         )
     }
-
-    // Open Food Facts fields have unreliable types (numbers sometimes as strings)
-    private fun JsonObject.obj(key: String): JsonObject? = this[key] as? JsonObject
-    private fun JsonObject.string(key: String): String? = (this[key] as? JsonPrimitive)?.content
-    private fun JsonObject.double(key: String): Double? =
-        (this[key] as? JsonPrimitive)?.content?.replace(',', '.')?.toDoubleOrNull()
 
     private companion object {
         const val TAG = "OpenFoodFacts"
         const val BASE_URL = "https://world.openfoodfacts.org/api/v3"
-        const val USER_AGENT = "PhotoCal/${BuildConfig.VERSION_NAME} (personal Android app)"
+        // Open Food Facts asks for "AppName/Version (contact email)"; the address forwards to the developer
+        const val USER_AGENT = "PhotoKCal/${BuildConfig.VERSION_NAME} (photokcal@emanuelemelini.dev)"
         const val KJ_PER_KCAL = 4.184
         val FIELDS = listOf(
             "product_name", *AppLanguage.entries.map { "product_name_${it.tag}" }.toTypedArray(), "brands", "nutriments", "quantity",
             "serving_size", "serving_quantity", "product_quantity", "product_quantity_unit", "image_front_small_url",
+            *QUALITY_FIELDS.toTypedArray(),
         ).joinToString(",")
         val LIQUID_QUANTITY = Regex("""\d\s*(ml|cl|l)\b""")
     }

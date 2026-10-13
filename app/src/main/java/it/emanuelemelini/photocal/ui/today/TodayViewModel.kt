@@ -12,6 +12,8 @@ import it.emanuelemelini.photocal.data.health.DayActivity
 import it.emanuelemelini.photocal.data.health.HealthConnect
 import it.emanuelemelini.photocal.data.nutrition.Bottle
 import it.emanuelemelini.photocal.data.prefs.SettingsRepository
+import it.emanuelemelini.photocal.data.quality.QualityRating
+import it.emanuelemelini.photocal.data.quality.QualityRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +32,9 @@ import kotlin.math.roundToInt
 data class MealGroup(val mealType: MealType, val entries: List<FoodEntry>) {
     val kcal: Double = entries.sumOf { it.kcal }
 }
+
+/** Average quality score of the day's packaged products, over [count] rated ones. */
+data class DayQuality(val score: Int, val count: Int)
 
 /** A bottle added to [date], kept for the undo. */
 data class BottleDrink(val date: LocalDate, val ml: Int)
@@ -57,6 +62,9 @@ data class TodayUiState(
     val aiConfigured: Boolean = true,
     /** Sharing needs a name in the profile. */
     val canShare: Boolean = false,
+    /** Quality score of the scanned products, by barcode. */
+    val ratings: Map<String, QualityRating> = emptyMap(),
+    val dayQuality: DayQuality? = null,
     val isLoading: Boolean = true,
 )
 
@@ -67,7 +75,9 @@ class TodayViewModel(
     private val waterRepository: WaterRepository,
     settingsRepository: SettingsRepository,
     private val healthConnect: HealthConnect,
+    private val qualityRepository: QualityRepository,
 ) : ViewModel() {
+
 
     /** Changed when the screen comes back: steps and calories grow during the day. */
     private val activityRefresh = MutableStateFlow(0)
@@ -87,12 +97,12 @@ class TodayViewModel(
     val uiState: StateFlow<TodayUiState> = selectedDate
         .flatMapLatest { date ->
             combine(
-                foodRepository.observeEntries(date),
+                combine(foodRepository.observeEntries(date), qualityRepository.observeRatings(), ::Pair),
                 foodRepository.observeTotals(date),
                 settingsRepository.settings,
                 waterRepository.observeMl(date),
                 activity.onStart { emit(null) },
-            ) { entries, totals, settings, waterMl, activity ->
+            ) { (entries, ratings), totals, settings, waterMl, activity ->
                 val burned = if (settings.healthAddBurned) activity?.activeKcal?.roundToInt() ?: 0 else 0
                 TodayUiState(
                     date = date,
@@ -115,11 +125,26 @@ class TodayViewModel(
                     bottle = settings.bottle,
                     aiConfigured = settings.aiConfigured,
                     canShare = settings.profile.name.isNotBlank(),
+                    ratings = ratings,
+                    dayQuality = dayQuality(entries, ratings),
                     isLoading = false,
                 )
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
+
+    private fun dayQuality(entries: List<FoodEntry>, ratings: Map<String, QualityRating>): DayQuality? {
+        val rated = entries.mapNotNull { entry ->
+            entry.barcode?.let { ratings[it]?.score }?.let { score -> score to entry.kcal }
+        }
+        return QualityRating.average(rated)?.let { DayQuality(it, rated.size) }
+    }
+
+    /**
+     * Products scanned before 1.9.0 or restored from a backup get their score. At every return
+     * to the screen, so also right after a restore; cheap when nothing is missing.
+     */
+    fun fetchMissingQuality() = qualityRepository.fetchMissing()
 
     fun refreshActivity() {
         activityRefresh.value++

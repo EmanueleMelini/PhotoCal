@@ -45,8 +45,12 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.emanuelemelini.photocal.R
 import it.emanuelemelini.photocal.data.db.SavedFood
+import it.emanuelemelini.photocal.data.quality.QualityRating
 import it.emanuelemelini.photocal.ui.appContainer
 import it.emanuelemelini.photocal.ui.formatKcal
+import it.emanuelemelini.photocal.ui.quality.QualityBadge
+import it.emanuelemelini.photocal.ui.quality.QualitySheet
+import it.emanuelemelini.photocal.ui.quality.QualitySheetData
 import it.emanuelemelini.photocal.ui.quantityLabel
 
 /** Favorites and recent foods: tapping one opens the entry form already filled in. */
@@ -58,9 +62,14 @@ fun RecentFoodsScreen(
 ) {
     val container = appContainer()
     val viewModel: RecentFoodsViewModel = viewModel {
-        RecentFoodsViewModel(createSavedStateHandle(), container.savedFoodRepository)
+        RecentFoodsViewModel(createSavedStateHandle(), container.savedFoodRepository, container.qualityRepository)
     }
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var qualitySheet by remember { mutableStateOf<QualitySheetData?>(null) }
+    val showQuality = { food: SavedFood, rating: QualityRating ->
+        val barcode = food.barcode
+        if (barcode != null) qualitySheet = QualitySheetData(food.name, barcode, rating)
+    }
 
     Scaffold(
         topBar = {
@@ -96,22 +105,23 @@ fun RecentFoodsScreen(
             when {
                 results != null -> {
                     if (results.isEmpty()) message(R.string.recent_no_results)
-                    foods("results", results, viewModel, onPick)
+                    foods("results", results, state.ratings, viewModel, onPick, showQuality)
                 }
                 state.favorites.isEmpty() && state.recent.isEmpty() -> message(R.string.recent_empty)
                 else -> {
                     if (state.favorites.isNotEmpty()) {
                         header(R.string.recent_favorites)
-                        foods("favorites", state.favorites, viewModel, onPick)
+                        foods("favorites", state.favorites, state.ratings, viewModel, onPick, showQuality)
                     }
                     if (state.recent.isNotEmpty()) {
                         header(R.string.recent_recent)
-                        foods("recent", state.recent, viewModel, onPick)
+                        foods("recent", state.recent, state.ratings, viewModel, onPick, showQuality)
                     }
                 }
             }
         }
     }
+    qualitySheet?.let { QualitySheet(it, onDismiss = { qualitySheet = null }) }
 }
 
 private fun LazyListScope.header(textRes: Int) {
@@ -139,12 +149,17 @@ private fun LazyListScope.message(textRes: Int) {
 private fun LazyListScope.foods(
     section: String,
     foods: List<SavedFood>,
+    ratings: Map<String, QualityRating>,
     viewModel: RecentFoodsViewModel,
     onPick: (SavedFood) -> Unit,
+    onShowQuality: (SavedFood, QualityRating) -> Unit,
 ) {
     items(foods, key = { "$section-${it.id}" }) { food ->
+        val rating = food.barcode?.let { ratings[it] }
         FoodRow(
             food = food,
+            rating = rating,
+            onRatingClick = { rating?.let { onShowQuality(food, it) } },
             onClick = { onPick(food) },
             onToggleFavorite = { viewModel.toggleFavorite(food) },
             onRemove = { viewModel.remove(food) },
@@ -154,12 +169,22 @@ private fun LazyListScope.foods(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun FoodRow(food: SavedFood, onClick: () -> Unit, onToggleFavorite: () -> Unit, onRemove: () -> Unit) {
+private fun FoodRow(
+    food: SavedFood,
+    rating: QualityRating?,
+    onRatingClick: () -> Unit,
+    onClick: () -> Unit,
+    onToggleFavorite: () -> Unit,
+    onRemove: () -> Unit,
+) {
     var menuOpen by remember { mutableStateOf(false) }
     val kcal = food.kcalPer100 * food.grams / 100
     Box {
         ListItem(
             headlineContent = { Text(food.name) },
+            leadingContent = rating?.score?.let { score ->
+                { QualityBadge(score, onClick = onRatingClick) }
+            },
             supportingContent = {
                 val quantity = quantityLabel(food.grams, food.servingUnit, food.servings, food.pieceLabel)
                 Text(listOfNotNull(quantity, "${kcal.formatKcal()} kcal").joinToString(" · "))

@@ -34,7 +34,7 @@ class BackupCodecTest {
         proteinG = 1.5, carbsG = 15.8, fatG = 4.5, source = Source.BARCODE,
         photoPath = "/data/user/0/it.emanuelemelini.photocal/files/photos/IMG_1.jpg",
         createdAt = Instant.ofEpochMilli(1_790_000_000_000), servingUnit = ServingUnit.PIECE, servings = 3.0,
-        servingLabel = "biscotti", fiberG = 0.8, sugarsG = 7.0, saltG = 0.12,
+        servingLabel = "biscotti", fiberG = 0.8, sugarsG = 7.0, saltG = 0.12, barcode = "0076808002461",
     )
 
     private val backup = Backup(
@@ -64,6 +64,7 @@ class BackupCodecTest {
     fun entriesComeBackWithThePhotoOnlyIfItIsStillThere() {
         val entry = backup.entries.single()
         assertEquals("IMG_1.jpg", entry.photo)
+        assertEquals("0076808002461", entry.barcode)
         val restored = entry.toEntry { name -> "/new/photos/$name" }
         assertEquals(biscuits.copy(photoPath = "/new/photos/IMG_1.jpg"), restored)
         assertEquals(null, entry.toEntry { null }.photoPath)

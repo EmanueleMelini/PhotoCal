@@ -136,6 +136,7 @@ class BackupManager(
                 csv.number(entry.sugarsG),
                 csv.number(entry.saltG),
                 res.getString(entry.source.labelRes()),
+                entry.barcode.orEmpty(),
             )
         }
         write(uri, csv.write(res.getStringArray(R.array.csv_columns).toList(), rows))
