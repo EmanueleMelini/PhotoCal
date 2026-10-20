@@ -681,6 +681,9 @@
     <string name="changelog_title">What\'s new</string>
     <string name="changelog_title_version">What\'s new in PhotoKCal %1$s</string>
     <string name="changelog_version">Version %1$s</string>
+    <string-array name="changelog_1_9_1">
+        <item>Fixed the quality score details: on some phones the panel kept jumping up and down and sometimes closed by itself as soon as you touched it. Now it stays put below the status bar and scrolls normally.</item>
+    </string-array>
     <string-array name="changelog_1_9_0">
         <item>Quality score of packaged products: when you scan a barcode you see a score from 0 to 100 (poor, mediocre, good, excellent). It counts nutritional quality (60 points), risky additives according to EFSA (30 points) and organic (10 points); a high-risk additive stops it at 49.</item>
         <item>Tap the score for the details: nutritional strengths and weaknesses (sugars, salt, saturated fat, fiber, protein…), the list of additives with their risk, organic and how processed the product is, with the sources and how it is computed.</item>

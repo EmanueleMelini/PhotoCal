@@ -693,6 +693,9 @@
     <string name="changelog_title">Novità</string>
     <string name="changelog_title_version">Novità di PhotoKCal %1$s</string>
     <string name="changelog_version">Versione %1$s</string>
+    <string-array name="changelog_1_9_1">
+        <item>Corretti i dettagli del punteggio qualità: su alcuni telefoni il pannello andava a scatti su e giù e a volte si chiudeva da solo appena lo toccavi. Ora resta fermo sotto la barra di stato e si scorre normalmente.</item>
+    </string-array>
     <string-array name="changelog_1_9_0">
         <item>Punteggio qualità dei prodotti confezionati: quando scansioni un codice a barre vedi un voto da 0 a 100 (scarso, mediocre, buono, eccellente). Conta la qualità nutrizionale (60 punti), gli additivi a rischio secondo l\'EFSA (30 punti) e il biologico (10 punti); un additivo a rischio alto lo ferma a 49.</item>
         <item>Tocca il voto per i dettagli: pregi e difetti nutrizionali (zuccheri, sale, grassi saturi, fibre, proteine…), l\'elenco degli additivi col loro rischio, il biologico e quanto è trasformato il prodotto, con le fonti e come è calcolato.</item>

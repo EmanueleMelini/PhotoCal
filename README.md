@@ -193,7 +193,11 @@ aggiornamenti, i link e le impostazioni salvate.
   calcola alla lettura: cambiare la formula vale anche per il passato. I prodotti senza dati
   (scansionati prima della 1.9.0 o arrivati da un backup) si cercano in background, una
   richiesta ogni 6 secondi (Open Food Facts permette 15 letture al minuto). Colori delle fasce
-  fissi in `QualityColors`, verificati per il daltonismo, sempre con il numero.
+  fissi in `QualityColors`, verificati per il daltonismo, sempre con il numero. Il dettaglio è un
+  `ModalBottomSheet` che si ferma sotto la barra di stato (padding fisso sopra, insets del
+  contenuto solo in basso): con gli insets predefiniti di Material3 1.4 il padding in alto
+  dipende dalla posizione del foglio e, con un contenuto alto quasi quanto lo schermo, dopo un
+  fling il foglio rimbalza senza fermarsi (corretto nella 1.9.1).
 - **Pezzi (barcode)**: oltre a grammi e ml, la quantità si può dare in pezzi (es. 3 biscotti).
   Scegliendo "pezzi" compare "Grammi per pezzo", sempre modificabile: è già compilato quando il
   testo della porzione su Open Food Facts (`serving_size`) dice quanti pezzi sono, per esempio
